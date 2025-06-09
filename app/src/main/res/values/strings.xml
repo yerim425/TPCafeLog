@@ -1,3 +1,29 @@
 <resources>
-    <string name="app_name">TPCafeLog</string>
+    <string name="app_name">카페로그</string>
+    <string name="start_without_login">로그인없이 시작하기</string>
+    <string name="company">YRLEE SOFT</string>
+    <string name="visit_certify">방문인증</string>
+    <string name="create_review">리뷰작성</string>
+    <string name="search_cafe">카페 검색하기</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">홈</string>
+    <string name="mypage">마이페이지</string>
+    <string name="favorite">찜</string>
+    <string name="review">리뷰</string>
+    <string name="map">지도</string>
+    <string name="coffee_shop">커피전문점</string>
+    <string name="dessert_cafe">디저트카페</string>
+    <string name="cartoon_cafe">만화카페</string>
+    <string name="board_cafe">보드카페</string>
+    <string name="study_cafe">스터디카페</string>
+    <string name="kids_cafe">키즈카페</string>
+    <string name="live_cafe">라이브카페</string>
+    <string name="galley_cafe">갤러리카페</string>
+    <string name="fruits_shop">생과일전문점</string>
+    <string name="meeting_space">모임공간</string>
+    <string name="dessert">디저트</string>
+    <string name="dogs_cafe">애견카페</string>
+    <string name="cats_cafe">고양이카페</string>
+    <string name="book_cafe">북카페</string>
 </resources>

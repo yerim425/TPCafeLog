@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@+id/tv_coffee_shop"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/coffee_shop"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"
+        android:checked="true"/>
+
+    <CheckBox
+        android:id="@+id/tv_dessert"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/dessert_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_cartoon"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/cartoon_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_board"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/board_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_study"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/study_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_book"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/book_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_kids"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/kids_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_live"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/live_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/galley_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_fruits"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/fruits_shop"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_meeting"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/meeting_space"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_dog"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/dogs_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+
+    <CheckBox
+        android:id="@+id/tv_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:button="@null"
+        android:text="@string/cats_cafe"
+        android:textSize="12sp"
+        android:textColor="@color/category_item"
+        android:background="@drawable/selector_category_item"
+        android:paddingHorizontal="8dp"
+        android:layout_marginEnd="12dp"/>
+</LinearLayout>

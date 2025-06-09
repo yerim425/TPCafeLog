@@ -33,9 +33,21 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures{
+        viewBinding = true
+    }
 }
 
 dependencies {
+
+    implementation("com.kakao.maps.open:android:2.12.8")
+    implementation(libs.glide)
+    implementation(libs.converter.scalars)
+    implementation(libs.retrofit)
+    implementation(libs.gson)
+    implementation(libs.converter.gson)
+    implementation("com.makeramen:roundedimageview:2.3.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

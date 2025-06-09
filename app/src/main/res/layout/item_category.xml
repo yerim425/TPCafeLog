@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckBox
+    android:id="@+id/cb"
+    android:layout_width="wrap_content"
+    android:layout_height="32dp"
+    android:button="@null"
+    android:text="@string/coffee_shop"
+    android:textSize="12sp"
+    android:textColor="@color/category_item"
+    android:background="@drawable/selector_category_item"
+    android:paddingHorizontal="8dp"
+    android:layout_marginEnd="12dp"
+    android:checked="true"
+    app:layout_goneMarginEnd="12dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />
