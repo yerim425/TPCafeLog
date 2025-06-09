@@ -6,9 +6,17 @@
     <color name="brown">#6B4F3B</color>
     <color name="mocha">#A9746E</color>
     <color name="cream">#F5F0EC</color>
-    <color name="beige">#EFE8DA</color>
+    <color name="beige">#D9D0C0</color>
     <color name="green2">#3E5641</color>
     <color name="green">#2E4639</color>
+    <color name="gray3">#666666</color>
     <color name="gray2">#444444</color>
     <color name="gray">#222222</color>
+
+    <color name="primary">#6B4F3B</color>
+    <color name="secondary">#A9746E</color>
+
+    <color name="unselected">#B5B5B5</color>
+
+    <color name="yellow">#FFF954</color>
 </resources>

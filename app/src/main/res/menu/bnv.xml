@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/bnv_home"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home"/>
+
+    <item android:id="@+id/bnv_review"
+        android:title="@string/review"
+        android:icon="@drawable/ic_review"/>
+
+    <item android:title="" android:enabled="false"/>
+
+    <item android:id="@+id/bnv_favorite"
+        android:title="@string/favorite"
+        android:icon="@drawable/ic_favorite"/>
+
+    <item android:id="@+id/bnv_mypage"
+        android:title="@string/mypage"
+        android:icon="@drawable/ic_user"/>
+
+</menu>
