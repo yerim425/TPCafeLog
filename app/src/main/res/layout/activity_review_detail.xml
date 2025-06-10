@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.review.ReviewDetailActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cream">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            app:title="카페 이름"
+            app:titleTextColor="@color/gray"
+            android:background="@null"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_back"
+            app:menu="@menu/appbar_cafe_detail">
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/iv_user_profile"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:riv_corner_radius="48dp"
+                android:src="@drawable/test1"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_user_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LV1. 원두 입문자"
+                android:textSize="11sp"
+                android:textColor="@color/secondary"
+                android:textStyle="bold"
+                android:layout_toEndOf="@id/iv_user_profile"
+                android:layout_marginTop="4dp"
+                android:layout_alignTop="@id/iv_user_profile"/>
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="작성자 닉네임"
+                android:textSize="16sp"
+                android:textColor="@color/gray"
+                android:layout_alignStart="@id/tv_user_level"
+                android:layout_alignBottom="@id/iv_user_profile"/>
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2025.06.10"
+                android:textSize="11sp"
+                android:textColor="@color/secondary"
+                android:textStyle="bold"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBaseline="@id/tv_user_level"
+                android:layout_margin="16dp"/>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/iv_user_profile"
+                android:layout_marginTop="8dp"/>
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dot_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:dotsColor="@color/beige"
+                app:selectedDotColor="@color/primary"
+                android:layout_below="@id/view_pager"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"
+                app:dotsSize="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_review_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="카페 리뷰 내용"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
+                android:layout_below="@id/dot_indicator"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_review_hashtag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="#뷰맛집 #분위기좋은 #작업하기좋은"
+                android:textColor="@color/secondary"
+                android:textSize="12sp"
+                android:layout_below="@id/tv_review_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"/>
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/cream"
+                android:layout_below="@id/tv_review_hashtag"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comments"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:layout_below="@id/line"
+                android:layout_margin="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tv_comments"
+                android:layout_marginHorizontal="16dp"
+                android:nestedScrollingEnabled="false"/>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/shape_bg_cream_rounded"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical">
+        <EditText
+            android:id="@+id/edt_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="코멘트 남기기..."
+            android:textColorHint="@color/gray3"
+            android:layout_marginHorizontal="16dp"
+            android:imeOptions="actionSend"/>
+        <ImageButton
+            android:id="@+id/btn_send"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_send"
+            android:backgroundTint="@android:color/transparent"
+            app:tint="@color/gray3"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

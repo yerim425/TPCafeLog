@@ -5,8 +5,6 @@
     <string name="visit_certify">방문인증</string>
     <string name="create_review">리뷰작성</string>
     <string name="search_cafe">카페 검색하기</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">홈</string>
     <string name="mypage">마이페이지</string>
     <string name="favorite">찜</string>
@@ -26,4 +24,28 @@
     <string name="dogs_cafe">애견카페</string>
     <string name="cats_cafe">고양이카페</string>
     <string name="book_cafe">북카페</string>
+    <string name="search_review">리뷰 검색하기</string>
+    <string name="review_rating">리뷰 평점</string>
+    <string name="my_favorite_list">나의 찜 목록</string>
+    <string name="distance_sort">거리순</string>
+    <string name="search_review_help">카페 이름, 지역 또는 원하는 스타일을 검색해보세요.</string>
+    <string name="logout">로그아웃</string>
+    <string name="dark_mode">다크모드</string>
+    <string name="setting">설정</string>
+    <string name="my_cafe_log">나의 카페로그</string>
+    <string name="my_visit_cafe">내가 방문한 카페</string>
+    <string name="my">MY</string>
+    <string name="comments">Comments</string>
+    <string name="cafe_search_for_certify">방문인증할 카페 검색</string>
+    <string name="location_certify">위치인증</string>
+    <string name="certify_my_location">내 위치 인증</string>
+    <string name="certify_my_location_completed">내 위치 인증 완료</string>
+    <string name="warning_certify_my_location">인증하려는 카페 근방 100m이내에서 위치인증을 해주세요.</string>
+    <string name="certify_image">음식/실내외 사진 인증 0/1</string>
+    <string name="certify_image_completed">음식/실내외 사진 인증 1/1</string>
+    <string name="certify">인증하기</string>
+    <string name="selected_cafe_for_review">리뷰작성할 카페 선택</string>
+    <string name="add_image">사진 추가</string>
+    <string name="select_hashtag">카페에 어울리는 해시태그를 골라주세요!</string>
+    <string name="hint_review_content">이 카페는 어땠나요?\n분위기, 맛 등 솔직한 한마디를 남겨주세요!</string>
 </resources>

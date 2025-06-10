@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cafe_tags">
+        <item>조용한</item>
+        <item>감성적인</item>
+        <item>아늑한</item>
+        <item>뷰맛집</item>
+        <item>분위기좋은</item>
+        <item>포토존</item>
+
+        <item>디저트맛집</item>
+        <item>브런치맛집</item>
+        <item>아이스크림있는카페</item>
+
+        <item>작업하기좋은</item>
+        <item>대화하기좋은</item>
+        <item>24시카페</item>
+        <item>반려동물가능</item>
+        <item>좌석많은카페</item>
+        <item>테이크아웃전문</item>
+    </string-array>
+
+</resources>

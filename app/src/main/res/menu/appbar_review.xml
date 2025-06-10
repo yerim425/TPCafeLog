@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/menu_visit_certify"
-        android:title="@string/visit_certify"/>
+        android:title="@string/visit_certify" />
 
     <item android:id="@+id/menu_create_review"
         android:title="@string/create_review"/>

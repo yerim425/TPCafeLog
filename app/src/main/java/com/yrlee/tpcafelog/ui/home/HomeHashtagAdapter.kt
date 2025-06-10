@@ -27,7 +27,7 @@ class HomeHashtagAdapter(val context: Context, private val items: List<String>):
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.binding.root.text = items[position]
+        holder.binding.root.text = "#"+items[position]
     }
 
     //fun getCheckedList(): List<String> = checkedList.toList()

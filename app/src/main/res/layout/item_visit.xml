@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="92dp"
-    android:layout_height="92dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="88dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/iv_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="88dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         app:riv_corner_radius="16dp"
@@ -20,5 +21,23 @@
         android:src="@drawable/ic_review2"
         app:tint="@color/yellow"
         android:layout_gravity="end|bottom"
-        android:layout_margin="8dp"/>
-</FrameLayout>
+        android:layout_margin="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/iv_main"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="카페 이름"
+        android:textSize="10sp"
+        android:textColor="@color/gray2"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:layout_below="@id/iv_main"
+        android:visibility="gone"/>
+
+</RelativeLayout>

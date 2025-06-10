@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 크림색 배경 이미지 -->
+    <item android:id="@+id/bg" android:drawable="@drawable/ic_coffee_cream"/>
+
+    <!-- 브라운색 채우기 이미지 -->
+    <item android:id="@+id/progress">
+        <clip
+            android:drawable="@drawable/ic_coffee_brown"
+            android:clipOrientation="vertical"
+            android:gravity="bottom"/>
+    </item>
+</layer-list>
