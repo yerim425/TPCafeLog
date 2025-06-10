@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.visit.VisitCertifyActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cream">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@null"
+            app:navigationIcon="@drawable/ic_close"
+            app:title="@string/visit_certify"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_search_cafe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cafe_search_for_certify"
+                android:textSize="12sp"
+                app:backgroundTint="@color/secondary"
+                app:icon="@drawable/ic_search"
+                app:iconPadding="4dp"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                style="@style/Widget.AppCompat.Button"/>
+
+            <TextView
+                android:id="@+id/tv_cafe_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/btn_search_cafe"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@id/btn_search_cafe"
+                android:layout_alignBottom="@id/btn_search_cafe"
+                android:text="선택한 카페 이름"
+                android:lines="2"
+                android:textSize="14sp"
+                android:textColor="@color/gray2"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:layout_below="@id/btn_search_cafe"/>
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/cream"
+                android:layout_below="@id/btn_search_cafe"
+                android:layout_marginVertical="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_certify_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/certify_my_location"
+                android:textSize="12sp"
+                app:backgroundTint="@color/secondary"
+                app:icon="@drawable/ic_my_location"
+                app:iconPadding="4dp"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_below="@id/line1"/>
+            <TextView
+                android:id="@+id/tv_certify_location_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/warning_certify_my_location"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:textColor="@color/secondary"
+                android:layout_below="@id/btn_certify_location"
+                tools:ignore="SmallSp" />
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/cream"
+                android:layout_below="@id/tv_certify_location_warning"
+                android:layout_marginVertical="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_certify_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/certify_image"
+                android:textSize="12sp"
+                app:backgroundTint="@color/secondary"
+                app:icon="@drawable/ic_check_image"
+                app:iconPadding="4dp"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_below="@id/line2"/>
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/iv"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:src="@drawable/test1"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_below="@id/btn_certify_image"
+                app:riv_corner_radius="16dp"
+                android:layout_margin="4dp"/>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_certify"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/certify"
+        android:textSize="16sp"
+        android:textColor="@color/gray"
+        app:backgroundTint="@color/cream"
+        app:rippleColor="@color/mocha"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_gravity="bottom"
+        android:layout_margin="4dp"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

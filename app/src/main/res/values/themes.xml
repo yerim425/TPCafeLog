@@ -11,7 +11,18 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/mocha</item>
         <item name="colorOnSecondary">@color/white</item>
+
+        <item name="popupMenuStyle">@style/MyPopupMenu</item><!-- 메뉴 팝업 bg color-->
     </style>
 
     <style name="Theme.TPCafeLog" parent="Base.Theme.TPCafeLog" />
+
+    <!--??-->
+    <style name="MyPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/white</item>
+    </style>
+
+    <style name="DialogToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
             getString(R.string.galley_cafe), getString(R.string.dogs_cafe), getString(R.string.cats_cafe), getString(R.string.fruits_shop),
             getString(R.string.meeting_space)
         )
-        binding.recyclerviewCategory.adapter = HomeCategoryAdapter(requireContext(), categoryItems.toList())
+        binding.recyclerviewHomeCategory.adapter = HomeCategoryAdapter(requireContext(), categoryItems.toList())
     }
 
     fun clickCategory(v: View){
@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
 
         // "검색 단어 + categoryQuery"로 키워드 검색 요청
 
-        binding.edtSearch.clearFocus()
+        binding.edtSearchHome.clearFocus()
 
 
         choiceCategoryId = v.id
@@ -91,19 +91,7 @@ class HomeFragment : Fragment() {
     fun setHashtagList(){
         // DB에서 가져와서 RecyclerView 설정
 
-        val items = mutableListOf<String>()
-        items.add("#조용한카페")
-        items.add("#디저트맛집")
-        items.add("#뷰맛집")
-        items.add("#작업하기좋은")
-        items.add("#분위기좋은")
-        items.add("#포토존맛집")
-        items.add("#반려동물가능")
-        items.add("#콘센트많은")
-        items.add("#노트북가능")
-        items.add("#브런치맛집")
-        items.add("#24시카페")
-
-        binding.recyclerviewHashtag.adapter = HomeHashtagAdapter(requireContext(), items)
+        val items = resources.getStringArray(R.array.cafe_tags)
+        binding.recyclerviewHomeHashtag.adapter = HomeHashtagAdapter(requireContext(), items.toList())
     }
 }

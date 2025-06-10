@@ -72,25 +72,22 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <EditText
+                        android:id="@+id/edt_search_home"
+                        style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
+                        android:background="@drawable/shape_bg_cream_rounded"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:layout_weight="1">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_search"
-                            style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/shape_bg_input_layout"
-                            android:hint="@string/search_cafe"
-                            android:inputType="text"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray3"
-                            android:textSize="16sp"
-                            android:imeOptions="actionSearch"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
+                        android:layout_weight="1"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:inputType="text"
+                        android:hint="@string/search_cafe"
+                        android:textColorHint="@color/gray3"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawablePadding="4dp"
+                        android:maxLines="1"
+                        android:maxEms="20"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_map"
@@ -115,7 +112,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="16dp">
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_category"
+                android:id="@+id/recyclerview_home_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -123,12 +120,12 @@
                 android:layout_marginTop="4dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_hashtag"
+                android:id="@+id/recyclerview_home_hashtag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_below="@id/recyclerview_category"
+                android:layout_below="@id/recyclerview_home_category"
                 android:layout_marginTop="4dp"/>
         </RelativeLayout>
 
