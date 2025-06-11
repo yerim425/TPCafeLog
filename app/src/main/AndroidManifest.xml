@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.start.StartActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.review.ReviewMyListActivity"
             android:exported="false" />
         <activity
@@ -56,8 +59,22 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="false" />
+            android:exported="false" /> <!-- Rediect URL 설정 -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao${KAKAO_NATIVE_API_KEY}" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

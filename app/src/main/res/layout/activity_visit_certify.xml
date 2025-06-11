@@ -84,7 +84,7 @@
                 android:id="@+id/tv_certify_location_warning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/warning_certify_my_location"
+                android:text="@string/message_certify_my_location"
                 android:textSize="8sp"
                 android:textStyle="bold"
                 android:textColor="@color/secondary"
