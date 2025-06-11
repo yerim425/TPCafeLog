@@ -1,3 +1,7 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +11,9 @@ android {
     namespace = "com.yrlee.tpcafelog"
     compileSdk = 35
 
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").inputStream())
+
     defaultConfig {
         applicationId = "com.yrlee.tpcafelog"
         minSdk = 26
@@ -15,6 +22,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "KAKAO_NATIVE_API_KEY", properties["KAKAO_NATIVE_API_KEY"].toString())
+        buildConfigField("String", "KAKAO_REST_API_KEY", properties["KAKAO_REST_API_KEY"].toString())
+        buildConfigField("String", "NAVER_CLIENT_ID", properties["NAVER_CLIENT_ID"].toString())
+        buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
+        manifestPlaceholders["KAKAO_NATIVE_API_KEY"] = properties["KAKAO_NATIVE_API_KEY"] as String
     }
 
     buildTypes {
@@ -36,12 +49,15 @@ android {
 
     buildFeatures{
         viewBinding = true
+        buildConfig = true
     }
 }
 
 dependencies {
 
     implementation("com.kakao.maps.open:android:2.12.8")
+    implementation("com.kakao.sdk:v2-user:2.17.0") // 로그인
+    implementation("com.kakao.sdk:v2-share:2.17.0") // 카톡 공유 (선택)
     implementation(libs.glide)
     implementation(libs.converter.scalars)
     implementation(libs.retrofit)

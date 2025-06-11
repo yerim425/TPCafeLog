@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 더미용 -->
     <string-array name="cafe_tags">
         <item>조용한</item>
         <item>감성적인</item>
@@ -20,4 +21,16 @@
         <item>테이크아웃전문</item>
     </string-array>
 
+<!--    <string-array name="level_titles">-->
+<!--        <item>카페 입문자</item>-->
+<!--        <item>동네 카페 손님</item>-->
+<!--        <item>카페 순례자</item>-->
+<!--        <item>시그니처 헌터</item>-->
+<!--        <item>로스터리 탐험가</item>-->
+<!--        <item>테라스 정복자</item>-->
+<!--        <item>카페 지도 제작자</item>-->
+<!--        <item>카페 전문가</item>-->
+<!--        <item>카페 평론가</item>-->
+<!--        <item>카페 마스터</item>-->
+<!--    </string-array>-->
 </resources>

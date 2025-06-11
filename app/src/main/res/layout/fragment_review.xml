@@ -61,7 +61,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/search_review_help"
+            android:text="@string/message_search_review"
             android:textSize="10sp"
             android:textColor="@color/secondary"
             android:paddingHorizontal="16dp"

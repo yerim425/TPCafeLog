@@ -28,12 +28,11 @@ class IntroActivity : AppCompatActivity() {
             insets
         }
         val isSet = preferences.getBoolean("isSet", false)
-        startActivity(Intent(this, MainActivity::class.java))
-//        if(!isSet){ // 앱을 처음 실행한 경우
-//            startActivity(Intent(this, LoginActivity::class.java))
-//        }else{
-//            startActivity(Intent(this, MainActivity::class.java))
-//        }
+        if(!isSet){ // 앱을 처음 실행한 경우
+            startActivity(Intent(this, LoginActivity::class.java))
+        }else{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
         finish()
     }
 }
