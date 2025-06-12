@@ -20,12 +20,13 @@ import com.yrlee.tpcafelog.databinding.ActivityLoginBinding
 import com.yrlee.tpcafelog.ui.intro.IntroActivity
 import com.yrlee.tpcafelog.ui.main.MainActivity
 import com.yrlee.tpcafelog.ui.start.StartActivity
+import com.yrlee.tpcafelog.util.PrefUtils
 
 class LoginActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
-
     val TAG_KAKAO = "kakao login"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,15 +37,19 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        // 로그인 버튼
         binding.btnLogin.setOnClickListener {
             loginWithKakao()
         }
 
+        // 로그인 없이 시작하기 버튼
         binding.tvStartWithoutLogin.setOnClickListener {
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.start_without_login))
                 .setMessage(getString(R.string.message_without_login))
                 .setPositiveButton("확인"){ _, _ ->
+                    PrefUtils.putBoolean("isSet", true)
+                    PrefUtils.putBoolean("isLoggedIn", false)
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
@@ -62,10 +67,7 @@ class LoginActivity : AppCompatActivity() {
             if (error != null) {
                 kakaoLoginFail()
             } else if (token != null) {
-                Log.i(TAG_KAKAO, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                // 사용자 정보 sharedPreferences에 저장
-                MyApplication.putString("accessToken", token.accessToken)
-                kakaoLoginSuccess()
+                kakaoLoginSuccess(token)
             }
         }
 
@@ -84,10 +86,7 @@ class LoginActivity : AppCompatActivity() {
                     // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                     UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                 }else if(token != null) {
-                    Log.i(TAG_KAKAO, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                    // 사용자 정보 sharedPreferences에 저장
-                    MyApplication.putString("accessToken", token.accessToken)
-                    kakaoLoginSuccess()
+                    kakaoLoginSuccess(token)
                 }
             }
         }else{
@@ -96,13 +95,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun kakaoLoginFail(){
-        startActivity(Intent(this, IntroActivity::class.java))
         Toast.makeText(this, getString(R.string.message_login_fail), Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, IntroActivity::class.java))
         finish()
     }
 
-    fun kakaoLoginSuccess(){
-        startActivity(Intent(this, StartActivity::class.java))
+    fun kakaoLoginSuccess(token: OAuthToken){
+        Log.i(TAG_KAKAO, "카카오톡으로 로그인 성공 ${token.accessToken}")
+        // 사용자 정보 sharedPreferences에 저장
+        PrefUtils.putBoolean("isSet", true)
+        PrefUtils.putBoolean("isLoggedIn", true)
+        PrefUtils.putString("accessToken", token.accessToken)
+        PrefUtils.putString("refreshToken", token.refreshToken)
+        startActivity(Intent(this, StartActivity::class.java)) // 프로필 설정 화면으로 이동
         finish()
     }
 

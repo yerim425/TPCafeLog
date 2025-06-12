@@ -1,23 +1,24 @@
 package com.yrlee.tpcafelog.ui.intro
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.yrlee.tpcafelog.MyApplication
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.databinding.ActivityIntroBinding
 import com.yrlee.tpcafelog.ui.login.LoginActivity
 import com.yrlee.tpcafelog.ui.main.MainActivity
+import com.yrlee.tpcafelog.ui.start.StartActivity
+import com.yrlee.tpcafelog.util.PrefUtils
 
 class IntroActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityIntroBinding.inflate(layoutInflater) }
-    val preferences by lazy { getSharedPreferences("User", MODE_PRIVATE)}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,12 +28,27 @@ class IntroActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val isSet = preferences.getBoolean("isSet", false)
-        if(!isSet){ // 앱을 처음 실행한 경우
-            startActivity(Intent(this, LoginActivity::class.java))
-        }else{
-            startActivity(Intent(this, MainActivity::class.java))
-        }
-        finish()
+        Handler(Looper.getMainLooper()).postDelayed({
+            if(PrefUtils.getBoolean("isSet")){
+                if(PrefUtils.getBoolean("isLoggedIn")){ // 카카오 로그인을 한 유저
+                    PrefUtils.getString("kakaoId").let{
+                        if(it.isEmpty()){ // 카카오 아이디가 없으면 프로필 설정 화면으로 이동
+                            startActivity(Intent(this, StartActivity::class.java))
+                            finish()
+                        }else{ // 카카오 아이디가 있으면 메인 화면으로 이동
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
+                    }
+                }else{ // 로그인 없이 시작하기를 한 유저
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+            }else{ // 앱을 처음 실행한 경우
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+        }, 1500)
+
     }
 }
