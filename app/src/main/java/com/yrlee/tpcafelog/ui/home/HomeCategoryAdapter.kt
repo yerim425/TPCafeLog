@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.databinding.ItemCategoryBinding
 
-class HomeCategoryAdapter(val context: Context, private val items: List<String>): Adapter<HomeCategoryAdapter.VH>() {
+class HomeCategoryAdapter(
+    val context: Context,
+    private val items: List<String>,
+    private val listener: OnCategoryItemClickListener): Adapter<HomeCategoryAdapter.VH>() {
 
     var selectedPosition = items.indexOf(context.getString(R.string.coffee_shop))
 
@@ -35,8 +38,23 @@ class HomeCategoryAdapter(val context: Context, private val items: List<String>)
 
             notifyItemChanged(prePos)
             notifyItemChanged(position)
+
+            listener.onCategoryItemSelected()
         }
     }
 
     //fun getCheckedList(): List<String> = checkedList.toList()
+
+    // 선택된 카테고리 이름 가져오기
+    fun getSelectedCategory(): String{
+        return if(selectedPosition == -1) "" else items[selectedPosition]
+    }
+
+    // 카테고리 선택 전부 해제
+    fun setUnselect(){
+        val prePos = selectedPosition
+        selectedPosition = -1
+        notifyItemChanged(prePos)
+    }
+
 }

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/iv_main"
+        android:id="@+id/iv_cafe"
         android:layout_width="match_parent"
         android:layout_height="88dp"
         android:adjustViewBounds="true"
@@ -23,7 +23,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="8dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/iv_main"/>
+        android:layout_alignBottom="@id/iv_cafe"/>
 
     <TextView
         android:id="@+id/tv_name"
@@ -37,7 +37,7 @@
         android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:lines="1"
-        android:layout_below="@id/iv_main"
+        android:layout_below="@id/iv_cafe"
         android:visibility="gone"/>
 
 </RelativeLayout>

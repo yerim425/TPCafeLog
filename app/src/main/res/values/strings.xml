@@ -53,4 +53,7 @@
     <string name="message_login_fail">로그인에 실패했어요. 다시 시도해주세요.</string>
     <string name="nickname">닉네임</string>
     <string name="start">시작하기</string>
+    <string name="message_restricted_search_func">내 위치정보를 제공하지 않아 검색기능 사용이 제한됩니다.</string>
+    <string name="cafe">카페</string>
+    <string name="message_input_search_query">검색할 내용을 입력해주세요.</string>
 </resources>
