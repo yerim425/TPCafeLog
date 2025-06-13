@@ -9,11 +9,12 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@null">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -87,7 +88,8 @@
                         android:drawableStart="@drawable/ic_search"
                         android:drawablePadding="4dp"
                         android:maxLines="1"
-                        android:maxEms="20"/>
+                        android:maxEms="20"
+                        android:imeOptions="actionSearch"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_map"
@@ -135,10 +137,17 @@
         android:id="@+id/recyclerview_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:padding="?attr/actionBarSize"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"
+        android:paddingBottom="56dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:indeterminateTint="@color/mocha"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_add"
         app:layout_anchor="@id/bab"
-        android:backgroundTint="@color/primary"
+        android:backgroundTint="@color/secondary"
         app:tint="@color/cream"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

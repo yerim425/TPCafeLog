@@ -49,13 +49,13 @@
             android:textSize="16sp"
             android:textColor="@color/gray"
             android:lines="2"
-            android:layout_toStartOf="@id/iv_main"
+            android:layout_toStartOf="@id/iv_cafe"
             android:textStyle="bold"
             android:layout_below="@id/tv_user_name"
             android:layout_marginTop="8dp"/>
         
         <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/iv_main"
+            android:id="@+id/iv_cafe"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:scaleType="centerCrop"
@@ -90,7 +90,7 @@
             android:layout_width="60dp"
             android:layout_height="20dp"
             android:background="@drawable/kakaomap_horizontal_ko"
-            android:layout_toStartOf="@id/iv_main"
+            android:layout_toStartOf="@id/iv_cafe"
             android:layout_alignBottom="@id/tv_category"
             android:layout_marginEnd="8dp" />
 

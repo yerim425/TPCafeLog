@@ -2,12 +2,15 @@ package com.yrlee.tpcafelog.ui.start
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.registerForActivityResult
+import androidx.annotation.RequiresExtension
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -71,7 +74,7 @@ class StartActivity : AppCompatActivity() {
         requestKakaoUserInfo()
 
         binding.ivProfile.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).setType("image/*")
+            val intent = Intent(MediaStore.ACTION_PICK_IMAGES)
             resultLauncher.launch(intent)
         }
 
@@ -177,8 +180,10 @@ class StartActivity : AppCompatActivity() {
 
     fun saveUserInfoToPrefs(userInfo: User){
         // shared_prefs에 자주 사용할 데이터들 저장
+        PrefUtils.putBoolean("isProfileSet", true)
         PrefUtils.putString("nickname", userInfo.name)
         PrefUtils.putInt("level", userInfo.level)
+
     }
 
     // 코루틴에서 실행할 함수

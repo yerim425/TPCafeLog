@@ -6,5 +6,5 @@ data class UserResponse(
     val level: Int,
     val points: Int,
     val created_at: String,
-    val profile_img_url: String,
+    val img_url: String,
 )

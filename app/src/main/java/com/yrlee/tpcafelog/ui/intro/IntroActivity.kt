@@ -31,11 +31,11 @@ class IntroActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if(PrefUtils.getBoolean("isSet")){
                 if(PrefUtils.getBoolean("isLoggedIn")){ // 카카오 로그인을 한 유저
-                    PrefUtils.getString("kakaoId").let{
-                        if(it.isEmpty()){ // 카카오 아이디가 없으면 프로필 설정 화면으로 이동
+                    PrefUtils.getBoolean("isProfileSet").let{
+                        if(!it){ // 프로필 설정 안함
                             startActivity(Intent(this, StartActivity::class.java))
                             finish()
-                        }else{ // 카카오 아이디가 있으면 메인 화면으로 이동
+                        }else{ // 프로필 설정 완료
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         }
