@@ -3,6 +3,7 @@ package com.yrlee.tpcafelog.data.remote
 import com.yrlee.tpcafelog.MyApplication
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -15,8 +16,13 @@ object RetrofitHelper {
             .build()
         chain.proceed(request)
     }
+    val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY  // URL, 헤더, 바디 전부 다 출력됨
+    }
+
     private val kakaoOkHttpClient = OkHttpClient.Builder()
         .addInterceptor(kakaoInterceptor)
+        .addInterceptor(loggingInterceptor)
         .build()
 
     private val kakaoRetrofit by lazy {

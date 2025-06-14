@@ -32,8 +32,9 @@
             android:button="@null"
             android:background="@drawable/selector_favorite_item"
             android:backgroundTint="@color/red"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/iv_cafe"
+            android:layout_marginTop="4dp"/>
 
         <TextView
             android:id="@+id/tv_cafe_name"
@@ -44,7 +45,6 @@
             android:textColor="@color/gray"
             android:lines="2"
             android:textStyle="bold"
-            android:layout_below="@id/cb_favorite"
             android:layout_marginEnd="104dp"/>
 
         <LinearLayout
@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_below="@id/tv_cafe_name"
-            android:layout_marginTop="8dp">
+            android:layout_below="@id/iv_kakao_map"
+            android:layout_marginTop="4dp">
 
             <TextView
                 android:id="@+id/tv_rating"
@@ -96,7 +96,7 @@
             android:drawableStart="@drawable/ic_phone_14"
             android:drawableTint="@color/secondary"
             android:drawablePadding="4dp"
-            android:layout_marginTop="2dp"/>
+            android:layout_marginTop="2dp" />
 
         <TextView
             android:id="@+id/tv_category"
@@ -105,19 +105,17 @@
             android:text="커피전문점 > 스타벅스"
             android:textColor="@color/secondary"
             android:textSize="11sp"
-            android:layout_below="@id/tv_phone"
-            android:layout_marginTop="4dp"
+            android:layout_alignBaseline="@id/cb_favorite"
             android:textStyle="bold" />
         
         <ImageView
+            android:id="@+id/iv_kakao_map"
             android:layout_width="60dp"
             android:layout_height="20dp"
             android:adjustViewBounds="true"
             android:src="@drawable/kakaomap_horizontal_ko"
-            android:layout_toStartOf="@id/iv_cafe"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"
-            android:layout_above="@id/tv_cafe_name"/>
+            android:layout_below="@id/tv_cafe_name"
+            android:layout_marginTop="16dp"/>
 
         <View
             android:id="@+id/line"

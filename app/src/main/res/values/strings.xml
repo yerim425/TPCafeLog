@@ -37,11 +37,12 @@
     <string name="my_visit_cafe">내가 방문한 카페</string>
     <string name="my">MY</string>
     <string name="comments">Comments</string>
-    <string name="cafe_search_for_certify">방문인증할 카페 검색</string>
+    <string name="search_cafe_for_certify">방문인증할 카페 검색</string>
     <string name="location_certify">위치인증</string>
     <string name="certify_my_location">내 위치 인증</string>
     <string name="certify_my_location_completed">내 위치 인증 완료</string>
-    <string name="message_certify_my_location">인증하려는 카페 근방 100m이내에서 위치인증을 해주세요.</string>
+    <string name="message_certify_my_location">내 위치 인증을 해주세요.</string>
+    <string name="message_certify_visit_image">카페 방문 사진을 선택해주세요.</string>
     <string name="certify_image">음식/실내외 사진 인증 0/1</string>
     <string name="certify_image_completed">음식/실내외 사진 인증 1/1</string>
     <string name="certify">인증하기</string>
@@ -56,4 +57,10 @@
     <string name="message_restricted_search_func">내 위치정보를 제공하지 않아 검색기능 사용이 제한됩니다.</string>
     <string name="cafe">카페</string>
     <string name="message_input_search_query">검색할 내용을 입력해주세요.</string>
+    <string name="message_stop_visit_certify">방문인증을 그만두시겠습니까?</string>
+    <string name="yes">확인</string>
+    <string name="message_select_visit_image">다른 유저들과 공유되니 자랑하고 싶은 멋진 사진으로 골라주세요!</string>
+    <string name="message_can_search_around_100m">내 위치 인증을 위해 100m 근방의 카페들만 검색할 수 있어요!</string>
+    <string name="message_require_location_permission">위치 권한이 필요합니다.</string>
+    <string name="message_search_cafe_for_certify">인증하려는 카페를 선택해주세요!</string>
 </resources>

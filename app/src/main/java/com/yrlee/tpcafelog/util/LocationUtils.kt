@@ -1,0 +1,88 @@
+package com.yrlee.tpcafelog.util
+
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Looper
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.yrlee.tpcafelog.R
+import kotlinx.coroutines.launch
+
+object LocationUtils {
+
+    private lateinit var appContext: Context
+    val locationProviderClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(appContext)
+    }
+
+
+    fun init(context: Context) {
+        appContext = context.applicationContext
+    }
+
+    // 내 위치 얻어오기 [개인정보이기에 동적퍼미션 필요]
+    // 내 위치 검색은 Google Fused Location API 사용 [라이브러리 추가 필요 : play-services-location]
+    // 내 위치 정보를 얻어오기 위한 클래스의 참조변수 [위치정보제공자(gps, network, passive)를 사용하는 객체]
+
+    /**
+     * 현재 위치 권한이 있는지 확인
+     */
+    fun hasLocationPermission(context: Context): Boolean {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * 위치 권한 요청 (Activity에서만 가능)
+     */
+//    fun requestLocationPermission(activity: Activity, requestCode: Int) {
+//        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), requestCode)
+//    }
+
+    /**
+     * 고정된 LocationRequest 생성
+     */
+    fun createLocationRequest(): LocationRequest {
+        return LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000L).build()
+    }
+
+    /**
+     * 현재 위치 한 번 받아오기
+     * 콜백에서 결과(Location?)를 반환
+     */
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    fun requestMyLocation(
+        context: Context,
+        onResult: (Location?) -> Unit
+    ) {
+        if (!hasLocationPermission(context)) {
+            onResult(null)
+            return
+        }else{
+            val locationRequest = createLocationRequest()
+
+            val callback = object : LocationCallback() {
+                override fun onLocationResult(p0: LocationResult) {
+                    super.onLocationResult(p0)
+                    locationProviderClient.removeLocationUpdates(this)
+                    onResult(p0.lastLocation)
+                    Log.d("my location", "${p0.lastLocation?.latitude}, ${p0.lastLocation?.longitude}")
+                }
+            }
+            locationProviderClient.requestLocationUpdates(locationRequest, callback, Looper.getMainLooper())
+        }
+    }
+}

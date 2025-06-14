@@ -61,7 +61,7 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
                     tvDistance.visibility = View.INVISIBLE
                 }
                 else{
-                    tvDistance.text = distance
+                    tvDistance.text = distance + "m"
                     ivDot.visibility = View.VISIBLE
                     tvDistance.visibility = View.VISIBLE
                 }
@@ -106,7 +106,7 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
     fun addItems(items: List<Place>){
         val startPos = itemList.size
         itemList.addAll(items)
-        notifyItemRangeChanged(startPos, items.size)
+        notifyItemRangeInserted(startPos, items.size)
     }
 
     fun updateImage(pos: Int, url: String?){

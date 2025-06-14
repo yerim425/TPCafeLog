@@ -28,6 +28,13 @@ class IntroActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        // test 계정
+//        PrefUtils.putBoolean("isSet", true)
+//        PrefUtils.putBoolean("isLoggedIn", true)
+//        PrefUtils.putBoolean("isProfileSet", true)
+//        PrefUtils.putString("nickname", "test")
+//        PrefUtils.putString("level", "test")
+//        PrefUtils.putString("kakao_id", "12345678")
         Handler(Looper.getMainLooper()).postDelayed({
             if(PrefUtils.getBoolean("isSet")){
                 if(PrefUtils.getBoolean("isLoggedIn")){ // 카카오 로그인을 한 유저

@@ -18,12 +18,11 @@ object Utils {
 
     private lateinit var appContext: Context
 
-
     fun init(context: Context) {
         appContext = context.applicationContext
     }
 
-    suspend fun getRealPathFromUri(uri: Uri): String{
+    fun getRealPathFromUri(uri: Uri): String{
 
         // android 10 version 부터 uri 에 해당하는 실제경로를 얻어오는 것이 불가능함
         // 그래서 별도의 임시파일을 만들어 uri에 해당하는 이미지 파일의 데이터를 복사해서 이 임시파일을 업로드함
