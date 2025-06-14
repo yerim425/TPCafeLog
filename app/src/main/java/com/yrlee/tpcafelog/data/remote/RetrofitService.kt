@@ -1,6 +1,7 @@
 package com.yrlee.tpcafelog.data.remote
 
 import com.yrlee.tpcafelog.MyApplication
+import com.yrlee.tpcafelog.model.CafeName
 import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.NaverSearchImageResponse
@@ -42,6 +43,15 @@ interface RetrofitService {
         @Query("y") latitude: String?= null,
         @Query("page") page: Int,
     ): Call<KakaoSearchPlaceResponse>
+
+    // 100m 근방의 카페 검색하기
+    @GET("v2/local/search/keyword.json?category_group_code=CE7&radius=1000")
+    suspend fun getSearchCafeNames(
+        @Query("query") query: String,
+        @Query("x") longitude: String,
+        @Query("y") latitude: String,
+        @Query("page") page: Int,
+    ): KakaoSearchPlaceResponse
 
     // 네이버 이미지 검색하기
     @GET("v1/search/image?display=1")

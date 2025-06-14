@@ -1,37 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="320dp"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
+    <EditText
+        android:id="@+id/edt_search_cafe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_close">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_bg_cream_rounded"
-                android:hint="@string/cafe_search_for_certify"
-                android:textSize="16sp"
-                android:textColorHint="@color/gray3"
-                android:paddingVertical="8dp"
-                android:paddingHorizontal="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="20"/>
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+        android:background="@drawable/shape_bg_cream_rounded"
+        android:drawableEnd="@drawable/ic_search"
+        android:drawableTint="@color/gray3"
+        android:ems="20"
+        android:hint="@string/search_cafe_for_certify"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray3"
+        android:textSize="16sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_cafe_name"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/message_can_search_around_100m"
+        android:textColor="@color/secondary"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:layout_marginTop="2dp"/>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="320dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
-        android:layout_below="@id/appbar"/>
-</RelativeLayout>
+        android:layout_height="320dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_cafe_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="4dp"/>
+        <TextView
+            android:id="@+id/tv_no_cafe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="찾으시는 카페가 없어요!"
+            android:textColor="@color/mocha"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+
+</LinearLayout>

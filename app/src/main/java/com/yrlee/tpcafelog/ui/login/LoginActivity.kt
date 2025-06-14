@@ -65,8 +65,9 @@ class LoginActivity : AppCompatActivity() {
         // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
-                kakaoLoginFail()
+                Log.e(TAG_KAKAO, "카카오 로그인 에러: ${error.message}", error)
             } else if (token != null) {
+                Log.d(TAG_KAKAO, "토큰 받음: ${token.accessToken}")
                 kakaoLoginSuccess(token)
             }
         }
@@ -101,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun kakaoLoginSuccess(token: OAuthToken){
-        Log.i(TAG_KAKAO, "카카오톡으로 로그인 성공 ${token.accessToken}")
+        Log.i(TAG_KAKAO, "카카오 로그인 성공")
         // 사용자 정보 sharedPreferences에 저장
         PrefUtils.putBoolean("isSet", true)
         PrefUtils.putBoolean("isLoggedIn", true)

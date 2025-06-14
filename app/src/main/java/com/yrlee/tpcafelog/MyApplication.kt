@@ -8,6 +8,7 @@ import com.kakao.vectormap.KakaoMapSdk
 import androidx.core.content.edit
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.user.UserApiClient
+import com.yrlee.tpcafelog.util.LocationUtils
 import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.Utils
 
@@ -22,8 +23,9 @@ class MyApplication : Application(){
 
     override fun onCreate() {
         super.onCreate()
-        PrefUtils.init(applicationContext)
+        PrefUtils.init(applicationContext) // SharedPreferences
         Utils.init(applicationContext)
+        LocationUtils.init(applicationContext) // 내 위치 요청할 때 사용
 
         // 카카오 로그인 SDK 초기화
         KakaoSdk.init(this, KAKAO_NATIVE_API_KEY)

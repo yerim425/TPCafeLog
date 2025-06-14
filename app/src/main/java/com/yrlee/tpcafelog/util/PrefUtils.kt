@@ -31,7 +31,7 @@ object PrefUtils {
     }
 
     fun putBoolean(key: String, value: Boolean){
-        sharedPreferences.edit(commit = true) { putBoolean(key, value) }
+        sharedPreferences.edit().putBoolean(key, value).apply()
     }
 
     fun getBoolean(key: String): Boolean{
