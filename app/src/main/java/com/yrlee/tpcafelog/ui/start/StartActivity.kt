@@ -2,15 +2,12 @@ package com.yrlee.tpcafelog.ui.start
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
-import androidx.annotation.RequiresExtension
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,32 +15,25 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.kakao.sdk.user.UserApiClient
-import com.yrlee.tpcafelog.MyApplication
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
-import com.yrlee.tpcafelog.data.remote.RetrofitService
 import com.yrlee.tpcafelog.databinding.ActivityStartBinding
 import com.yrlee.tpcafelog.model.MyResponse
-import com.yrlee.tpcafelog.model.User
+import com.yrlee.tpcafelog.model.UserItem
 import com.yrlee.tpcafelog.ui.intro.IntroActivity
-import com.yrlee.tpcafelog.ui.login.LoginActivity
 import com.yrlee.tpcafelog.ui.main.MainActivity
 import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.UUID
 
 class StartActivity : AppCompatActivity() {
 
@@ -133,12 +123,11 @@ class StartActivity : AppCompatActivity() {
 
     fun requestCreateUser(){
         // 서버에 유저 정보 추가
-        val userInfo = User(
+        val userInfo = UserItem(
             kakao_id = PrefUtils.getString("kakao_id"),
             name = binding.inputLayoutName.editText!!.text.toString().trim(),
             level = 1,
             points = 0,
-            created_at = Utils.getNowDateTimeString()
         )
 
         val json = Gson().toJson(userInfo)
@@ -161,7 +150,8 @@ class StartActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     Log.d(TAG, "응답 body: $body")
                     if(body?.status == 200){
-                        saveUserInfoToPrefs(userInfo)
+                        val id = body.data?.toInt() ?: 0
+                        saveUserInfoToPrefs(userInfo, id)
                         startActivity(Intent(this@StartActivity, MainActivity::class.java))
                         finish()
                     }
@@ -178,8 +168,9 @@ class StartActivity : AppCompatActivity() {
         })
     }
 
-    fun saveUserInfoToPrefs(userInfo: User){
+    fun saveUserInfoToPrefs(userInfo: UserItem, id: Int){
         // shared_prefs에 자주 사용할 데이터들 저장
+        PrefUtils.putInt("user_id", id)
         PrefUtils.putBoolean("isProfileSet", true)
         PrefUtils.putString("nickname", userInfo.name)
         PrefUtils.putInt("level", userInfo.level)
@@ -198,7 +189,7 @@ class StartActivity : AppCompatActivity() {
             .get()
 
         // 파일로 저장
-        val fileName = "${System.currentTimeMillis()}.jpg"
+        val fileName = "${System.currentTimeMillis()}_${UUID.randomUUID()}.jpg"
         val file = File(externalCacheDir, fileName)
 
         val outputStream = FileOutputStream(file)

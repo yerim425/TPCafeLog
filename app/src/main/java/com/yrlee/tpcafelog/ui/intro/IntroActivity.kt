@@ -29,6 +29,7 @@ class IntroActivity : AppCompatActivity() {
             insets
         }
         // test 계정
+//        PrefUtils.putInt("user_id", 1)
 //        PrefUtils.putBoolean("isSet", true)
 //        PrefUtils.putBoolean("isLoggedIn", true)
 //        PrefUtils.putBoolean("isProfileSet", true)

@@ -3,27 +3,22 @@ package com.yrlee.tpcafelog.ui.visit
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.yrlee.tpcafelog.databinding.ItemCafeNameBinding
-import com.yrlee.tpcafelog.model.CafeName
+import com.yrlee.tpcafelog.model.CafeItem
 
-class VisitCafeNameAdapter(
+class CafeNameAdapter(
     val context: Context,
-    private val onItemClick: (CafeName) -> Unit
-): Adapter<VisitCafeNameAdapter.VH>() {
+    private val onItemClick: (CafeItem) -> Unit
+): Adapter<CafeNameAdapter.VH>() {
 
-    val cafeNameList = mutableListOf<CafeName>()
+    val cafeNameList = mutableListOf<CafeItem>()
 
     inner class VH(val binding: ItemCafeNameBinding): ViewHolder(binding.root){
         init{
             binding.root.setOnClickListener {
                 onItemClick(cafeNameList[bindingAdapterPosition])
-//                val pos = bindingAdapterPosition
-//                if (pos != RecyclerView.NO_POSITION && pos < cafeNameList.size) {
-//                    onItemClick(cafeNameList[pos])
-//                }
             }
         }
     }
@@ -39,7 +34,7 @@ class VisitCafeNameAdapter(
         holder.binding.tvCafeAddress.text = cafeNameList[position].address
     }
 
-    fun addItems(items: List<CafeName>){
+    fun addItems(items: List<CafeItem>){
         val pos = cafeNameList.size
         cafeNameList.addAll(items)
         notifyItemRangeInserted(pos, items.size)

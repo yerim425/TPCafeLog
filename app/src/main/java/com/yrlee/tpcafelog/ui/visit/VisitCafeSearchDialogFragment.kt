@@ -7,27 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.DialogSearchCafeBinding
-import com.yrlee.tpcafelog.model.CafeName
-import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import com.yrlee.tpcafelog.model.CafeItem
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment() {
     private val TAG = "visit cafe search dialog fragment"
@@ -35,14 +25,14 @@ class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment()
     private var cafeSearchJob: Job? = null
     private var page = 1
     private var totalCnt = 0
-    private lateinit var adapter: VisitCafeNameAdapter
+    private lateinit var adapter: CafeNameAdapter
     private var query = ""
     private var isLoading = false
 
-    val binding by lazy { DialogSearchCafeBinding.inflate(LayoutInflater.from(context)) }
+    lateinit var binding:DialogSearchCafeBinding
 
     interface OnCafeSelectedListener {
-        fun onCafeSelected(cafeName: CafeName)
+        fun onCafeSelected(cafeInfo: CafeItem)
     }
 
     private var listener: OnCafeSelectedListener? = null
@@ -53,9 +43,10 @@ class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        binding = DialogSearchCafeBinding.inflate(LayoutInflater.from(requireContext()))
         val builder = AlertDialog.Builder(requireContext()).setView(binding.root)
 
-        adapter = VisitCafeNameAdapter(requireContext()) {
+        adapter = CafeNameAdapter(requireContext()) {
             listener?.onCafeSelected(it)
             dismiss()
         }
@@ -79,7 +70,7 @@ class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment()
                 if (!recyclerView.canScrollVertically(1) && !isLoading && adapter.itemCount < totalCnt) {
                     isLoading = true
                     page++
-                    viewLifecycleOwner.lifecycleScope.launch {
+                    lifecycleScope.launch {
                         requestSearchCafes(query)
                     }
                 }
@@ -106,9 +97,9 @@ class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment()
             }
 
             val cafeNames = response.documents.map {
-                CafeName(it.place_name, it.road_address_name)
+                val address = if(it.address_name.isEmpty()) it.road_address_name else it.address_name
+                CafeItem(it.id, it.place_name, address)
             }
-
             adapter.addItems(cafeNames)
         } catch (e: Exception) {
             Log.e(TAG, "카페 검색 실패: ${e.message}")

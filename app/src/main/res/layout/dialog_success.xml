@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/tv_cafe_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="카페 이름"
+        android:textSize="16sp"
+        android:textColor="@color/primary"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_success_visit_certify"
+        android:textColor="@color/gray"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_below="@id/tv_cafe_name"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tv_txt"
+        android:layout_below="@id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="현재 포인트"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/secondary"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_current_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5P"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/secondary"
+        android:layout_toEndOf="@id/tv_txt"
+        android:layout_marginStart="4sp"
+        android:layout_alignBaseline="@id/tv_txt"/>
+
+    <TextView
+        android:id="@+id/tv_gained_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(+0)"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/secondary"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@id/tv_current_point"
+        android:layout_alignBaseline="@id/tv_current_point"
+        android:layout_marginStart="8dp"/>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        app:backgroundTint="@color/secondary"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tv_current_point" />
+</RelativeLayout>
