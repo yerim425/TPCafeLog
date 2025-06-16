@@ -1,6 +1,7 @@
 package com.yrlee.tpcafelog.model
 
-data class CafeName(
+data class CafeItem(
+    var id: String,
     var name: String,
     var address: String,
 )

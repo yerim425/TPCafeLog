@@ -101,6 +101,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onRestart() {
+        super.onRestart()
+
+        if(isFabMenuOpen){
+            binding.fabMenu.visibility = View.GONE
+            binding.fabMain.setImageResource(R.drawable.ic_add)
+            isFabMenuOpen = false
+        }
+    }
+
     // 내 위치 검색 작업
 //    fun requestMyLocation() {
 //        // 요청 객체 생성 [정확도 우선, 5초마다 갱신]

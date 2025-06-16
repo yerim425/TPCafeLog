@@ -30,10 +30,10 @@
             android:padding="16dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_search_cafe"
+                android:id="@+id/btn_select_cafe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/selected_cafe_for_review"
+                android:text="@string/select_cafe"
                 android:textSize="12sp"
                 app:backgroundTint="@color/secondary"
                 app:icon="@drawable/ic_select"
@@ -43,32 +43,44 @@
                 style="@style/Widget.AppCompat.Button"/>
 
             <TextView
-                android:id="@+id/tv_cafe_name"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_select_cafe"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/btn_search_cafe"
+                android:text="@string/message_can_select_in_visited_cafe"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@color/secondary"
+                android:layout_below="@id/btn_select_cafe"
+                tools:ignore="SmallSp"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_cafe_name"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_toEndOf="@id/btn_select_cafe"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@id/btn_search_cafe"
-                android:layout_alignBottom="@id/btn_search_cafe"
+                android:layout_alignTop="@id/btn_select_cafe"
+                android:layout_alignBottom="@id/btn_select_cafe"
                 android:text="선택한 카페 이름"
                 android:lines="2"
                 android:textSize="14sp"
-                android:textColor="@color/gray2"
+                android:textColor="@color/gray3"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
-                android:layout_marginStart="4dp"
-                android:layout_below="@id/btn_search_cafe"/>
+                android:visibility="gone"
+                android:layout_marginStart="4dp"/>
 
             <View
                 android:id="@+id/line1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/cream"
-                android:layout_below="@id/btn_search_cafe"
+                android:layout_below="@id/tv_select_cafe"
                 android:layout_marginVertical="16dp"/>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_image"
+                android:id="@+id/btn_add_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_image"
@@ -79,7 +91,19 @@
                 app:iconGravity="textStart"
                 app:iconTint="@color/white"
                 style="@style/Widget.AppCompat.Button"
-                android:layout_below="@id/line1"/>
+                android:layout_below="@id/line3"/>
+
+            <TextView
+                android:id="@+id/tv_add_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/message_can_add_photo_max_6"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@color/secondary"
+                android:layout_below="@id/btn_add_photo"
+                tools:ignore="SmallSp"
+                android:layout_marginStart="8dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_add_review_image"
@@ -87,14 +111,14 @@
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="horizontal"
-                android:layout_below="@id/btn_add_image"/>
+                android:layout_below="@id/btn_add_photo"/>
 
             <View
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/cream"
-                android:layout_below="@id/recyclerview_add_review_image"
+                android:layout_below="@id/tv_add_photo"
                 android:layout_marginVertical="16dp"/>
 
             <TextView
@@ -102,8 +126,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/select_hashtag"
-                android:layout_below="@id/line2"
-                android:textSize="14sp"
+                android:layout_below="@id/line1"
+                android:textSize="12sp"
                 android:textColor="@color/secondary"
                 android:textStyle="bold"/>
 
@@ -139,20 +163,21 @@
                 android:padding="16dp"
                 android:gravity="top"
                 android:textColor="@color/gray"
-                android:layout_below="@id/line3"
+                android:layout_below="@id/line2"
                 android:lines="5"/>
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_certify"
+        android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="@string/certify"
+        android:text="@string/submit"
         android:textSize="16sp"
-        android:textColor="@color/gray"
-        app:backgroundTint="@color/cream"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="@color/secondary"
         app:rippleColor="@color/mocha"
         style="@style/Widget.AppCompat.Button"
         android:layout_gravity="bottom"

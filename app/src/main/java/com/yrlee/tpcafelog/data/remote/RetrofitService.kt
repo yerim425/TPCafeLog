@@ -1,19 +1,17 @@
 package com.yrlee.tpcafelog.data.remote
 
 import com.yrlee.tpcafelog.MyApplication
-import com.yrlee.tpcafelog.model.CafeName
+import com.yrlee.tpcafelog.model.HashTagItem
 import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.NaverSearchImageResponse
-import com.yrlee.tpcafelog.model.User
 import com.yrlee.tpcafelog.model.UserResponse
+import com.yrlee.tpcafelog.model.VisitCafeInfoItem
+import com.yrlee.tpcafelog.model.VisitCertifyResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -33,7 +31,9 @@ interface RetrofitService {
 
     // DB에서 User 데이터 가져오기
     @GET("loadUserInfo.php")
-    fun getUserInfo(): Call<MyResponse<UserResponse>>
+    fun getUserInfo(
+        @Query("user_id") user_id: Int
+    ): Call<MyResponse<UserResponse>>
 
     // 카카오 키워드로 장소 검색하기
     @GET("v2/local/search/keyword.json?category_group_code=CE7")
@@ -45,7 +45,7 @@ interface RetrofitService {
     ): Call<KakaoSearchPlaceResponse>
 
     // 100m 근방의 카페 검색하기
-    @GET("v2/local/search/keyword.json?category_group_code=CE7&radius=1000")
+    @GET("v2/local/search/keyword.json?category_group_code=CE7&radius=100")
     suspend fun getSearchCafeNames(
         @Query("query") query: String,
         @Query("x") longitude: String,
@@ -58,4 +58,28 @@ interface RetrofitService {
     suspend fun getSearchImage(
         @Query("query") query: String,
     ): NaverSearchImageResponse
+
+    // 방문 인증 정보 저장
+    @Multipart
+    @POST("insertVisitInfo.php")
+    fun postVisitInfo(
+        @Part("data") data: RequestBody,
+        @Part img: MultipartBody.Part?
+    ): Call<MyResponse<VisitCertifyResponse>>
+
+    @GET("loadVisitedCafeList.php")
+    fun getVisitedCafeList(
+        @Query("user_id") user_id: Int,
+    ): Call<MyResponse<List<VisitCafeInfoItem>>>
+
+    @GET("loadHashtagNames.php")
+    fun getHastTagNames(): Call<MyResponse<List<HashTagItem>>>
+
+    // 리뷰 정보 저장
+    @Multipart
+    @POST("insertReviewInfo.php")
+    fun postReviewInfo(
+        @Part("data") data: RequestBody,
+        @Part imgs: List<MultipartBody.Part?>
+    ): Call<MyResponse<String>>
 }

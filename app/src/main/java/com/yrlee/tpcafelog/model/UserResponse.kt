@@ -1,6 +1,7 @@
 package com.yrlee.tpcafelog.model
 
 data class UserResponse(
+    val user_id: Int,
     val kakao_id: String,
     val name: String,
     val level: Int,
