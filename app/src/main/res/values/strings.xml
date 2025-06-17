@@ -49,7 +49,8 @@
     <string name="selected_cafe_for_review">리뷰작성할 카페 선택</string>
     <string name="add_image">사진 추가</string>
     <string name="select_hashtag">카페에 어울리는 해시태그를 골라주세요!</string>
-    <string name="hint_review_content">이 카페는 어땠나요?\n분위기, 맛 등 솔직한 한마디를 남겨주세요!</string>
+    <string name="hint_review_content">분위기, 맛 등 솔직한 한마디를 남겨주세요!</string>
+    <string name="message_how_this_cafe">이 카페는 어떠셨나요?</string>
     <string name="message_without_login">로그인하지 않으면 일부 기능이 제한됩니다.\n로그인 없이 시작하시겠습니까?</string>
     <string name="message_login_fail">로그인에 실패했어요. 다시 시도해주세요.</string>
     <string name="nickname">닉네임</string>
@@ -75,4 +76,9 @@
     <string name="message_remove_photo">사진을 삭제하시겠습니까?</string>
     <string name="cancel">취소</string>
     <string name="remove">삭제</string>
+    <string name="message_select_cafe_for_review">리뷰할 카페를 선택해주세요</string>
+    <string name="message_select_hashtags">해시태그를 선택해주세요!</string>
+    <string name="message_success_create_review">리뷰를 작성했어요!</string>
+    <string name="message_give_score">카페 점수를 매겨주세요!</string>
+    <string name="message_stop_create_review">리뷰 작성을 그만두시겠습니까?</string>
 </resources>

@@ -133,7 +133,7 @@
         </RelativeLayout>
 
         <View
-            android:id="@+id/line"
+            android:id="@+id/line2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/cream"
@@ -147,7 +147,7 @@
             android:text="@string/my_visit_cafe"
             android:textColor="@color/primary"
             android:textSize="14sp"
-            android:layout_below="@id/line"
+            android:layout_below="@id/line2"
             android:layout_marginTop="16dp"/>
 
         <androidx.recyclerview.widget.RecyclerView

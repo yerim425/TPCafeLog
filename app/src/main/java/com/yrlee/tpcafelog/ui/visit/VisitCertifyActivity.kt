@@ -1,8 +1,6 @@
 package com.yrlee.tpcafelog.ui.visit
 
 import android.Manifest
-import android.content.DialogInterface
-import android.content.DialogInterface.OnClickListener
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -11,6 +9,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -26,8 +25,8 @@ import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.ActivityVisitCertifyBinding
 import com.yrlee.tpcafelog.model.CafeItem
 import com.yrlee.tpcafelog.model.MyResponse
-import com.yrlee.tpcafelog.model.VisitCertifyItem
-import com.yrlee.tpcafelog.model.VisitCertifyResponse
+import com.yrlee.tpcafelog.model.VisitCafeItem
+import com.yrlee.tpcafelog.model.VisitCafeAddResponse
 import com.yrlee.tpcafelog.util.LocationUtils
 import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.SuccessDialogFragment
@@ -100,12 +99,18 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
         // 취소 버튼
         binding.toolbar.setNavigationOnClickListener {
             AlertDialog.Builder(this).setTitle(R.string.message_stop_visit_certify)
-                .setPositiveButton(getString(R.string.yes), object : OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        finish()
-                    }
+                .setPositiveButton(getString(R.string.yes), {_,_->
+                    finish()
                 })
                 .create().show()
+        }
+        onBackPressedDispatcher.addCallback(this) {
+            AlertDialog.Builder(this@VisitCertifyActivity)
+                .setTitle(R.string.message_stop_visit_certify)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    finish()
+                }
+                .show()
         }
 
         // 카페 이름 검색 및 위치 인증 완료
@@ -152,7 +157,7 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
         }
 
         // 서버에 방문 인증 데이터를 저장
-        val visitInfo = VisitCertifyItem(
+        val visitInfo = VisitCafeItem(
             user_id = PrefUtils.getInt("user_id"),
             place_id = selectedCafe.id,
             place_name = selectedCafe.name,
@@ -173,10 +178,10 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
             }
         }
         val call = RetrofitHelper.getMyService().postVisitInfo(dataPart, filePart)
-        call.enqueue(object : Callback<MyResponse<VisitCertifyResponse>>{
+        call.enqueue(object : Callback<MyResponse<VisitCafeAddResponse>>{
             override fun onResponse(
-                call: Call<MyResponse<VisitCertifyResponse>>,
-                response: Response<MyResponse<VisitCertifyResponse>>
+                call: Call<MyResponse<VisitCafeAddResponse>>,
+                response: Response<MyResponse<VisitCafeAddResponse>>
             ) {
                 if(response.isSuccessful){
                     val body = response.body()
@@ -188,7 +193,9 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
                                     selectedCafe.name,
                                     data.user_point,
                                     data.gained_point
-                                ).show(supportFragmentManager, "VisitSuccess") }
+                                ){
+                                    finish()
+                                }.show(supportFragmentManager, "VisitSuccess") }
                             }
                             400 ->{
                                 val body = response.errorBody()?.string()
@@ -204,7 +211,7 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
                 }
             }
 
-            override fun onFailure(call: Call<MyResponse<VisitCertifyResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<MyResponse<VisitCafeAddResponse>>, t: Throwable) {
                 Log.e(TAG, "${t.message}")
             }
         })

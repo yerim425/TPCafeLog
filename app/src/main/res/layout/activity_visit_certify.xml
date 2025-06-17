@@ -76,7 +76,7 @@
                 android:layout_marginStart="8dp"/>
 
             <View
-                android:id="@+id/line"
+                android:id="@+id/line2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/cream"
@@ -96,7 +96,7 @@
                 app:iconGravity="textStart"
                 app:iconTint="@color/cream"
                 style="@style/Widget.AppCompat.Button"
-                android:layout_below="@id/line"/>
+                android:layout_below="@id/line2"/>
 
             <TextView
                 android:id="@+id/tv_msg_visit_image"

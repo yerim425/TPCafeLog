@@ -5,9 +5,10 @@ import com.yrlee.tpcafelog.model.HashTagItem
 import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.NaverSearchImageResponse
+import com.yrlee.tpcafelog.model.ReviewAddResponse
 import com.yrlee.tpcafelog.model.UserResponse
-import com.yrlee.tpcafelog.model.VisitCafeInfoItem
-import com.yrlee.tpcafelog.model.VisitCertifyResponse
+import com.yrlee.tpcafelog.model.VisitCafeResponseItem
+import com.yrlee.tpcafelog.model.VisitCafeAddResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -65,12 +66,12 @@ interface RetrofitService {
     fun postVisitInfo(
         @Part("data") data: RequestBody,
         @Part img: MultipartBody.Part?
-    ): Call<MyResponse<VisitCertifyResponse>>
+    ): Call<MyResponse<VisitCafeAddResponse>>
 
     @GET("loadVisitedCafeList.php")
     fun getVisitedCafeList(
         @Query("user_id") user_id: Int,
-    ): Call<MyResponse<List<VisitCafeInfoItem>>>
+    ): Call<MyResponse<List<VisitCafeResponseItem>>>
 
     @GET("loadHashtagNames.php")
     fun getHastTagNames(): Call<MyResponse<List<HashTagItem>>>
@@ -78,8 +79,8 @@ interface RetrofitService {
     // 리뷰 정보 저장
     @Multipart
     @POST("insertReviewInfo.php")
-    fun postReviewInfo(
+    fun postReviewAdd(
         @Part("data") data: RequestBody,
         @Part imgs: List<MultipartBody.Part?>
-    ): Call<MyResponse<String>>
+    ): Call<MyResponse<ReviewAddResponse>>
 }

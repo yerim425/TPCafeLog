@@ -35,6 +35,6 @@ class ReviewHashtagAdapter(val context: Context, val items: List<HashTagItem>): 
     }
 
     fun getCheckedList(): List<HashTagItem>{
-        return checkedList
+        return checkedList.toList()
     }
 }
