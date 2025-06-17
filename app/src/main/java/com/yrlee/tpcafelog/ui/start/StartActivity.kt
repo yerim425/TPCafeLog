@@ -125,9 +125,7 @@ class StartActivity : AppCompatActivity() {
         // 서버에 유저 정보 추가
         val userInfo = UserItem(
             kakao_id = PrefUtils.getString("kakao_id"),
-            name = binding.inputLayoutName.editText!!.text.toString().trim(),
-            level = 1,
-            points = 0,
+            name = binding.inputLayoutName.editText!!.text.toString().trim()
         )
 
         val json = Gson().toJson(userInfo)
@@ -173,7 +171,7 @@ class StartActivity : AppCompatActivity() {
         PrefUtils.putInt("user_id", id)
         PrefUtils.putBoolean("isProfileSet", true)
         PrefUtils.putString("nickname", userInfo.name)
-        PrefUtils.putInt("level", userInfo.level)
+        PrefUtils.putInt("level", 1)
 
     }
 

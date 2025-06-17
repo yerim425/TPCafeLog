@@ -6,13 +6,19 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
+import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.databinding.DialogSuccessBinding
-import com.yrlee.tpcafelog.model.VisitCertifyResponse
 import com.yrlee.tpcafelog.ui.visit.VisitCertifyActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SuccessDialogFragment(val msg: String, val cafeName: String, val currentPoint: Int, val gainedPoint: Int) : DialogFragment() {
+class SuccessDialogFragment(
+    val msg: String,
+    val cafeName: String,
+    val currentPoint: Int,
+    val gainedPoint: Int,
+    private val onConfirm: (() -> Unit)? = null
+) : DialogFragment() {
 
     private lateinit var binding: DialogSuccessBinding
 
@@ -31,8 +37,8 @@ class SuccessDialogFragment(val msg: String, val cafeName: String, val currentPo
         animatePointGain()
 
         binding.btnOk.setOnClickListener {
+            onConfirm?.invoke() // 확인 시 콜백 실행
             dismiss()
-            (requireContext() as VisitCertifyActivity).finish()
         }
 
         return builder.create()

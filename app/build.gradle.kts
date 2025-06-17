@@ -66,6 +66,7 @@ dependencies {
     implementation("com.makeramen:roundedimageview:2.3.0")
     implementation("com.tbuonomo:dotsindicator:5.1.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("me.zhanghai.android.materialratingbar:library:1.4.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

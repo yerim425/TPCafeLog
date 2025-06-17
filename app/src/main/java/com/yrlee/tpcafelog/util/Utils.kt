@@ -69,4 +69,9 @@ object Utils {
         val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("img", file.name, requestBody)
     }
+    fun filePathToMultipartBodyForList(path: String): MultipartBody.Part{
+        val file = File(path)
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("imgs[]", file.name, requestBody)
+    }
 }
