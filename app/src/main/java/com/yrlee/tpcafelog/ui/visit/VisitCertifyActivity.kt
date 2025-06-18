@@ -161,8 +161,10 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
             user_id = PrefUtils.getInt("user_id"),
             place_id = selectedCafe.id,
             place_name = selectedCafe.name,
-            place_address = selectedCafe.address
+            place_address = selectedCafe.address,
+            place_category = selectedCafe.category
         )
+        Log.d("category name", selectedCafe.category)
         val json = Gson().toJson(visitInfo)
         val dataPart = Utils.jsonToRequestBody(json)
         var filePart: MultipartBody.Part? = null

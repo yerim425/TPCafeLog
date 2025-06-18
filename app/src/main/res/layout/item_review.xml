@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,7 +8,9 @@
     app:cardBackgroundColor="@color/cream"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    android:layout_marginBottom="16dp">
+    app:strokeColor="@color/cream"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="16dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +20,7 @@
             android:id="@+id/iv_user_profile"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/test2"
+            android:src="@drawable/ic_profile_default"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:riv_corner_radius="80dp"/>
@@ -26,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LV.2 에스프레소 시음가"
-            android:textSize="11sp"
+            android:textSize="10sp"
             android:textColor="@color/secondary"
             android:textStyle="bold"
             android:layout_toEndOf="@id/iv_user_profile"
@@ -36,32 +39,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User Name"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/gray"
             android:layout_below="@id/tv_user_level"
             android:layout_alignStart="@id/tv_user_level"/>
-
-        <TextView
-            android:id="@+id/tv_cafe_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="스타벅스 성수점"
-            android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:lines="2"
-            android:layout_toStartOf="@id/iv_cafe"
-            android:textStyle="bold"
-            android:layout_below="@id/tv_user_name"
-            android:layout_marginTop="8dp"/>
-        
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/iv_cafe"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/test1"
-            android:layout_alignParentEnd="true"
-            app:riv_corner_radius="16dp"/>
 
         <CheckBox
             android:id="@+id/cb_favorite"
@@ -70,67 +51,147 @@
             android:button="@null"
             android:background="@drawable/selector_favorite_item"
             android:backgroundTint="@color/red"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="4dp"/>
+            android:layout_alignParentEnd="true"/>
 
         <TextView
             android:id="@+id/tv_category"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="커피전문점 > 스타벅스"
             android:textColor="@color/secondary"
-            android:textSize="12sp"
-            android:layout_below="@id/tv_cafe_name"
-            android:layout_marginTop="2dp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/btn_kakaomap"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
-            android:background="@drawable/kakaomap_horizontal_ko"
-            android:layout_toStartOf="@id/iv_cafe"
-            android:layout_alignBottom="@id/tv_category"
-            android:layout_marginEnd="8dp" />
-
-        <TextView
-            android:id="@+id/tv_rating_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/review_rating"
-            android:textColor="@color/secondary"
-            android:textSize="12sp"
-            android:layout_below="@id/tv_category"
+            android:textSize="9sp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"/>
+            android:layout_toStartOf="@id/iv_cafe"
+            android:textStyle="bold"
+            android:layout_marginEnd="2dp"
+            android:layout_below="@id/iv_user_profile"
+            tools:ignore="SmallSp" />
 
         <TextView
-            android:id="@+id/tv_rating"
+            android:id="@+id/tv_cafe_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="스타벅스 성수점"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:textColor="@color/gray2"
+            android:maxLines="2"
+            android:layout_toStartOf="@id/iv_cafe"
+            android:textStyle="bold"
+            android:layout_below="@id/tv_category"
+            android:layout_marginEnd="2dp"
+            android:layout_marginTop="4dp"/>
+        
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_cafe"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/test1"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/cb_favorite"
+            android:layout_alignTop="@id/tv_category"
+            app:riv_corner_radius="8dp"/>
+
+
+
+
+
+        <LinearLayout
+            android:id="@+id/layout_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/iv_cafe"
+            android:layout_marginEnd="2dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_toStartOf="@id/iv_cafe">
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_location"
+                app:tint="@color/secondary"
+                android:layout_marginEnd="4dp"/>
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="서울 성동구 "
+                android:textColor="@color/secondary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/beige"
+            android:layout_marginVertical="8dp"
+            android:layout_below="@id/layout_location"/>
+
+        <LinearLayout
+            android:id="@+id/layout_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4.0"
-            android:textColor="@color/secondary"
-            android:textSize="12sp"
-            android:drawableStart="@drawable/ic_star_14"
-            android:drawableTint="@color/secondary"
-            android:drawablePadding="4dp"
-            android:layout_toEndOf="@id/tv_rating_txt"
-            android:layout_alignBaseline="@id/tv_rating_txt" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_below="@id/line">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_star"
+                app:tint="@color/secondary"
+                android:layout_marginEnd="4dp"/>
+
+            <TextView
+                android:id="@+id/tv_rating_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/review_rating"
+                android:textColor="@color/secondary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="4dp"/>
+
+            <TextView
+                android:id="@+id/tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.0"
+                android:textColor="@color/secondary"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_review_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:lines="1"
+            android:maxLines="2"
             android:ellipsize="end"
-            android:layout_below="@id/tv_rating_txt"
+            android:layout_below="@id/layout_rating"
             android:text="분위기도 좋고 맛도 좋아요!!"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textColor="@color/gray2"
             android:textStyle="bold"
             android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_hashtag_names"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_review_content"
+            android:text="#분위기좋은 #감성적인"
+            android:textSize="11sp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/secondary"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

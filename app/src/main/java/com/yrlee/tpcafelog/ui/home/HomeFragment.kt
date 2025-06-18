@@ -60,13 +60,17 @@ class HomeFragment : Fragment(), OnCategoryItemClickListener {
 
     val permissionResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (!it){
-            viewLifecycleOwner.lifecycleScope.launch {
-                requestSearchCafes()
+            viewLifecycleOwnerLiveData.value?.let{
+                it.lifecycleScope.launch {
+                    requestSearchCafes()
+                }
             }
             Toast.makeText(requireContext(), getString(R.string.message_restricted_search_func), Toast.LENGTH_SHORT).show()
         }else{
-            viewLifecycleOwner.lifecycleScope.launch {
-                requestSearchCafes()
+            viewLifecycleOwnerLiveData.value?.let{
+                it.lifecycleScope.launch {
+                    requestSearchCafes()
+                }
             }
         }
     }
@@ -92,10 +96,11 @@ class HomeFragment : Fragment(), OnCategoryItemClickListener {
         else LocationUtils.requestMyLocation(requireContext()){
             it?.let{
                 myLocation = it
-                viewLifecycleOwner.lifecycleScope.launch {
-                    requestSearchCafes()
+                viewLifecycleOwnerLiveData.value?.let{
+                    it.lifecycleScope.launch {
+                        requestSearchCafes()
+                    }
                 }
-
             }
         }
 
@@ -113,8 +118,10 @@ class HomeFragment : Fragment(), OnCategoryItemClickListener {
                 ).show()
             } else {
                 categoryAdapter.setUnselect()
-                viewLifecycleOwner.lifecycleScope.launch {
-                    requestSearchCafes()
+                viewLifecycleOwnerLiveData.value?.let{
+                    it.lifecycleScope.launch {
+                        requestSearchCafes()
+                    }
                 }
                 binding.edtSearchHome.setText(searchQuery)
                 binding.edtSearchHome.clearFocus()
@@ -166,8 +173,10 @@ class HomeFragment : Fragment(), OnCategoryItemClickListener {
                     // 다음 페이지 요청
                     if (binding.progressbar.isGone) { // 중복 요청 방지
                         page++
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            requestSearchCafes()
+                        viewLifecycleOwnerLiveData.value?.let{
+                            it.lifecycleScope.launch {
+                                requestSearchCafes()
+                            }
                         }
                     }
                 }
@@ -268,10 +277,15 @@ class HomeFragment : Fragment(), OnCategoryItemClickListener {
                                 val city = address.split(" ").firstOrNull() ?: ""
                                 val query =
                                     city + " " + place.place_name + " " + getString(R.string.cafe)
+                                viewLifecycleOwnerLiveData.value?.let{
+                                    it.lifecycleScope.launch {
+                                        // 1초에 10개 이상 요청 -> HTTP 429 = Too Many Requests
+                                        val imageUrl = requestCafeImage(query)
+                                        cafeAdapter.updateImage(i, imageUrl)
+                                    }
+                                }
                                 viewLifecycleOwner.lifecycleScope.launch {
-                                    // 1초에 10개 이상 요청 -> HTTP 429 = Too Many Requests
-                                    val imageUrl = requestCafeImage(query)
-                                    cafeAdapter.updateImage(i, imageUrl)
+
                                 }
                             }
 

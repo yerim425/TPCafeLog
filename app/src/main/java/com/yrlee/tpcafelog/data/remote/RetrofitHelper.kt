@@ -50,6 +50,7 @@ object RetrofitHelper {
     }
     private val naverOkHttpClient = OkHttpClient.Builder()
         .addInterceptor(naverInterceptor)
+        .addInterceptor(loggingInterceptor)
         .build()
 
     private val naverRetrofit by lazy {
@@ -65,10 +66,16 @@ object RetrofitHelper {
         return naverRetrofit.create(RetrofitService::class.java)
     }
 
+
+    private val myOkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+
     // 닷홈 서버 연결
     private val myRetrofit by lazy {
         Retrofit.Builder().run {
             baseUrl("http://yrlee2025.dothome.co.kr/cafelog/")
+            client(myOkHttpClient)
             addConverterFactory(ScalarsConverterFactory.create())
             addConverterFactory(GsonConverterFactory.create())
             build()
