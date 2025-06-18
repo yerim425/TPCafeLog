@@ -95,10 +95,9 @@ class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment()
                 if(totalCnt==0) binding.tvNoCafe.visibility = View.VISIBLE
                 else binding.tvNoCafe.visibility = View.GONE
             }
-
             val cafeNames = response.documents.map {
                 val address = if(it.address_name.isEmpty()) it.road_address_name else it.address_name
-                CafeItem(it.id, it.place_name, address)
+                CafeItem(it.id, it.place_name, address, it.category_name)
             }
             adapter.addItems(cafeNames)
         } catch (e: Exception) {

@@ -26,7 +26,7 @@
     <string name="cats_cafe">고양이카페</string>
     <string name="book_cafe">북카페</string>
     <string name="search_review">리뷰 검색하기</string>
-    <string name="review_rating">리뷰 평점</string>
+    <string name="review_rating">리뷰 점수</string>
     <string name="my_favorite_list">나의 찜 목록</string>
     <string name="distance_sort">거리순</string>
     <string name="message_search_review">카페 이름, 지역 또는 원하는 스타일을 검색해보세요.</string>

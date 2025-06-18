@@ -57,38 +57,27 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
                 tvCafeName.text = place_name
                 // 카페 거리
                 if(distance.isEmpty()) {
-                    ivDot.visibility = View.INVISIBLE
-                    tvDistance.visibility = View.INVISIBLE
+                    tvDistance.visibility = View.GONE
                 }
                 else{
                     tvDistance.text = distance + "m"
-                    ivDot.visibility = View.VISIBLE
                     tvDistance.visibility = View.VISIBLE
                 }
-                // 카페 카테고리
-                // "가정,생활 > 여가시설 > 만화방 > 만화카페 > 벌툰"
-//                val baseCategory = "음식점 > 카페"
-//                if(category_name == baseCategory){
-//                    tvCategory.visibility = View.INVISIBLE
-//                }else{
-//                    var category = ""
-//                    if(category_name.length > baseCategory.length){
-//                        val keyword = "카페 >"
-//                        category = category_name.indexOf(keyword).takeIf { it >= 0 }?.let{
-//                            category_name.substring(it + keyword.length).trim()} ?: category_name
-//                    }
-//                    else category = category_name
-//                    tvCategory.text = category
-//                    tvCategory.visibility = View.VISIBLE
-//                }
-                tvCategory.text = category_name
                 // 카페 전화번호
                 if(phone.isEmpty()){
-                    tvPhone.visibility = View.INVISIBLE
+                    layoutPhone.visibility = View.GONE
                 }else{
-                    tvPhone.visibility = View.VISIBLE
+                    layoutPhone.visibility = View.VISIBLE
                     tvPhone.text = phone
                 }
+                // 카페 주소
+                val address = if(address_name.isEmpty()) road_address_name else address_name
+                tvAddress.text = address
+
+                // 카페 카테고리
+                tvCategory.text = category_name
+
+                // 카페 이미지
                 if(img_url==null){
                     Glide.with(context).load(R.drawable.ic_app_logo).into(ivCafe)
                 }else{
@@ -99,6 +88,10 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
 //                line.visibility = View.GONE
 //                recyclerviewVisit.visibility = View.GONE
                 // 대표 이미지 등록
+                layoutRating.visibility = View.GONE
+                ivDot.visibility = View.GONE
+                line.visibility = View.GONE
+                recyclerviewVisit.visibility = View.GONE
             }
         }
     }

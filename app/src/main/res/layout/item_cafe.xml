@@ -17,8 +17,8 @@
         android:layout_height="wrap_content">
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/iv_cafe"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_app_logo"
@@ -45,35 +45,51 @@
             android:textColor="@color/gray"
             android:lines="2"
             android:textStyle="bold"
-            android:layout_marginEnd="104dp"/>
+            android:layout_toStartOf="@id/iv_cafe"
+            android:layout_marginEnd="4dp"/>
+
+
 
         <LinearLayout
-            android:id="@+id/layout_rating_distance"
+            android:id="@+id/layout_rating_distance_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_below="@id/iv_kakao_map"
+            android:layout_below="@id/tv_cafe_name"
             android:layout_marginTop="4dp">
 
-            <TextView
-                android:id="@+id/tv_rating"
+            <LinearLayout
+                android:id="@+id/layout_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.0"
-                android:textColor="@color/secondary"
-                android:textSize="11sp"
-                android:drawableStart="@drawable/ic_star_14"
-                android:drawableTint="@color/secondary"
-                android:drawablePadding="4dp"/>
+                android:orientation="horizontal"
+                android:layout_marginEnd="4dp"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="@color/secondary"
+                    android:layout_marginEnd="4dp"/>
+                <TextView
+                    android:id="@+id/tv_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.0"
+                    android:textColor="@color/secondary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
 
+            </LinearLayout>
             <ImageView
                 android:id="@+id/iv_dot"
                 android:layout_width="3dp"
                 android:layout_height="3dp"
                 android:src="@drawable/ic_circle"
                 app:tint="@color/secondary"
-                android:layout_marginStart="4dp"/>
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"/>
 
             <TextView
                 android:id="@+id/tv_distance"
@@ -81,22 +97,73 @@
                 android:layout_height="wrap_content"
                 android:text="0m"
                 android:textSize="11sp"
+                android:textStyle="bold"
                 android:textColor="@color/secondary"
-                android:layout_marginStart="4dp"/>
+                android:layout_marginEnd="8dp"/>
+
+            <ImageView
+                android:id="@+id/iv_kakao_map"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/kakaomap_horizontal_ko"/>
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_phone"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layout_phone_location"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="02-1234-5678"
-            android:textColor="@color/secondary"
-            android:textSize="11sp"
-            android:layout_below="@id/layout_rating_distance"
-            android:drawableStart="@drawable/ic_phone_14"
-            android:drawableTint="@color/secondary"
-            android:drawablePadding="4dp"
-            android:layout_marginTop="2dp" />
+            android:layout_toStartOf="@id/iv_cafe"
+            android:layout_below="@id/layout_rating_distance_map"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/layout_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp">
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_phone"
+                    app:tint="@color/secondary"
+                    android:layout_marginEnd="4dp"/>
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="02-1234-5678"
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp">
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_location"
+                    app:tint="@color/secondary"
+                    android:layout_marginEnd="4dp"/>
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="서울 성동구"
+                    android:textStyle="bold"
+                    android:textColor="@color/secondary"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_category"
@@ -104,21 +171,13 @@
             android:layout_height="wrap_content"
             android:text="커피전문점 > 스타벅스"
             android:textColor="@color/secondary"
-            android:textSize="11sp"
-            android:layout_alignBaseline="@id/cb_favorite"
-            android:textStyle="bold" />
-        
-        <ImageView
-            android:id="@+id/iv_kakao_map"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/kakaomap_horizontal_ko"
-            android:layout_below="@id/tv_cafe_name"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_below="@id/layout_phone_location"
             android:layout_marginTop="8dp"/>
 
         <View
-            android:id="@+id/line2"
+            android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/beige"
@@ -132,7 +191,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_below="@id/line2"
+            android:layout_below="@id/line"
             android:visibility="gone"
             android:layout_marginTop="8dp"/>
     </RelativeLayout>

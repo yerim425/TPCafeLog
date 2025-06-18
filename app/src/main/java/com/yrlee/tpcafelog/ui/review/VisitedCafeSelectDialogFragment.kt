@@ -74,6 +74,11 @@ class VisitedCafeSelectDialogFragment : DialogFragment() {
                             AlertDialog.Builder(requireContext())
                                 .setTitle(getString(R.string.message_no_visited_cafe))
                                 .setMessage(getString(R.string.message_certify_visit_cafe_for_create_review))
+                                .setCancelable(false)
+                                .setPositiveButton(getString(R.string.yes)){_,_->
+                                    dismiss()
+                                    (requireContext() as ReviewAddActivity).finish()
+                                }
                                 .create().show()
                         }
                     }

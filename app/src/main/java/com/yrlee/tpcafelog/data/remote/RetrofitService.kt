@@ -6,6 +6,7 @@ import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.NaverSearchImageResponse
 import com.yrlee.tpcafelog.model.ReviewAddResponse
+import com.yrlee.tpcafelog.model.ReviewListItemResponse
 import com.yrlee.tpcafelog.model.UserResponse
 import com.yrlee.tpcafelog.model.VisitCafeResponseItem
 import com.yrlee.tpcafelog.model.VisitCafeAddResponse
@@ -83,4 +84,11 @@ interface RetrofitService {
         @Part("data") data: RequestBody,
         @Part imgs: List<MultipartBody.Part?>
     ): Call<MyResponse<ReviewAddResponse>>
+
+    // 리뷰 리스트 요청
+    @GET("loadReviewList.php")
+    fun getReviewList(
+        @Query("query") query: String,
+        @Query("user_id") user_id: Int?=null,
+    ): Call<MyResponse<List<ReviewListItemResponse>>>
 }

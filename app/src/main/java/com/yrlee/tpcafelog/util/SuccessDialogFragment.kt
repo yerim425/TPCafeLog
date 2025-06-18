@@ -50,7 +50,7 @@ class SuccessDialogFragment(
             while (currentPoint < gainedPoint) {
                 currentPoint++
                 binding.tvGainedPoint.text = "(+$currentPoint)"
-                delay(300L) // 점수 올라가는 간격
+                delay(200L) // 점수 올라가는 간격
             }
         }
     }
