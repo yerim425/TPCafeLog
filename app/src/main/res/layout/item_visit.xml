@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="88dp"
+    android:layout_width="96dp"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginEnd="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/iv_cafe"
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="96dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        app:riv_corner_radius="16dp"
+        app:riv_corner_radius="8dp"
         android:src="@drawable/test1"/>
 
-    <ImageView
-        android:id="@+id/iv_review"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_review2"
-        app:tint="@color/yellow"
+    <FrameLayout
+        android:id="@+id/layout_is_reviewed"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_gravity="end|bottom"
-        android:layout_margin="8dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/iv_cafe"/>
+        android:layout_alignBottom="@id/iv_cafe"
+        android:background="@drawable/shape_bg_review_icon">
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_review2"
+            app:tint="@color/beige"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_name"

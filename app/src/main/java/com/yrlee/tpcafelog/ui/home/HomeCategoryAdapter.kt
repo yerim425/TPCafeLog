@@ -7,16 +7,35 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.yrlee.tpcafelog.R
+import com.yrlee.tpcafelog.data.local.OnHomeItemSelectListener
 import com.yrlee.tpcafelog.databinding.ItemCategoryBinding
+import com.yrlee.tpcafelog.util.Constants
 
 class HomeCategoryAdapter(
     val context: Context,
     private val items: List<String>,
-    private val listener: OnCategoryItemClickListener): Adapter<HomeCategoryAdapter.VH>() {
+    private val listener: OnHomeItemSelectListener
+): Adapter<HomeCategoryAdapter.VH>() {
 
     var selectedPosition = items.indexOf(context.getString(R.string.coffee_shop))
 
     inner class VH(val binding: ItemCategoryBinding): ViewHolder(binding.root){
+
+        init {
+            binding.root.setOnClickListener {
+                val prePos = selectedPosition
+                selectedPosition = if (bindingAdapterPosition == selectedPosition) {
+                    RecyclerView.NO_POSITION // 같은 걸 클릭하면 해제
+                } else {
+                    bindingAdapterPosition
+                }
+
+                notifyItemChanged(prePos)
+                notifyItemChanged(bindingAdapterPosition)
+
+                listener.onItemSelected(Constants.CATEGORY_TYPE)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -28,19 +47,7 @@ class HomeCategoryAdapter(
     override fun onBindViewHolder(holder: VH, position: Int) {
         holder.binding.cb.text = items[position]
         holder.binding.cb.isChecked = position == selectedPosition
-        holder.binding.cb.setOnClickListener {
-            val prePos = selectedPosition
-            selectedPosition = if (position == selectedPosition) {
-                RecyclerView.NO_POSITION // 같은 걸 클릭하면 해제
-            } else {
-                position
-            }
 
-            notifyItemChanged(prePos)
-            notifyItemChanged(position)
-
-            listener.onCategoryItemSelected()
-        }
     }
 
     //fun getCheckedList(): List<String> = checkedList.toList()

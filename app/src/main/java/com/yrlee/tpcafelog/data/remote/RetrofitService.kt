@@ -2,6 +2,9 @@ package com.yrlee.tpcafelog.data.remote
 
 import com.yrlee.tpcafelog.MyApplication
 import com.yrlee.tpcafelog.model.HashTagItem
+import com.yrlee.tpcafelog.model.HomeCafeRequest
+import com.yrlee.tpcafelog.model.HomeCafeResponse
+import com.yrlee.tpcafelog.model.HomeFilteringRequest
 import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.NaverSearchImageResponse
@@ -13,6 +16,7 @@ import com.yrlee.tpcafelog.model.VisitCafeAddResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -74,8 +78,11 @@ interface RetrofitService {
         @Query("user_id") user_id: Int,
     ): Call<MyResponse<List<VisitCafeResponseItem>>>
 
+    // 해시태그 리스트 가져오기
     @GET("loadHashtagNames.php")
-    fun getHastTagNames(): Call<MyResponse<List<HashTagItem>>>
+    fun getHastTagNames(
+        @Query("filter") filter: String?=null
+    ): Call<MyResponse<List<HashTagItem>>>
 
     // 리뷰 정보 저장
     @Multipart
@@ -91,4 +98,17 @@ interface RetrofitService {
         @Query("query") query: String,
         @Query("user_id") user_id: Int?=null,
     ): Call<MyResponse<List<ReviewListItemResponse>>>
+
+    // 각 카페의 DB 정보들 요청
+    @POST("loadHomeCafeList.php")
+    suspend fun getHomeCafeList(
+        @Body data: HomeCafeRequest
+    ): MyResponse<List<HomeCafeResponse>>
+
+    // DB에 저장되어 있는 카페 정보들 중 검색어, 카테고리, 해시태그에 맞는 카페의 id들 요청
+    @POST("loadHomeCafeFilteredList.php")
+    fun getHomeCafeFiltering(
+        @Body data: HomeFilteringRequest
+    ): Call<MyResponse<MyResponse<List<String>>>>
+
 }

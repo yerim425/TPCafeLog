@@ -2,7 +2,6 @@ package com.yrlee.tpcafelog.ui.home
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.databinding.ItemCafeBinding
-import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
+import com.yrlee.tpcafelog.model.HomeCafeResponse
 import com.yrlee.tpcafelog.model.Place
 
 /*
@@ -51,47 +50,66 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
     override fun getItemCount(): Int = itemList.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        itemList[position].apply {
-            with(holder.binding){
-                // 카페 이름
-                tvCafeName.text = place_name
-                // 카페 거리
-                if(distance.isEmpty()) {
-                    tvDistance.visibility = View.GONE
-                }
-                else{
-                    tvDistance.text = distance + "m"
-                    tvDistance.visibility = View.VISIBLE
-                }
-                // 카페 전화번호
-                if(phone.isEmpty()){
-                    layoutPhone.visibility = View.GONE
-                }else{
-                    layoutPhone.visibility = View.VISIBLE
-                    tvPhone.text = phone
-                }
-                // 카페 주소
-                val address = if(address_name.isEmpty()) road_address_name else address_name
-                tvAddress.text = address
+        val item = itemList[position]
+        with(holder){
+            // 카페 이름
+            binding.tvCafeName.text = item.place_name
+            // 카페 사용자 평점
+            if(item.avg_rating == null){
+                binding.layoutRating.visibility = View.GONE
+            }else{
+                binding.layoutRating.visibility = View.VISIBLE
+                binding.tvRating.text = item.avg_rating.toString()
+            }
+            // 카페 거리
+            if(item.distance.isEmpty()) {
+                binding.tvDistance.visibility = View.GONE
+            }
+            else{
+                binding.tvDistance.text = item.distance + "m"
+                binding.tvDistance.visibility = View.VISIBLE
+            }
+            // 카페 전화번호
+            if(item.phone.isEmpty()){
+                binding.layoutPhone.visibility = View.GONE
+            }else{
+                binding.layoutPhone.visibility = View.VISIBLE
+                binding.tvPhone.text = item.phone
+            }
 
-                // 카페 카테고리
-                tvCategory.text = category_name
+            // 카페 주소
+            val address = if(item.address_name.isEmpty()) item.road_address_name else item.address_name
+            binding.tvAddress.text = address
 
-                // 카페 이미지
-                if(img_url==null){
-                    Glide.with(context).load(R.drawable.ic_app_logo).into(ivCafe)
+            // 카페 카테고리
+            binding.tvCategory.text = item.category_name
+
+           // 이미지
+            item.visitDatas.let{
+                if(it==null){
+                    if(item.img_url == null) Glide.with(context).load(R.drawable.ic_app_logo).placeholder(R.drawable.ic_app_logo).into(binding.ivCafe)
+                    else Glide.with(context).load(item.img_url).placeholder(R.drawable.ic_app_logo).into(binding.ivCafe)
+
+                    binding.layoutVisit.visibility = View.GONE
                 }else{
-                    Glide.with(context).load(img_url).into(ivCafe)
+                    Glide.with(context).load(item.img_url).placeholder(R.drawable.ic_app_logo).into(binding.ivCafe)
+                    binding.layoutVisit.visibility = View.VISIBLE
+
+                    // 방문인증 리사이클러뷰 세팅
+                    binding.recyclerviewVisit.adapter = HomeCafeVisitAdapter(context, it)
                 }
-                // 서버에 해당 카페의 정보가 있으면 ui 변경
-//                layoutRating.visibility = View.INVISIBLE
-//                line.visibility = View.GONE
-//                recyclerviewVisit.visibility = View.GONE
-                // 대표 이미지 등록
-                layoutRating.visibility = View.GONE
-                ivDot.visibility = View.GONE
-                line.visibility = View.GONE
-                recyclerviewVisit.visibility = View.GONE
+            }
+            if(item.distance.isEmpty() || item.avg_rating == null){
+                binding.ivDot.visibility = View.GONE
+            }else binding.ivDot.visibility = View.VISIBLE
+
+            // 해시태그
+            if(item.hashtag_names == null){
+                binding.tvHashtagNames.visibility = View.GONE
+            }else{
+                val names = item.hashtag_names?.split(",")?.joinToString(" ") { "#$it" } ?: ""
+                binding.tvHashtagNames.text = names
+                binding.tvHashtagNames.visibility = View.VISIBLE
             }
         }
     }
@@ -110,6 +128,25 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
     fun clearItemList(){
         itemList.clear()
         notifyDataSetChanged()
+    }
+
+    fun updateDBdata(datas: List<HomeCafeResponse>){
+        datas.forEach{ data ->
+            val pos = itemList.indexOfFirst { it.id == data.place_id }
+            if(pos != -1){
+                itemList[pos].avg_rating = data.avg_rating
+                itemList[pos].visit_cnt = data.visit_id
+                itemList[pos].review_cnt = data.review_id
+                itemList[pos].hashtag_names = data.hashtag_names
+                data.visit_datas?.let {
+                    itemList[pos].visitDatas = it
+                    itemList[pos].img_url = it[it.lastIndex].visit_img_url
+                    itemList[pos].isImgRequested = true
+                }
+                notifyItemChanged(pos)
+            }
+        }
+
     }
 
 }

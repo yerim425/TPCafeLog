@@ -45,8 +45,11 @@
             android:textColor="@color/gray"
             android:lines="2"
             android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
             android:layout_toStartOf="@id/iv_cafe"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginEnd="4dp"
+            android:padding="4dp"/>
 
 
 
@@ -56,8 +59,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_below="@id/tv_cafe_name"
-            android:layout_marginTop="4dp">
+            android:layout_marginBottom="2dp"
+            android:layout_above="@id/layout_phone_location">
 
             <LinearLayout
                 android:id="@+id/layout_rating"
@@ -101,13 +104,6 @@
                 android:textColor="@color/secondary"
                 android:layout_marginEnd="8dp"/>
 
-            <ImageView
-                android:id="@+id/iv_kakao_map"
-                android:layout_width="60dp"
-                android:layout_height="20dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/kakaomap_horizontal_ko"/>
-
         </LinearLayout>
 
         <LinearLayout
@@ -115,15 +111,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/iv_cafe"
-            android:layout_below="@id/layout_rating_distance_map"
+            android:layout_alignBottom="@id/iv_cafe"
             android:orientation="vertical">
             <LinearLayout
                 android:id="@+id/layout_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
+                android:gravity="center_vertical">
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
@@ -145,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="2dp">
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
@@ -167,32 +162,49 @@
 
         <TextView
             android:id="@+id/tv_category"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="커피전문점 > 스타벅스"
             android:textColor="@color/secondary"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:textStyle="bold"
+            android:layout_toStartOf="@id/cb_favorite"
+            android:layout_marginEnd="4dp"
+            android:lines="2"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
             android:layout_below="@id/layout_phone_location"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="4dp"/>
 
-        <View
-            android:id="@+id/line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/beige"
-            android:layout_below="@id/tv_category"
-            android:visibility="gone"
-            android:layout_marginTop="8dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_visit"
+        <LinearLayout
+            android:id="@+id/layout_visit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_below="@id/line"
-            android:visibility="gone"
+            android:layout_below="@id/cb_favorite"
+            android:orientation="vertical">
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/beige"
+                android:layout_marginVertical="4dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_visit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_hashtag_names"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            android:layout_below="@id/layout_visit"
             android:layout_marginTop="8dp"/>
     </RelativeLayout>
 
