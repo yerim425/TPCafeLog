@@ -22,11 +22,7 @@ class ReviewListAdapter(
             binding.root.setOnClickListener {
                 listener.onItemClick(items[bindingAdapterPosition])
             }
-            binding.cbFavorite.setOnCheckedChangeListener { buttonView, isChecked ->
-                if(isChecked){
-                    listener.onLikeClick(items[bindingAdapterPosition], isChecked)
-                }
-            }
+
         }
     }
 

@@ -24,4 +24,5 @@
     <color name="red">#FF1E1E</color>
 
     <color name="hint_color">#999999</color>
+    <color name="black_transparent">#99000000</color>
 </resources>

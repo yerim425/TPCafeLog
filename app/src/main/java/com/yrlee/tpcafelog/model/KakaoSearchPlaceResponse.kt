@@ -24,6 +24,12 @@ data class Place(
     @SerializedName("y") var latitude: String,
     var place_url: String,
     var distance: String,
+    var is_like: Boolean = false,
+    var avg_rating: Float?= null,
+    var visit_cnt: Int = 0,
+    var review_cnt: Int= 0,
     var img_url: String? = null,
-    var isImgRequested: Boolean = false
+    var isImgRequested: Boolean = false,
+    var visitDatas: List<HomeVisit>?= null,
+    var hashtag_names: String?= null,
 )

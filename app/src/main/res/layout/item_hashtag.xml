@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="32sp"
     android:button="@null"
-    android:layout_marginEnd="8dp"
     android:text="#조용한"
+    android:layout_marginEnd="8dp"
     android:textColor="@color/hashtag_item"
     android:textSize="12sp" />
