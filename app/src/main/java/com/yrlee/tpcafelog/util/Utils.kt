@@ -17,7 +17,7 @@ import java.util.Date
 object Utils {
 
     private lateinit var appContext: Context
-    val userId by lazy { PrefUtils.getInt("user_id") }
+
 
     fun init(context: Context) {
         appContext = context.applicationContext

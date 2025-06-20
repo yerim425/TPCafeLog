@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -16,16 +18,24 @@ import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.User
 import com.yrlee.tpcafelog.MyApplication
 import com.yrlee.tpcafelog.R
+import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.ActivityLoginBinding
+import com.yrlee.tpcafelog.model.MyResponse
+import com.yrlee.tpcafelog.model.UserInfoRequest
+import com.yrlee.tpcafelog.model.UserInfoResponse
 import com.yrlee.tpcafelog.ui.intro.IntroActivity
 import com.yrlee.tpcafelog.ui.main.MainActivity
 import com.yrlee.tpcafelog.ui.start.StartActivity
 import com.yrlee.tpcafelog.util.PrefUtils
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
-    val TAG_KAKAO = "kakao login"
+    val TAG = "login activity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +59,6 @@ class LoginActivity : AppCompatActivity() {
                 .setMessage(getString(R.string.message_without_login))
                 .setPositiveButton("확인"){ _, _ ->
                     PrefUtils.putBoolean("isSet", true)
-                    PrefUtils.putBoolean("isLoggedIn", false)
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
@@ -65,9 +74,9 @@ class LoginActivity : AppCompatActivity() {
         // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
-                Log.e(TAG_KAKAO, "카카오 로그인 에러: ${error.message}", error)
+                Log.e(TAG, "카카오 로그인 에러: ${error.message}", error)
             } else if (token != null) {
-                Log.d(TAG_KAKAO, "토큰 받음: ${token.accessToken}")
+                Log.d(TAG, "토큰 받음: ${token.accessToken}")
                 kakaoLoginSuccess(token)
             }
         }
@@ -76,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
         if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
             UserApiClient.instance.loginWithKakaoTalk(this){ token, error ->
                 if(error != null){
-                    Log.e(TAG_KAKAO, "카카오톡으로 로그인 실패", error)
+                    Log.e(TAG, "카카오톡으로 로그인 실패", error)
 
                     // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (뒤로가기)
@@ -102,15 +111,81 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun kakaoLoginSuccess(token: OAuthToken){
-        Log.i(TAG_KAKAO, "카카오 로그인 성공")
-        // 사용자 정보 sharedPreferences에 저장
-        PrefUtils.putBoolean("isSet", true)
-        PrefUtils.putBoolean("isLoggedIn", true)
-        PrefUtils.putString("accessToken", token.accessToken)
-        PrefUtils.putString("refreshToken", token.refreshToken)
-        startActivity(Intent(this, StartActivity::class.java)) // 프로필 설정 화면으로 이동
+        Log.i(TAG, "카카오 로그인 성공")
+
+        // 카카오 정보 요청
+        requestKakaoUserInfo()
+
+    }
+
+    fun requestKakaoUserInfo(){ // 사용자의 카카오 정보 요청
+        // 카카오 프로필 정보 가져오기
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                requestKakaoUserInfoFail()
+            } else if (user != null) {
+                if(user.id == null){
+                    requestKakaoUserInfoFail()
+                }else{
+                    Log.d(TAG, "카카오 사용자 정보 로딩 완료 ${user.id}")
+                    PrefUtils.putString("kakao_id", user.id.toString())
+                    PrefUtils.putBoolean("isSet", true)
+                    val name = user.kakaoAccount?.profile?.nickname
+                    val profileImageUrl = user.kakaoAccount?.profile?.profileImageUrl
+
+                    requestMyUserInfo(user.id.toString(), name, profileImageUrl)
+                }
+            }
+        }
+    }
+    fun requestKakaoUserInfoFail(){
+        Log.e(TAG, "사용자 정보 요청 실패")
+        Toast.makeText(this, "정보 로딩에 실패했어요. 로그인을 다시 해주세요.", Toast.LENGTH_SHORT).show()
+        PrefUtils.clearSharedPrefs()
+        startActivity(Intent(this, IntroActivity::class.java))
         finish()
     }
 
+    fun requestMyUserInfo(id: String, name: String?, profileImageUrl: String?){
+        // 카카오 아이디로 유저 검색
+        val kakao_id = id
+        val request = UserInfoRequest(kakao_id)
+        val call = RetrofitHelper.getMyService().getUserInfo(request)
+        call.enqueue(object : Callback<MyResponse<UserInfoResponse>> {
+            override fun onResponse(
+                call: Call<MyResponse<UserInfoResponse>>,
+                response: Response<MyResponse<UserInfoResponse>>
+            ) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    body?.status?.let{
+                        when(it){
+                            200 -> { // 유저 정보 있음
+                                body.data?.let{
+                                    PrefUtils.putInt("user_id", it.user_id)
+                                    PrefUtils.putString("name", it.name)
+                                    PrefUtils.putInt("level", it.level)
+                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                    finish()
+                                }
+                            }
+                            400 -> { // 유저 정보 없음
+                                val intent = Intent(this@LoginActivity, StartActivity::class.java)
+                                intent.putExtra("name", name)
+                                intent.putExtra("profileImageUrl", profileImageUrl)
+                                startActivity(intent) // 프로필 설정 화면으로 이동
+                                finish()
+                            }
+                            else->{}
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<MyResponse<UserInfoResponse>>, t: Throwable) {
+                Log.e(TAG, "${t.message}")
+            }
+        })
+    }
 
 }

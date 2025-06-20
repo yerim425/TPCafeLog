@@ -27,10 +27,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yrlee.tpcafelog.data.local.OnHomeItemSelectListener
 import com.yrlee.tpcafelog.model.HashTagItem
 import com.yrlee.tpcafelog.model.HomeCafeRequest
+import com.yrlee.tpcafelog.model.HomeHashtagFilteringRequest
+import com.yrlee.tpcafelog.model.HomeHashtagFilteringResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.util.Constants
 import com.yrlee.tpcafelog.util.LocationUtils
+import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.Utils
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 
 class HomeFragment : Fragment(), OnHomeItemSelectListener {
     val TAG = "home fragment"
@@ -42,7 +47,9 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
     private var page = 1
     private var totalCnt = 0
     var myLocation: Location? = null // 내 위치
-    var isLoadingGetHomeList = false
+    private var isLoadingGetHomeList = false
+    private var isFirst = true
+    private val userId = PrefUtils.getInt("user_id") // 없으면 -1
 
     // adapter
     lateinit var categoryAdapter: HomeCategoryAdapter
@@ -180,7 +187,12 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                         page++
                         viewLifecycleOwnerLiveData.value?.let{
                             it.lifecycleScope.launch {
-                                requestSearchCafesFromKakao()
+                                if(hashtagAdapter.getHashtagList().isNotEmpty()){
+                                    requestHomeCafeHashtagFiltering()
+                                }else{
+                                    requestSearchCafesFromKakao()
+                                }
+
                             }
                         }
                     }
@@ -278,13 +290,13 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                             totalCnt = it.meta.total_count
                             Log.d(TAG, "total count: $totalCnt")
                             binding.recyclerviewHome.smoothScrollToPosition(0)
+                            binding.tvNoCafe.visibility = View.GONE
                         }
                         cafeAdapter.addItems(it.documents)
 
                         isLoadingGetHomeList = true
 
                         // 서버에 카페 정보 검색
-                        val userId = Utils.userId
                         val placeIds = it.documents.map { it.id }
 
                         viewLifecycleOwnerLiveData.value?.let{
@@ -320,30 +332,15 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                     response.data?.let { data ->
                         cafeAdapter.updateDBdata(data) // DB data로 카페 리스트 업데이트
 
-                        // 방문 인증 사진 없는 것들은 이미지 검색
-//                        val nullIndexes = data.withIndex()
-//                            .filter { it.value.visit_datas == null }
-//                            .map { it.index }
-//                        if(nullIndexes.isNotEmpty()){
-//                            // 네이버 이미지 검색
-//                            viewLifecycleOwnerLiveData.value?.let{
-//                                lifecycleScope.launch {
-//                                    requestSearchNaverImage(nullIndexes[0], data.size-nullIdx)
-//                                }
-//                            }
-//                        }
-
                         val nullIdx = data.indexOfFirst { it.visit_datas == null }
                         if(nullIdx < 5){ // 처음에는 화면에 보이는 리스트만 확인
                             viewLifecycleOwnerLiveData.value?.let{
                                 lifecycleScope.launch {
-                                    requestSearchNaverImage(0, 5)
+                                    requestSearchNaverImage(0, data.size)
                                 }
                             }
                         }
-
                     }
-
                 }
                 400 -> {
                     Log.d(TAG, "400 -> ${response.data}")
@@ -356,6 +353,7 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
         }
     }
 
+    // 카테고리 or 해시태그 아이템 클릭 콜백
     override fun onItemSelected(type: Int) {
 
         hideKeyboard()
@@ -369,11 +367,16 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                 }
             }
             Constants.HASHTAG_TYPE -> { // 해시태그 클릭 시 서버에 해당하는 카페 id 리스트 요청
-                if(hashtagAdapter.getHashtagList().isNotEmpty()){
-                    viewLifecycleOwnerLiveData.value?.let {
-                        lifecycleScope.launch { requestSearchCafeIdsFromDB() }
+                viewLifecycleOwnerLiveData.value?.let {
+                    lifecycleScope.launch {
+                        if(hashtagAdapter.getHashtagList().isNotEmpty()){
+                            requestHomeCafeHashtagFiltering() // 해시태그 클릭된 것이 있으면 DB에 있는 카페들을 조회
+                        }else{
+                            requestSearchCafesFromKakao()
+                        }
                     }
                 }
+
             }
         }
 
@@ -420,62 +423,88 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
     }
 
     // 서버에 해시태그에 해당하는 카페 id 리스트 요청
-    fun requestSearchCafeIdsFromDB() {
-        binding.progressbar.visibility = View.VISIBLE
+    fun requestHomeCafeHashtagFiltering() {
 
-        var query = (searchQuery + " " + categoryAdapter.getSelectedCategory()).trim()
+        var query = binding.edtSearchHome.text.toString().trim()
+        var category = categoryAdapter.getSelectedCategory()
+        var hashtags = hashtagAdapter.getHashtagList().map { it.no }
 
-        val call = RetrofitHelper.getKakaoService().getSearchCafes(
-            query = query,
-            page = page,
-            longitude = myLocation?.longitude?.toString(),
-            latitude = myLocation?.latitude?.toString()
-        )
-        Log.d(TAG, "${myLocation?.latitude}")
-        call.enqueue(object : Callback<KakaoSearchPlaceResponse> {
+        var request = HomeHashtagFilteringRequest(query, category, hashtags, page)
+
+        val call = RetrofitHelper.getMyService().getHomeCafeFiltering(request)
+        call.enqueue(object : Callback<MyResponse<HomeHashtagFilteringResponse>> {
             override fun onResponse(
-                call: Call<KakaoSearchPlaceResponse>,
-                response: Response<KakaoSearchPlaceResponse>
+                call: Call<MyResponse<HomeHashtagFilteringResponse>>,
+                response: Response<MyResponse<HomeHashtagFilteringResponse>>
             ) {
                 if (response.isSuccessful) {
-                    Log.d(TAG, "cafe 리스트 요청 성공 ${response.body()?.meta?.total_count}")
                     val body = response.body()
-                    body?.let {
+                    body?.data?.let { data->
                         if (page == 1) {
                             cafeAdapter.clearItemList()
-                            totalCnt = it.meta.total_count
-                            Log.d(TAG, "total count: $totalCnt")
+                            totalCnt = data.total_cnt
                             binding.recyclerviewHome.smoothScrollToPosition(0)
+                            binding.tvNoCafe.visibility = View.GONE
                         }
-                        cafeAdapter.addItems(it.documents)
-
-                        isLoadingGetHomeList = true
-
-                        // 서버에 카페 정보 검색
-                        val userId = Utils.userId
-                        val placeIds = it.documents.map { it.id }
 
                         viewLifecycleOwnerLiveData.value?.let{
-                            it.lifecycleScope.launch {
-                                requestHomeCafeList(userId, placeIds)
+                            lifecycleScope.launch {
+                                binding.progressbar.visibility = View.VISIBLE
+
+                                val jobs = data.querys.map { query ->
+                                    async {
+                                        requestSearchCafeFromKakao(query)
+                                    }
+                                }
+                                jobs.awaitAll() // 전부 끝날 때까지 대기
+
+                                val placeIds = cafeAdapter.itemList.map { it.id }
+                                Log.d(TAG, "hashtag - placeIds size: ${placeIds.size}")
+                                if(placeIds.size > 0){
+                                    requestHomeCafeList(userId, placeIds)
+                                }else{
+                                    binding.tvNoCafe.visibility = View.VISIBLE
+                                }
                             }
                         }
                     }
                 } else {
                     Log.d(TAG, response.errorBody()?.string().toString())
                 }
-                binding.progressbar.visibility = View.GONE
             }
 
-            override fun onFailure(call: Call<KakaoSearchPlaceResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MyResponse<HomeHashtagFilteringResponse>>, t: Throwable) {
                 Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "${t.message}")
-                binding.progressbar.visibility = View.GONE
+
 
             }
         })
-
+        binding.progressbar.visibility = View.GONE
         binding.edtSearchHome.clearFocus()
     }
 
+    // 해시태그 필터링된 카페 id로 카페 정보 요청
+    suspend fun requestSearchCafeFromKakao(query: String) {
+
+        try{
+            val response = RetrofitHelper.getKakaoService().getSearchCafe(
+                query = query,
+                longitude = myLocation?.longitude?.toString(),
+                latitude = myLocation?.latitude?.toString(),
+                size = 1
+            )
+            if(response.meta.total_count == 1) {
+                val place = response.documents
+                cafeAdapter.addItems(place)
+            }else{
+                Log.d(TAG, "requestSearchCafeFromKakao response error - $query")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "searchCafeFromKakao 요청 실패 : ${e.message}")
+        } finally {
+            binding.progressbar.visibility = View.GONE
+        }
+
+    }
 }

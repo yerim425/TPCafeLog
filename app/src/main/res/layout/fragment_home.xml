@@ -142,6 +142,16 @@
         android:paddingBottom="56dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
+    <TextView
+        android:id="@+id/tv_no_cafe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_no_cafe"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary"/>
 
     <ProgressBar
         android:id="@+id/progressbar"
