@@ -4,13 +4,15 @@ import com.yrlee.tpcafelog.MyApplication
 import com.yrlee.tpcafelog.model.HashTagItem
 import com.yrlee.tpcafelog.model.HomeCafeRequest
 import com.yrlee.tpcafelog.model.HomeCafeResponse
-import com.yrlee.tpcafelog.model.HomeFilteringRequest
+import com.yrlee.tpcafelog.model.HomeHashtagFilteringRequest
+import com.yrlee.tpcafelog.model.HomeHashtagFilteringResponse
 import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.NaverSearchImageResponse
 import com.yrlee.tpcafelog.model.ReviewAddResponse
 import com.yrlee.tpcafelog.model.ReviewListItemResponse
-import com.yrlee.tpcafelog.model.UserResponse
+import com.yrlee.tpcafelog.model.UserInfoRequest
+import com.yrlee.tpcafelog.model.UserInfoResponse
 import com.yrlee.tpcafelog.model.VisitCafeResponseItem
 import com.yrlee.tpcafelog.model.VisitCafeAddResponse
 import okhttp3.MultipartBody
@@ -36,10 +38,10 @@ interface RetrofitService {
     ): Call<MyResponse<String>>
 
     // DB에서 User 데이터 가져오기
-    @GET("loadUserInfo.php")
+    @POST("loadUserInfo.php")
     fun getUserInfo(
-        @Query("user_id") user_id: Int
-    ): Call<MyResponse<UserResponse>>
+        @Body data: UserInfoRequest
+    ): Call<MyResponse<UserInfoResponse>>
 
     // 카카오 키워드로 장소 검색하기
     @GET("v2/local/search/keyword.json?category_group_code=CE7")
@@ -106,9 +108,16 @@ interface RetrofitService {
     ): MyResponse<List<HomeCafeResponse>>
 
     // DB에 저장되어 있는 카페 정보들 중 검색어, 카테고리, 해시태그에 맞는 카페의 id들 요청
-    @POST("loadHomeCafeFilteredList.php")
+    @POST("loadHomeCafeFiltering.php")
     fun getHomeCafeFiltering(
-        @Body data: HomeFilteringRequest
-    ): Call<MyResponse<MyResponse<List<String>>>>
+        @Body data: HomeHashtagFilteringRequest
+    ): Call<MyResponse<HomeHashtagFilteringResponse>> // place_id 리스트
 
+    @GET("v2/local/search/keyword.json?category_group_code=CE7")
+    suspend fun getSearchCafe(
+        @Query("query") query: String,
+        @Query("x") longitude: String?= null,
+        @Query("y") latitude: String?= null,
+        @Query("size") size: Int
+    ): KakaoSearchPlaceResponse
 }

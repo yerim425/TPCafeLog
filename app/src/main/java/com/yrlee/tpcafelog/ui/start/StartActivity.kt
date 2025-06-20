@@ -14,13 +14,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import com.kakao.sdk.user.UserApiClient
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.ActivityStartBinding
 import com.yrlee.tpcafelog.model.MyResponse
-import com.yrlee.tpcafelog.model.UserItem
-import com.yrlee.tpcafelog.ui.intro.IntroActivity
+import com.yrlee.tpcafelog.model.UserAddRequest
 import com.yrlee.tpcafelog.ui.main.MainActivity
 import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.Utils
@@ -61,7 +59,16 @@ class StartActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        requestKakaoUserInfo()
+        val name = intent.getStringExtra("name") ?: ""
+        val imgUrl = intent.getStringExtra("profileImageUrl")
+        binding.inputLayoutName.editText!!.setText(name)
+        Glide.with(binding.root).load(imgUrl).placeholder(R.drawable.ic_profile_default).into(binding.ivProfile)
+        lifecycleScope.launch {
+            imgUrl?.let{
+                imgRealPath = getRealPathFromUrl(it)
+            }
+
+        }
 
         binding.ivProfile.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_PICK_IMAGES)
@@ -74,56 +81,14 @@ class StartActivity : AppCompatActivity() {
                 Toast.makeText(this, "닉네임을 알맞게 입력해 주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            requestCreateUser()
+            requestAddUser()
         }
     }
 
-    fun requestKakaoUserInfo(){ // 사용자의 카카오 정보 요청
-        binding.btnStart.isEnabled = false
-        // 카카오 프로필 정보 가져오기
-        UserApiClient.instance.me { user, error ->
-            if (error != null) {
-                requestKakaoUserInfoFail()
-            } else if (user != null) {
-                if(user.id == null){
-                    requestKakaoUserInfoFail()
-                }else{
-                    Log.d(TAG, "카카오 사용자 정보 로딩 완료 ${user.id}")
-                    PrefUtils.putString("kakao_id", user.id.toString())
-                    val nickname = user.kakaoAccount?.profile?.nickname
-                    val profileImageUrl = user.kakaoAccount?.profile?.profileImageUrl
-                    nickname?.let{
-                        val trimmedNickname = if(it.length>20) nickname.take(20) + "..." else nickname
-                        binding.inputLayoutName.editText!!.setText(trimmedNickname)
-                    }
-                    profileImageUrl?.let {
-                        Glide.with(this)
-                            .load(it)
-                            .placeholder(R.drawable.ic_profile_default)
-                            .into(binding.ivProfile)
 
-                        // 백그라운드에서 실행할 비동기 쓰레드
-                        lifecycleScope.launch {
-                            imgRealPath = getRealPathFromUrl(it)
-                        }
-                    }
-                    binding.btnStart.isEnabled = true
-                }
-            }
-        }
-    }
-
-    fun requestKakaoUserInfoFail(){
-        Log.e(TAG, "사용자 정보 요청 실패")
-        Toast.makeText(this, "정보 로딩에 실패했어요. 로그인을 다시 해주세요.", Toast.LENGTH_SHORT).show()
-        PrefUtils.clearSharedPrefs()
-        startActivity(Intent(this, IntroActivity::class.java))
-        finish()
-    }
-
-    fun requestCreateUser(){
+    fun requestAddUser(){
         // 서버에 유저 정보 추가
-        val userInfo = UserItem(
+        val userInfo = UserAddRequest(
             kakao_id = PrefUtils.getString("kakao_id"),
             name = binding.inputLayoutName.editText!!.text.toString().trim()
         )
@@ -148,8 +113,10 @@ class StartActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     Log.d(TAG, "응답 body: $body")
                     if(body?.status == 200){
-                        val id = body.data?.toInt() ?: 0
-                        saveUserInfoToPrefs(userInfo, id)
+                        val id = body.data?.toInt()!!
+                        PrefUtils.putInt("user_id", id)
+                        PrefUtils.putString("name", userInfo.name)
+                        PrefUtils.putInt("level", 1)
                         startActivity(Intent(this@StartActivity, MainActivity::class.java))
                         finish()
                     }
@@ -164,15 +131,6 @@ class StartActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    fun saveUserInfoToPrefs(userInfo: UserItem, id: Int){
-        // shared_prefs에 자주 사용할 데이터들 저장
-        PrefUtils.putInt("user_id", id)
-        PrefUtils.putBoolean("isProfileSet", true)
-        PrefUtils.putString("nickname", userInfo.name)
-        PrefUtils.putInt("level", 1)
-
     }
 
     // 코루틴에서 실행할 함수
