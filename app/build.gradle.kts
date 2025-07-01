@@ -55,7 +55,7 @@ android {
 
 dependencies {
 
-    implementation("com.kakao.maps.open:android:2.12.8")
+    implementation("com.kakao.maps.open:android:2.12.8") // 지도
     implementation("com.kakao.sdk:v2-user:2.17.0") // 로그인
     implementation("com.kakao.sdk:v2-share:2.17.0") // 카톡 공유 (선택)
     implementation(libs.glide)

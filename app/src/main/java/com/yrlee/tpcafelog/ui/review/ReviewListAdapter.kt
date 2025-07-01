@@ -2,6 +2,7 @@ package com.yrlee.tpcafelog.ui.review
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -10,6 +11,7 @@ import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.local.OnReviewClickListener
 import com.yrlee.tpcafelog.databinding.ItemReviewBinding
 import com.yrlee.tpcafelog.model.ReviewListItemResponse
+import com.yrlee.tpcafelog.util.PrefUtils
 
 class ReviewListAdapter(
     private val context: Context,
@@ -36,7 +38,7 @@ class ReviewListAdapter(
         with(holder){
             // 유저 정보 set
             Glide.with(binding.root).load(item.userInfo.img_url)
-                .placeholder(R.drawable.ic_profile_default)
+                .placeholder(R.drawable.ic_app_logo)
                 .into(binding.ivUserProfile)
             binding.tvUserName.text = item.userInfo.name
             binding.tvUserLevel.text = "Lv.${item.userInfo.level} ${item.userInfo.title}"
@@ -47,11 +49,18 @@ class ReviewListAdapter(
             binding.tvAddress.text = item.cafeInfo.address
 
             // 리뷰 정보 set
-            Glide.with(binding.root).load(item.img_url).into(binding.ivCafe)
+            Glide.with(binding.root).load(item.img_url)
+                .placeholder(R.drawable.ic_app_logo)
+                .into(binding.ivCafe)
             binding.tvReviewContent.text = "\"${item.content}\""
             binding.tvRating.text = item.rating.toString()
             val tags = item.hashtag_names.joinToString(" ") { "#${it}" }
             binding.tvHashtagNames.text = tags
+
+            // 좋아요
+            if(PrefUtils.getInt("user_id") == -1 || PrefUtils.getInt("user_id") == 0){
+                binding.cbFavorite.visibility = View.INVISIBLE
+            }else binding.cbFavorite.visibility = View.VISIBLE
         }
     }
 

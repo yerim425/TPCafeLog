@@ -4,8 +4,8 @@
 
     <item android:id="@+id/map"
         android:title="@string/map"
-        android:icon="@drawable/ic_map"
-        android:iconTint="@color/primary"
+        android:icon="@drawable/ic_menu_location"
+        android:iconTint="@color/point_color"
         app:showAsAction="ifRoom"/>
 
 

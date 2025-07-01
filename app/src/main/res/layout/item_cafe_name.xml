@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="카페 이름"
         android:textSize="14sp"
-        android:textColor="@color/gray"
+        android:textColor="@color/text"
         android:paddingTop="8dp"
         android:paddingHorizontal="8dp"/>
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="카페 주소"
-        android:textColor="@color/gray3"
+        android:textColor="@color/hint_color"
         android:textSize="12sp"
         android:layout_marginTop="4dp"
         android:paddingHorizontal="8dp"/>
@@ -27,6 +27,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/cream"
+        android:background="@color/line"
         android:layout_marginTop="8dp"/>
 </LinearLayout>

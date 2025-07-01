@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.yrlee.tpcafelog.databinding.ItemCafeNameBinding
-import com.yrlee.tpcafelog.model.VisitCafeResponseItem
+import com.yrlee.tpcafelog.model.VisitedCafeItem
 
 class VisitedCafeAdapter(
     private val context: Context,
-    private val itemList: List<VisitCafeResponseItem>,
-    private val onItemClick: (VisitCafeResponseItem) -> Unit
+    private val itemList: List<VisitedCafeItem>,
+    private val onItemClick: (VisitedCafeItem) -> Unit
 ) : Adapter<VisitedCafeAdapter.VH>() {
 
     inner class VH(val binding: ItemCafeNameBinding) : ViewHolder(binding.root) {

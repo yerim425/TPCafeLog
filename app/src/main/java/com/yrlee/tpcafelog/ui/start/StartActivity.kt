@@ -17,8 +17,10 @@ import com.google.gson.Gson
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.ActivityStartBinding
+import com.yrlee.tpcafelog.model.ErrorResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.UserAddRequest
+import com.yrlee.tpcafelog.model.UserInfoResponse
 import com.yrlee.tpcafelog.ui.main.MainActivity
 import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.Utils
@@ -59,6 +61,7 @@ class StartActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        // 카카오 닉네임, 프로필 사진 set
         val name = intent.getStringExtra("name") ?: ""
         val imgUrl = intent.getStringExtra("profileImageUrl")
         binding.inputLayoutName.editText!!.setText(name)
@@ -70,11 +73,13 @@ class StartActivity : AppCompatActivity() {
 
         }
 
+        // 프로필 사진 변경
         binding.ivProfile.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_PICK_IMAGES)
             resultLauncher.launch(intent)
         }
 
+        // 시작하기 -> DB에 유저 정보 저장
         binding.btnStart.setOnClickListener {
             val nickname = binding.inputLayoutName.editText!!.text
             if(nickname.isEmpty() || nickname.length > 20){
@@ -86,8 +91,9 @@ class StartActivity : AppCompatActivity() {
     }
 
 
+    // 서버에 유저 정보 추가
     fun requestAddUser(){
-        // 서버에 유저 정보 추가
+
         val userInfo = UserAddRequest(
             kakao_id = PrefUtils.getString("kakao_id"),
             name = binding.inputLayoutName.editText!!.text.toString().trim()
@@ -104,29 +110,30 @@ class StartActivity : AppCompatActivity() {
             else Log.d(TAG, "이미지 파일 없음: $imgRealPath")
         }
         val call = RetrofitHelper.getMyService().postUserInfo(dataBody, filePart)
-        call.enqueue(object : Callback<MyResponse<String>>{
+        call.enqueue(object : Callback<MyResponse<UserInfoResponse>>{
             override fun onResponse(
-                call: Call<MyResponse<String>>,
-                response: Response<MyResponse<String>>
+                call: Call<MyResponse<UserInfoResponse>>,
+                response: Response<MyResponse<UserInfoResponse>>
             ) {
                 val body = response.body()
-                if(response.isSuccessful){
-                    Log.d(TAG, "응답 body: $body")
+                if(response.isSuccessful){ // 200
                     if(body?.status == 200){
-                        val id = body.data?.toInt()!!
-                        PrefUtils.putInt("user_id", id)
-                        PrefUtils.putString("name", userInfo.name)
-                        PrefUtils.putInt("level", 1)
+                        // 유저 저장 성공
+                        val data = body.data!!
+                        PrefUtils.putInt("user_id", data.user_id)
+                        PrefUtils.putString("name", data.name)
+                        PrefUtils.putInt("level", data.level)
+                        PrefUtils.putString("title", data.title)
+                        PrefUtils.putString("img_url", data.img_url)
                         startActivity(Intent(this@StartActivity, MainActivity::class.java))
                         finish()
                     }
                 }else{
-                    val errorBody = response.errorBody()?.string()
-                    Log.e(TAG, "에러 응답: $errorBody")
+                    Log.e(TAG, response.errorBody()?.string() ?: "errorBody is null")
                 }
 
             }
-            override fun onFailure(call: Call<MyResponse<String>>, t: Throwable) {
+            override fun onFailure(call: Call<MyResponse<UserInfoResponse>>, t: Throwable) {
                 Log.e(TAG, "Error: ${t.message.toString()}")
             }
 

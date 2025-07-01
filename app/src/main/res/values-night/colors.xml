@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="primary">#F5F0EC</color>
+    <color name="on_primary">#A9746E</color>
+    <color name="secondary">#D9D0C0</color>
+    <color name="on_secondary">#6B4F3B</color>
+    <color name="unselected">#444444</color>
+
+    <color name="hint_color">#666666</color>
+    <color name="edt_bg">#D9D0C0</color>
+    <color name="edt_text">#222222</color>
+
+    <color name="bnv_bg">#2E231B</color>
+    <color name="bnv_selected">#D9D0C0</color>
+    <color name="bnv_unselected">#5F5B53</color>
+    <color name="fab_bg">#D9D0C0</color>
+    <color name="fab_fg">#6B4F3B</color>
+
+    <color name="text">#D9D0C0</color>
+    <color name="point_color">#6B4F3B</color>
+    <color name="light_color">#D9D0C0</color>
+    <color name="btn_bg_selected">#6B4F3B</color>
+
+    <color name="rv_item_bg">#D9D0C0</color>
+
+    <color name="line">#ADA391</color>
+
+    <color name="favorite">#950C0C</color>
+
+    <color name="hashtag_unselected">#444444</color>
 
 </resources>

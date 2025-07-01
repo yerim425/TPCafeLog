@@ -10,14 +10,21 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
+        android:background="@color/light_color">
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/cream"
-            app:navigationIcon="@drawable/ic_close"
-            app:title="@string/create_review"/>
+            android:background="@null"
+            app:navigationIconTint="@color/hint_color"
+            app:navigationIcon="@drawable/ic_close">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_review"
+                android:textColor="@color/gray"
+                android:textSize="20sp"/>
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -43,11 +50,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/select_cafe"
                     android:textSize="12sp"
-                    app:backgroundTint="@color/secondary"
+                    android:textColor="@color/light_color"
+                    app:backgroundTint="@color/btn_bg_selected"
                     app:icon="@drawable/ic_select"
                     app:iconPadding="4dp"
                     app:iconGravity="textStart"
-                    app:iconTint="@color/white"
+                    app:iconTint="@color/light_color"
                     style="@style/Widget.AppCompat.Button"/>
 
                 <TextView
@@ -57,7 +65,7 @@
                     android:text=""
                     android:lines="2"
                     android:textSize="14sp"
-                    android:textColor="@color/gray3"
+                    android:textColor="@color/hint_color"
                     android:textStyle="bold"
                     android:gravity="center_vertical"
                     android:layout_marginStart="4dp"
@@ -77,15 +85,15 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/cream"
+                android:background="@color/line"
                 android:layout_marginVertical="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/select_hashtag"
-                android:textSize="12sp"
-                android:textColor="@color/secondary"
+                android:textSize="13sp"
+                android:textColor="@color/primary"
                 android:textStyle="bold"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -100,7 +108,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/cream"
+                android:background="@color/line"
                 android:layout_marginVertical="16dp"/>
 
             <LinearLayout
@@ -114,11 +122,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/add_image"
                     android:textSize="12sp"
-                    app:backgroundTint="@color/secondary"
+                    android:textColor="@color/light_color"
+                    app:backgroundTint="@color/btn_bg_selected"
                     app:icon="@drawable/ic_add_image"
                     app:iconPadding="4dp"
                     app:iconGravity="textStart"
-                    app:iconTint="@color/white"
+                    app:iconTint="@color/light_color"
                     style="@style/Widget.AppCompat.Button"/>
 
                 <TextView
@@ -128,7 +137,7 @@
                     android:text="0/6"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="@color/secondary"
+                    android:textColor="@color/hint_color"
                     tools:ignore="SmallSp"
                     android:layout_marginStart="8dp"
                     android:gravity="end"
@@ -156,7 +165,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/cream"
+                android:background="@color/line"
                 android:layout_marginVertical="16dp"/>
 
 
@@ -181,7 +190,7 @@
                     android:layout_width="160dp"
                     android:layout_height="36dp"
                     app:mrb_fillBackgroundStars="true"
-                    app:mrb_progressTint="@color/secondary"/>
+                    app:mrb_progressTint="@color/mocha"/>
 
                 <TextView
                     android:id="@+id/tv_select_rating"
@@ -199,9 +208,9 @@
                 android:id="@+id/edt_review_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_bg_cream_rounded"
+                android:background="@drawable/shape_bg_edt"
                 android:hint="@string/hint_review_content"
-                android:textColorHint="@color/gray3"
+                android:textColorHint="@color/hint_color"
                 android:inputType="textMultiLine"
                 android:text=""
                 android:textSize="14sp"
@@ -219,11 +228,19 @@
         android:layout_height="56dp"
         android:text="@string/submit"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/light_color"
         android:textStyle="bold"
-        app:backgroundTint="@color/secondary"
-        app:rippleColor="@color/mocha"
+        app:backgroundTint="@color/btn_bg_selected"
         style="@style/Widget.AppCompat.Button"
         android:layout_margin="8dp"
         android:layout_gravity="bottom"/>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/mocha"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -5,17 +5,14 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.DialogSelectVisitedCafeBinding
 import com.yrlee.tpcafelog.model.MyResponse
-import com.yrlee.tpcafelog.model.VisitCafeResponseItem
+import com.yrlee.tpcafelog.model.VisitedCafeItem
 import com.yrlee.tpcafelog.util.PrefUtils
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,12 +20,12 @@ import retrofit2.Response
 class VisitedCafeSelectDialogFragment : DialogFragment() {
     private val TAG = "visit cafe select dialog fragment"
 
-    private var cafeList: List<VisitCafeResponseItem>? = null
+    private var cafeList: List<VisitedCafeItem>? = null
     lateinit var binding: DialogSelectVisitedCafeBinding
     private val userId = PrefUtils.getInt("user_id")
 
     interface OnCafeSelectedListener {
-        fun onCafeSelected(visitCafeInfo: VisitCafeResponseItem)
+        fun onCafeSelected(visitCafeInfo: VisitedCafeItem)
     }
 
     private var listener: OnCafeSelectedListener? = null
@@ -52,10 +49,10 @@ class VisitedCafeSelectDialogFragment : DialogFragment() {
             return
         }
         val call = RetrofitHelper.getMyService().getVisitedCafeList(user_id = userId)
-        call.enqueue(object : Callback<MyResponse<List<VisitCafeResponseItem>>> {
+        call.enqueue(object : Callback<MyResponse<List<VisitedCafeItem>>> {
             override fun onResponse(
-                call: Call<MyResponse<List<VisitCafeResponseItem>>>,
-                response: Response<MyResponse<List<VisitCafeResponseItem>>>
+                call: Call<MyResponse<List<VisitedCafeItem>>>,
+                response: Response<MyResponse<List<VisitedCafeItem>>>
             ) {
                 if (response.isSuccessful) {
                     val body = response.body()
@@ -87,7 +84,7 @@ class VisitedCafeSelectDialogFragment : DialogFragment() {
                 }
             }
 
-            override fun onFailure(call: Call<MyResponse<List<VisitCafeResponseItem>>>, t: Throwable) {
+            override fun onFailure(call: Call<MyResponse<List<VisitedCafeItem>>>, t: Throwable) {
                 Log.e(TAG, "${t.message}")
             }
         })

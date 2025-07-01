@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.databinding.ItemCafeBinding
 import com.yrlee.tpcafelog.model.HomeCafeResponse
 import com.yrlee.tpcafelog.model.Place
+import com.yrlee.tpcafelog.util.PrefUtils
 
 /*
 data class Place(
@@ -36,8 +38,10 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
         init {
             binding.main.setOnClickListener {
                 val intent = Intent(context, CafeDetailActivity::class.java)
-                intent.putExtra("id", itemList[layoutPosition].id) // 서버에서 리뷰 리스트 받아 올때 사용
-                intent.putExtra("place_url", itemList[layoutPosition].place_url)
+                //intent.putExtra("id", itemList[layoutPosition].id) // 서버에서 리뷰 리스트 받아 올때 사용
+                //intent.putExtra("place_url", itemList[layoutPosition].place_url)
+                val place = itemList[layoutPosition]
+                intent.putExtra("place", Gson().toJson(place))
                 context.startActivity(intent) // 카카오 장소 상세 페이지
             }
         }
@@ -111,6 +115,12 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
                 binding.tvHashtagNames.text = names
                 binding.tvHashtagNames.visibility = View.VISIBLE
             }
+
+            // 좋아요
+            if(PrefUtils.getInt("user_id") == -1 || PrefUtils.getInt("user_id") == 0){
+                binding.cbFavorite.visibility = View.INVISIBLE
+            }else binding.cbFavorite.visibility = View.VISIBLE
+
         }
     }
 

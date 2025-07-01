@@ -6,15 +6,19 @@ import com.yrlee.tpcafelog.model.HomeCafeRequest
 import com.yrlee.tpcafelog.model.HomeCafeResponse
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringRequest
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringResponse
+import com.yrlee.tpcafelog.model.KakaoAddressResponse
 import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.NaverSearchImageResponse
-import com.yrlee.tpcafelog.model.ReviewAddResponse
 import com.yrlee.tpcafelog.model.ReviewListItemResponse
 import com.yrlee.tpcafelog.model.UserInfoRequest
 import com.yrlee.tpcafelog.model.UserInfoResponse
-import com.yrlee.tpcafelog.model.VisitCafeResponseItem
-import com.yrlee.tpcafelog.model.VisitCafeAddResponse
+import com.yrlee.tpcafelog.model.VisitedCafeItem
+import com.yrlee.tpcafelog.model.PointUpdateResponse
+import com.yrlee.tpcafelog.model.ReviewDetailRequest
+import com.yrlee.tpcafelog.model.ReviewDetailResponse
+import com.yrlee.tpcafelog.model.ReviewLikeRequest
+import com.yrlee.tpcafelog.model.ReviewLikeResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -35,13 +39,13 @@ interface RetrofitService {
     fun postUserInfo(
         @Part("data") data: RequestBody,
         @Part img: MultipartBody.Part?
-    ): Call<MyResponse<String>>
+    ): Call<MyResponse<UserInfoResponse>>
 
     // DB에서 User 데이터 가져오기
     @POST("loadUserInfo.php")
     fun getUserInfo(
         @Body data: UserInfoRequest
-    ): Call<MyResponse<UserInfoResponse>>
+    ): Call<MyResponse<UserInfoResponse?>>
 
     // 카카오 키워드로 장소 검색하기
     @GET("v2/local/search/keyword.json?category_group_code=CE7")
@@ -61,6 +65,21 @@ interface RetrofitService {
         @Query("page") page: Int,
     ): KakaoSearchPlaceResponse
 
+    // 내 위치 좌표를 주소로 변환하기
+    @GET("/v2/local/geo/coord2address.json")
+    suspend fun getMyAddress(
+        @Query("x") longitude: String?,
+        @Query("y") latitude: String?,
+    ): KakaoAddressResponse
+
+    // 지도에 표시할 카페 검색하기
+    @GET("/v2/local/search/category.json?category_group_code=CE7&sort=distance")
+    suspend fun getSearchMapCafes(
+        @Query("x") longitude: String,
+        @Query("y") latitude: String,
+        @Query("page") page: Int,
+    ): KakaoSearchPlaceResponse
+
     // 네이버 이미지 검색하기
     @GET("v1/search/image?display=1")
     suspend fun getSearchImage(
@@ -73,17 +92,19 @@ interface RetrofitService {
     fun postVisitInfo(
         @Part("data") data: RequestBody,
         @Part img: MultipartBody.Part?
-    ): Call<MyResponse<VisitCafeAddResponse>>
+    ): Call<MyResponse<PointUpdateResponse>>
 
+    // 방문 카페 리스트 조회
     @GET("loadVisitedCafeList.php")
     fun getVisitedCafeList(
         @Query("user_id") user_id: Int,
-    ): Call<MyResponse<List<VisitCafeResponseItem>>>
+        @Query("filter") filter: String = ""
+    ): Call<MyResponse<List<VisitedCafeItem>>>
 
-    // 해시태그 리스트 가져오기
+    // 해시태그 리스트 조회
     @GET("loadHashtagNames.php")
     fun getHastTagNames(
-        @Query("filter") filter: String?=null
+        @Query("filter") filter: String = ""
     ): Call<MyResponse<List<HashTagItem>>>
 
     // 리뷰 정보 저장
@@ -92,7 +113,7 @@ interface RetrofitService {
     fun postReviewAdd(
         @Part("data") data: RequestBody,
         @Part imgs: List<MultipartBody.Part?>
-    ): Call<MyResponse<ReviewAddResponse>>
+    ): Call<MyResponse<PointUpdateResponse>>
 
     // 리뷰 리스트 요청
     @GET("loadReviewList.php")
@@ -100,6 +121,12 @@ interface RetrofitService {
         @Query("query") query: String,
         @Query("user_id") user_id: Int?=null,
     ): Call<MyResponse<List<ReviewListItemResponse>>>
+
+    // 리뷰 상세 정보 요청
+    @POST("loadReviewDetail.php")
+    fun getReviewDetail(
+        @Body data: ReviewDetailRequest
+    ): Call<MyResponse<ReviewDetailResponse>>
 
     // 각 카페의 DB 정보들 요청
     @POST("loadHomeCafeList.php")
@@ -120,4 +147,11 @@ interface RetrofitService {
         @Query("y") latitude: String?= null,
         @Query("size") size: Int
     ): KakaoSearchPlaceResponse
+
+    // 좋아요/취소 요청
+    @POST("updateReviewLike.php")
+    fun updateReviewLike(
+        @Body data: ReviewLikeRequest
+    ): Call<MyResponse<ReviewLikeResponse>>
+
 }

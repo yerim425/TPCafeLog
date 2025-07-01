@@ -23,10 +23,11 @@ import com.google.gson.GsonBuilder
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.ActivityVisitCertifyBinding
-import com.yrlee.tpcafelog.model.CafeItem
+import com.yrlee.tpcafelog.model.ErrorResponse
 import com.yrlee.tpcafelog.model.MyResponse
-import com.yrlee.tpcafelog.model.VisitCafeItem
-import com.yrlee.tpcafelog.model.VisitCafeAddResponse
+import com.yrlee.tpcafelog.model.Place
+import com.yrlee.tpcafelog.model.CafeItem
+import com.yrlee.tpcafelog.model.PointUpdateResponse
 import com.yrlee.tpcafelog.util.LocationUtils
 import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.SuccessDialogFragment
@@ -41,14 +42,14 @@ import java.io.File
 class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.OnCafeSelectedListener {
     val TAG = "visit certify activity"
 
-    var checkLocation = false // 인증하려는 카페가 내 위치의 100m 이내에 있는지 체크
-    var checkImage = false    // 이미지 선택했는지 확인
-    var myLocation: Location? = null
-    var imgRealPath: String? = null
+    private var checkLocation = false // 인증하려는 카페가 내 위치의 100m 이내에 있는지 체크
+    private var checkImage = false    // 이미지 선택했는지 확인
+    private var myLocation: Location? = null
+    private var imgRealPath: String? = null
     val binding by lazy { ActivityVisitCertifyBinding.inflate(layoutInflater) }
-    lateinit var selectedCafe: CafeItem
+    lateinit var selectedCafe: Place
 
-    val permissionResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+    private val permissionResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (!it){
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.message_require_location_permission))
@@ -60,13 +61,13 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
         }
     }
 
-    val imageResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ it ->
+    private val imageResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ it ->
         if(it.resultCode == RESULT_OK){
-            it.data?.data?.let{
-                Glide.with(this).load(it).into(binding.iv)
+            it.data?.data?.let{ uri ->
+                Glide.with(this).load(uri).into(binding.iv)
                 binding.iv.visibility = View.VISIBLE
                 lifecycleScope.launch {
-                    imgRealPath = Utils.getRealPathFromUri(it)
+                    imgRealPath = Utils.getRealPathFromUri(uri)
                     imgRealPath?.let{
                         if(File(it).exists()) checkImage = true
                     }
@@ -140,8 +141,8 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
         }
     }
 
-    override fun onCafeSelected(cafeInfo: CafeItem) {
-        binding.tvCafeName.text = cafeInfo.name
+    override fun onCafeSelected(cafeInfo: Place) {
+        binding.tvCafeName.text = cafeInfo.place_name
         selectedCafe = cafeInfo
         checkLocation = true
     }
@@ -156,15 +157,21 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
             return
         }
 
+        binding.progressbar.visibility = View.VISIBLE
+
         // 서버에 방문 인증 데이터를 저장
-        val visitInfo = VisitCafeItem(
+        val visitInfo = CafeItem(
             user_id = PrefUtils.getInt("user_id"),
             place_id = selectedCafe.id,
-            place_name = selectedCafe.name,
-            place_address = selectedCafe.address,
-            place_category = selectedCafe.category
+            name = selectedCafe.place_name,
+            address = selectedCafe.address_name.ifEmpty { selectedCafe.road_address_name },
+            category = selectedCafe.category_name,
+            lat = selectedCafe.latitude,
+            lng = selectedCafe.longitude,
+            place_url = selectedCafe.place_url,
+            phone = selectedCafe.phone
+
         )
-        Log.d("category name", selectedCafe.category)
         val json = Gson().toJson(visitInfo)
         val dataPart = Utils.jsonToRequestBody(json)
         var filePart: MultipartBody.Part? = null
@@ -180,10 +187,10 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
             }
         }
         val call = RetrofitHelper.getMyService().postVisitInfo(dataPart, filePart)
-        call.enqueue(object : Callback<MyResponse<VisitCafeAddResponse>>{
+        call.enqueue(object : Callback<MyResponse<PointUpdateResponse>>{
             override fun onResponse(
-                call: Call<MyResponse<VisitCafeAddResponse>>,
-                response: Response<MyResponse<VisitCafeAddResponse>>
+                call: Call<MyResponse<PointUpdateResponse>>,
+                response: Response<MyResponse<PointUpdateResponse>>
             ) {
                 if(response.isSuccessful){
                     val body = response.body()
@@ -192,30 +199,25 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
                             200 ->{
                                 it.data?.let { data -> SuccessDialogFragment(
                                     getString(R.string.message_success_visit_certify),
-                                    selectedCafe.name,
-                                    data.user_point,
-                                    data.gained_point
+                                    selectedCafe.place_name,
+                                    data
                                 ){
                                     finish()
                                 }.show(supportFragmentManager, "VisitSuccess") }
-                            }
-                            400 ->{
-                                val body = response.errorBody()?.string()
-                                val data = GsonBuilder().create().fromJson(body, MyResponse::class.java)
-                                Log.e(TAG, "error: "+data.toString())
                             }
                             else -> {}
                         }
                     }
                 }else {
-                    response.errorBody()?.let { Log.e(TAG, it.string()) }
-                    Log.d(TAG, "response is not successful")
+                    Log.e(TAG, response.errorBody()?.string() ?: "errorBody is null")
                 }
             }
 
-            override fun onFailure(call: Call<MyResponse<VisitCafeAddResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<MyResponse<PointUpdateResponse>>, t: Throwable) {
                 Log.e(TAG, "${t.message}")
             }
         })
+
+        binding.progressbar.visibility = View.GONE
     }
 }
