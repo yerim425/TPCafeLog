@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:contentPadding="16dp"
-    app:cardBackgroundColor="@color/cream"
+    app:cardBackgroundColor="@color/rv_item_bg"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:strokeColor="@color/cream"
+    app:strokeColor="@color/rv_item_bg"
     android:layout_marginVertical="8dp"
     android:layout_marginHorizontal="16dp">
 
@@ -31,7 +31,7 @@
             android:layout_height="32dp"
             android:button="@null"
             android:background="@drawable/selector_favorite_item"
-            android:backgroundTint="@color/red"
+            android:backgroundTint="@color/favorite"
             android:layout_alignParentEnd="true"
             android:layout_below="@id/iv_cafe"
             android:layout_marginTop="4dp"/>
@@ -73,14 +73,14 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:src="@drawable/ic_star"
-                    app:tint="@color/secondary"
+                    app:tint="@color/point_color"
                     android:layout_marginEnd="4dp"/>
                 <TextView
                     android:id="@+id/tv_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0"
-                    android:textColor="@color/secondary"
+                    android:textColor="@color/point_color"
                     android:textSize="11sp"
                     android:textStyle="bold"/>
 
@@ -90,7 +90,7 @@
                 android:layout_width="3dp"
                 android:layout_height="3dp"
                 android:src="@drawable/ic_circle"
-                app:tint="@color/secondary"
+                app:tint="@color/point_color"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"/>
 
@@ -101,7 +101,7 @@
                 android:text="0m"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="@color/secondary"
+                android:textColor="@color/point_color"
                 android:layout_marginEnd="8dp"/>
 
         </LinearLayout>
@@ -123,7 +123,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:src="@drawable/ic_phone"
-                    app:tint="@color/secondary"
+                    app:tint="@color/point_color"
                     android:layout_marginEnd="4dp"/>
                 <TextView
                     android:id="@+id/tv_phone"
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:text="02-1234-5678"
                     android:textStyle="bold"
-                    android:textColor="@color/secondary"
+                    android:textColor="@color/point_color"
                     android:textSize="11sp"/>
             </LinearLayout>
             <LinearLayout
@@ -145,7 +145,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:src="@drawable/ic_location"
-                    app:tint="@color/secondary"
+                    app:tint="@color/point_color"
                     android:layout_marginEnd="4dp"/>
                 <TextView
                     android:id="@+id/tv_address"
@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:text="서울 성동구"
                     android:textStyle="bold"
-                    android:textColor="@color/secondary"
+                    android:textColor="@color/point_color"
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="11sp"/>
@@ -165,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="커피전문점 > 스타벅스"
-            android:textColor="@color/secondary"
+            android:textColor="@color/point_color"
             android:textSize="12sp"
             android:textStyle="bold"
             android:layout_toStartOf="@id/cb_favorite"
@@ -186,7 +186,7 @@
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/beige"
+                android:background="@color/line"
                 android:layout_marginVertical="4dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -202,7 +202,7 @@
             android:id="@+id/tv_hashtag_names"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/secondary"
+            android:textColor="@color/hashtag_selected"
             android:textSize="12sp"
             android:layout_below="@id/layout_visit"
             android:layout_marginTop="8dp"/>

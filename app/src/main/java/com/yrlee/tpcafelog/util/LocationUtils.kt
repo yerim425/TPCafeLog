@@ -33,12 +33,6 @@ object LocationUtils {
         appContext = context.applicationContext
     }
 
-    // 위치 권한 있는지 확인
-    fun hasLocationPermission(context: Context): Boolean {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
 
     fun createLocationRequest(): LocationRequest {
         return LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000L).build()
@@ -48,26 +42,25 @@ object LocationUtils {
     // 내 위치 검색은 Google Fused Location API 사용 [라이브러리 추가 필요 : play-services-location]
     // 내 위치 정보를 얻어오기 위한 클래스의 참조변수 [위치정보제공자(gps, network, passive)를 사용하는 객체]
     // 내위치 받아오기
-    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun requestMyLocation(
         context: Context,
         onResult: (Location?) -> Unit
     ) {
-        if (!hasLocationPermission(context)) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             onResult(null)
             return
-        }else{
-            val locationRequest = createLocationRequest()
-
-            val callback = object : LocationCallback() {
-                override fun onLocationResult(p0: LocationResult) {
-                    super.onLocationResult(p0)
-                    locationProviderClient.removeLocationUpdates(this)
-                    onResult(p0.lastLocation)
-                    Log.d("my location", "${p0.lastLocation?.latitude}, ${p0.lastLocation?.longitude}")
-                }
-            }
-            locationProviderClient.requestLocationUpdates(locationRequest, callback, Looper.getMainLooper())
         }
+        val locationRequest = createLocationRequest()
+
+        val callback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+                locationProviderClient.removeLocationUpdates(this)
+                onResult(p0.lastLocation)
+                Log.d("my location", "${p0.lastLocation?.latitude}, ${p0.lastLocation?.longitude}")
+            }
+        }
+        locationProviderClient.requestLocationUpdates(locationRequest, callback, Looper.getMainLooper())
     }
 }

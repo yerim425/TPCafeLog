@@ -1,10 +1,7 @@
 package com.yrlee.tpcafelog.model
 
-import com.google.gson.annotations.SerializedName
-
-data class VisitCafeResponseItem(
+data class VisitedCafeItem(
     var visit_id : Int,
-    var user_id: Int,
     var place_id: String,
     var place_name: String,
     var place_address: String,

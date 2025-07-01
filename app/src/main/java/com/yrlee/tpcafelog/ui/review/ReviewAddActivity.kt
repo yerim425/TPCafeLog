@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
@@ -15,27 +14,22 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.marginBottom
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.ActivityReviewAddBinding
 import com.yrlee.tpcafelog.model.HashTagItem
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.model.PhotoItem
-import com.yrlee.tpcafelog.model.ReviewAddResponse
+import com.yrlee.tpcafelog.model.PointUpdateResponse
 import com.yrlee.tpcafelog.model.ReviewItem
-import com.yrlee.tpcafelog.model.VisitCafeResponseItem
-import com.yrlee.tpcafelog.model.VisitCafeAddResponse
+import com.yrlee.tpcafelog.model.VisitedCafeItem
 import com.yrlee.tpcafelog.util.PrefUtils
 import com.yrlee.tpcafelog.util.SuccessDialogFragment
 import com.yrlee.tpcafelog.util.Utils
-import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
 
 class ReviewAddActivity : AppCompatActivity(),
     VisitedCafeSelectDialogFragment.OnCafeSelectedListener {
@@ -44,8 +38,8 @@ class ReviewAddActivity : AppCompatActivity(),
     val userId = PrefUtils.getInt("user_id")
     var photoAdapter: ReviewPhotoAdapter?= null
     lateinit var hashtagAdapter: ReviewHashtagAdapter
-    var selectedCafe: VisitCafeResponseItem? = null
-    var checkedHashtags: List<HashTagItem>? = null
+    var selectedCafe: VisitedCafeItem? = null
+    lateinit var checkedHashtags: List<HashTagItem>
     val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -112,7 +106,6 @@ class ReviewAddActivity : AppCompatActivity(),
                     Intent(MediaStore.ACTION_PICK_IMAGES).putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, 6-it.itemCount)
                 resultLauncher.launch(intent)
             }
-
         }
 
         // 제출하기
@@ -128,7 +121,7 @@ class ReviewAddActivity : AppCompatActivity(),
             }
             // 해시태그 선택했는지 확인
             checkedHashtags = hashtagAdapter.getCheckedList()
-            checkedHashtags?.let {
+            checkedHashtags.let {
                 if (it.isEmpty()) {
                     Toast.makeText(
                         this@ReviewAddActivity.applicationContext,
@@ -168,6 +161,7 @@ class ReviewAddActivity : AppCompatActivity(),
     }
 
     fun requestReviewAdd() {
+        binding.progressbar.visibility = View.VISIBLE
         // DataBody 생성
         val review = ReviewItem(
             user_id = userId,
@@ -185,10 +179,10 @@ class ReviewAddActivity : AppCompatActivity(),
             Utils.filePathToMultipartBodyForList(path)
         }
         val call = RetrofitHelper.getMyService().postReviewAdd(dataPart, fileParts)
-        call.enqueue(object : Callback<MyResponse<ReviewAddResponse>> {
+        call.enqueue(object : Callback<MyResponse<PointUpdateResponse>> {
             override fun onResponse(
-                call: Call<MyResponse<ReviewAddResponse>>,
-                response: Response<MyResponse<ReviewAddResponse>>
+                call: Call<MyResponse<PointUpdateResponse>>,
+                response: Response<MyResponse<PointUpdateResponse>>
             ) {
                 if (response.isSuccessful) {
                     val body = response.body()
@@ -199,29 +193,24 @@ class ReviewAddActivity : AppCompatActivity(),
                                     SuccessDialogFragment(
                                         getString(R.string.message_success_create_review),
                                         selectedCafe!!.place_name,
-                                        data.user_point,
-                                        data.gained_point
+                                        data
                                     ){
                                         finish()
                                     }.show(supportFragmentManager, "ReviewSuccess")
                                 }
                             }
-                            400 -> {
-                                Log.d(TAG, it.data.toString())
-                            }
-                            else -> {}
+                            else ->{}
                         }
                     }
                 } else {
                     response.errorBody()?.let { Log.e(TAG, it.string()) }
-                    Log.d(TAG, "response is not successful")
                 }
             }
-
-            override fun onFailure(call: Call<MyResponse<ReviewAddResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<MyResponse<PointUpdateResponse>>, t: Throwable) {
                 Log.e(TAG, "${t.message}")
             }
         })
+        binding.progressbar.visibility = View.GONE
     }
 
 
@@ -240,16 +229,14 @@ class ReviewAddActivity : AppCompatActivity(),
                     }
                 }
             }
-
             override fun onFailure(call: Call<MyResponse<List<HashTagItem>>>, t: Throwable) {
                 Log.e(TAG, "${t.message}")
             }
-
         })
     }
 
-    // 카페 리스트에서 카페 선택 시 콜백
-    override fun onCafeSelected(visitCafeInfo: VisitCafeResponseItem) {
+    // 방문 카페 리스트에서 카페 선택 시 콜백
+    override fun onCafeSelected(visitCafeInfo: VisitedCafeItem) {
         selectedCafe = visitCafeInfo
         photoAdapter = ReviewPhotoAdapter(this, selectedCafe!!.img_url)
         binding.recyclerviewReviewPhoto.adapter = photoAdapter

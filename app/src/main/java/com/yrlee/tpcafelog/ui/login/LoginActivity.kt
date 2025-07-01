@@ -104,21 +104,17 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    // 카카오 로그인 실패
     fun kakaoLoginFail(){
         Toast.makeText(this, getString(R.string.message_login_fail), Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, IntroActivity::class.java))
         finish()
     }
 
+    // 카카오 로그인 성공
     fun kakaoLoginSuccess(token: OAuthToken){
         Log.i(TAG, "카카오 로그인 성공")
 
-        // 카카오 정보 요청
-        requestKakaoUserInfo()
-
-    }
-
-    fun requestKakaoUserInfo(){ // 사용자의 카카오 정보 요청
         // 카카오 프로필 정보 가져오기
         UserApiClient.instance.me { user, error ->
             if (error != null) {
@@ -137,7 +133,10 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
+
+    // 카카오 유저 정보 요청 실패
     fun requestKakaoUserInfoFail(){
         Log.e(TAG, "사용자 정보 요청 실패")
         Toast.makeText(this, "정보 로딩에 실패했어요. 로그인을 다시 해주세요.", Toast.LENGTH_SHORT).show()
@@ -151,10 +150,10 @@ class LoginActivity : AppCompatActivity() {
         val kakao_id = id
         val request = UserInfoRequest(kakao_id)
         val call = RetrofitHelper.getMyService().getUserInfo(request)
-        call.enqueue(object : Callback<MyResponse<UserInfoResponse>> {
+        call.enqueue(object : Callback<MyResponse<UserInfoResponse?>> {
             override fun onResponse(
-                call: Call<MyResponse<UserInfoResponse>>,
-                response: Response<MyResponse<UserInfoResponse>>
+                call: Call<MyResponse<UserInfoResponse?>>,
+                response: Response<MyResponse<UserInfoResponse?>>
             ) {
                 if(response.isSuccessful){
                     val body = response.body()
@@ -165,24 +164,31 @@ class LoginActivity : AppCompatActivity() {
                                     PrefUtils.putInt("user_id", it.user_id)
                                     PrefUtils.putString("name", it.name)
                                     PrefUtils.putInt("level", it.level)
+                                    PrefUtils.putString("title", it.title)
+                                    PrefUtils.putString("img_url", it.img_url)
                                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                     finish()
                                 }
                             }
-                            400 -> { // 유저 정보 없음
+                            204 -> { // 유저 정보 없음 -> 프로필 설정 화면으로 이동
                                 val intent = Intent(this@LoginActivity, StartActivity::class.java)
                                 intent.putExtra("name", name)
                                 intent.putExtra("profileImageUrl", profileImageUrl)
-                                startActivity(intent) // 프로필 설정 화면으로 이동
+                                startActivity(intent)
                                 finish()
                             }
-                            else->{}
+                            else -> {
+                            }
                         }
                     }
+                }else {
+                    Log.d(TAG, response.errorBody()?.string() ?: "errorBody is null")
+                    startActivity(Intent(this@LoginActivity, IntroActivity::class.java))
+                    finish()
                 }
             }
 
-            override fun onFailure(call: Call<MyResponse<UserInfoResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<MyResponse<UserInfoResponse?>>, t: Throwable) {
                 Log.e(TAG, "${t.message}")
             }
         })

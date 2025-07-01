@@ -107,9 +107,10 @@ class ReviewFragment : Fragment(), OnReviewClickListener {
         binding.edtSearchReview.clearFocus()
     }
 
+    // 리뷰 아이템 클릭 콜백
     override fun onItemClick(item: ReviewListItemResponse) {
         val intent = Intent(requireContext(), ReviewDetailActivity::class.java)
-        intent.putExtra("review_id", item.review_id)
+        intent.putExtra("reviewId", item.review_id)
         startActivity(intent)
     }
 

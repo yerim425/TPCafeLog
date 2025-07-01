@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.yrlee.tpcafelog.databinding.ItemCafeNameBinding
-import com.yrlee.tpcafelog.model.CafeItem
+import com.yrlee.tpcafelog.model.Place
 
 class CafeNameAdapter(
     val context: Context,
-    private val onItemClick: (CafeItem) -> Unit
+    private val onItemClick: (Place) -> Unit
 ): Adapter<CafeNameAdapter.VH>() {
 
-    val cafeNameList = mutableListOf<CafeItem>()
+    val cafeNameList = mutableListOf<Place>()
 
     inner class VH(val binding: ItemCafeNameBinding): ViewHolder(binding.root){
         init{
@@ -30,11 +30,11 @@ class CafeNameAdapter(
     override fun getItemCount(): Int = cafeNameList.size
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.binding.tvCafeName.text = cafeNameList[position].name
-        holder.binding.tvCafeAddress.text = cafeNameList[position].address
+        holder.binding.tvCafeName.text = cafeNameList[position].place_name
+        holder.binding.tvCafeAddress.text = cafeNameList[position].address_name
     }
 
-    fun addItems(items: List<CafeItem>){
+    fun addItems(items: List<Place>){
         val pos = cafeNameList.size
         cafeNameList.addAll(items)
         notifyItemRangeInserted(pos, items.size)

@@ -10,13 +10,14 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cream">
+        android:background="@color/light_color">
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@null"
-            app:navigationIcon="@drawable/ic_close">
+            app:navigationIcon="@drawable/ic_close"
+            app:navigationIconTint="@color/hint_color">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,12 +44,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/certify_my_location"
                 android:textSize="12sp"
-                android:textColor="@color/cream"
-                app:backgroundTint="@color/secondary"
+                android:textColor="@color/light_color"
+                app:backgroundTint="@color/btn_bg_selected"
                 app:icon="@drawable/ic_my_location"
                 app:iconPadding="4dp"
                 app:iconGravity="textStart"
-                app:iconTint="@color/cream"
+                app:iconTint="@color/light_color"
                 style="@style/Widget.AppCompat.Button"/>
             <TextView
                 android:id="@+id/tv_cafe_name"
@@ -59,7 +60,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignBottom="@id/btn_search_cafe"
                 android:textSize="14sp"
-                android:textColor="@color/gray3"
+                android:textColor="@color/hint_color"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
                 android:layout_marginStart="8dp"/>
@@ -79,7 +80,7 @@
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/cream"
+                android:background="@color/line"
                 android:layout_below="@id/tv_search_cafe"
                 android:layout_marginVertical="16dp"/>
 
@@ -89,12 +90,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/certify_image"
                 android:textSize="12sp"
-                android:textColor="@color/cream"
-                app:backgroundTint="@color/secondary"
+                android:textColor="@color/light_color"
+                app:backgroundTint="@color/btn_bg_selected"
                 app:icon="@drawable/ic_check_image"
                 app:iconPadding="4dp"
                 app:iconGravity="textStart"
-                app:iconTint="@color/cream"
+                app:iconTint="@color/light_color"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_below="@id/line2"/>
 
@@ -130,11 +131,20 @@
         android:layout_height="56dp"
         android:text="@string/certify"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/light_color"
         android:textStyle="bold"
-        app:backgroundTint="@color/mocha"
+        app:backgroundTint="@color/btn_bg_selected"
         app:rippleColor="@color/beige"
         style="@style/Widget.AppCompat.Button"
         android:layout_gravity="bottom"
         android:layout_margin="4dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/mocha"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

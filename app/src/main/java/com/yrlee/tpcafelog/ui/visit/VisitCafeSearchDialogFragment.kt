@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
 import com.yrlee.tpcafelog.databinding.DialogSearchCafeBinding
-import com.yrlee.tpcafelog.model.CafeItem
+import com.yrlee.tpcafelog.model.Place
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment()
     lateinit var binding:DialogSearchCafeBinding
 
     interface OnCafeSelectedListener {
-        fun onCafeSelected(cafeInfo: CafeItem)
+        fun onCafeSelected(cafeInfo: Place)
     }
 
     private var listener: OnCafeSelectedListener? = null
@@ -95,10 +95,7 @@ class VisitCafeSearchDialogFragment(val myLocation: Location) : DialogFragment()
                 if(totalCnt==0) binding.tvNoCafe.visibility = View.VISIBLE
                 else binding.tvNoCafe.visibility = View.GONE
             }
-            val cafeNames = response.documents.map {
-                val address = if(it.address_name.isEmpty()) it.road_address_name else it.address_name
-                CafeItem(it.id, it.place_name, address, it.category_name)
-            }
+            val cafeNames = response.documents
             adapter.addItems(cafeNames)
         } catch (e: Exception) {
             Log.e(TAG, "카페 검색 실패: ${e.message}")

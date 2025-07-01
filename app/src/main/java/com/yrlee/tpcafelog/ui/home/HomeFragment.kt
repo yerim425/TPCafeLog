@@ -2,6 +2,7 @@ package com.yrlee.tpcafelog.ui.home
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -30,6 +31,7 @@ import com.yrlee.tpcafelog.model.HomeCafeRequest
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringRequest
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringResponse
 import com.yrlee.tpcafelog.model.MyResponse
+import com.yrlee.tpcafelog.ui.map.MapCafeActivity
 import com.yrlee.tpcafelog.util.Constants
 import com.yrlee.tpcafelog.util.LocationUtils
 import com.yrlee.tpcafelog.util.PrefUtils
@@ -48,7 +50,6 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
     private var totalCnt = 0
     var myLocation: Location? = null // 내 위치
     private var isLoadingGetHomeList = false
-    private var isFirst = true
     private val userId = PrefUtils.getInt("user_id") // 없으면 -1
 
     // adapter
@@ -64,10 +65,15 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                 }
             }
             Toast.makeText(requireContext(), getString(R.string.message_restricted_search_func), Toast.LENGTH_SHORT).show()
-        }else{
-            viewLifecycleOwnerLiveData.value?.let{
-                it.lifecycleScope.launch {
-                    requestSearchCafesFromKakao()
+        }else {
+            LocationUtils.requestMyLocation(requireContext()) {
+                it?.let {
+                    myLocation = it
+                    viewLifecycleOwnerLiveData.value?.let {
+                        lifecycleScope.launch {
+                            requestSearchCafesFromKakao()
+                        }
+                    }
                 }
             }
         }
@@ -95,7 +101,7 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
             it?.let{
                 myLocation = it
                 viewLifecycleOwnerLiveData.value?.let{
-                    it.lifecycleScope.launch {
+                    lifecycleScope.launch {
                         requestSearchCafesFromKakao()
                     }
                 }
@@ -136,8 +142,6 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
         binding.recyclerviewHome.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
 
             hideKeyboard()
-
-
             if(isLoadingGetHomeList) return@setOnScrollChangeListener
             // 스크롤 시 화면에 보이는 카페들의 이미지 요청
             val layoutManager = binding.recyclerviewHome.layoutManager as LinearLayoutManager
@@ -145,46 +149,20 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
             val lastVisible = layoutManager.findLastVisibleItemPosition()
             val size = lastVisible - firstVisible + 1
 
-            viewLifecycleOwnerLiveData.value?.let{
+            viewLifecycleOwnerLiveData.value?.let {
                 lifecycleScope.launch {
                     requestSearchNaverImage(firstVisible, size)
                 }
-
-//            for (i in firstVisible..lastVisible) {
-//                val place = cafeAdapter.itemList.getOrNull(i) ?: continue
-//                if (!place.isImgRequested) {
-//                    place.isImgRequested = true
-//                    // 커피 전문점 만 이미지 검색
-////                    if(place.category_name.contains(getString(R.string.coffee_shop))){
-////                        // query = 주소(서울, 경기 등) + " " + 카페 이름
-////                        val address = if(place.address_name.isEmpty()) place.address_name else place.road_address_name
-////                        val city = address.split(" ").firstOrNull() ?: ""
-////                        val query = city + " " + place.place_name + " " + getString(R.string.cafe)
-////                        viewLifecycleOwner.lifecycleScope.launch {
-////                            // 1초에 10개 이상 요청 -> HTTP 429 = Too Many Requests
-////                            val imageUrl = requestCafeImage(query)
-////                            cafeAdapter.updateImage(i, imageUrl)
-////                        }
-////                    }
-//                    // 모두 이미지 검색
-//                    val address =
-//                        if (place.address_name.isEmpty()) place.address_name else place.road_address_name
-//                    val city = address.split(" ").firstOrNull() ?: ""
-//                    val query = city + " " + place.place_name + " " + getString(R.string.cafe)
-//                    viewLifecycleOwner.lifecycleScope.launch {
-//                        // 1초에 10개 이상 요청 -> HTTP 429 = Too Many Requests
-//                        val imageUrl = requestCafeImage(query)
-//                        cafeAdapter.updateImage(i, imageUrl)
-//                    }
-//                }
             }
 
             if (!binding.recyclerviewHome.canScrollVertically(1)) {
 
+                if(cafeAdapter.itemCount == 0) return@setOnScrollChangeListener
                 if (cafeAdapter.itemCount < totalCnt) {
                     // 다음 페이지 요청
                     if (binding.progressbar.isGone) { // 중복 요청 방지
                         page++
+                        Log.d(TAG, "${cafeAdapter.itemCount} : $totalCnt")
                         viewLifecycleOwnerLiveData.value?.let{
                             it.lifecycleScope.launch {
                                 if(hashtagAdapter.getHashtagList().isNotEmpty()){
@@ -206,6 +184,13 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
             binding.recyclerviewHomeHashtag.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
                 hideKeyboard()
             }
+        }
+
+        binding.btnMap.setOnClickListener {
+            val intent = Intent(requireContext(), MapCafeActivity::class.java)
+            intent.putExtra("latitude", myLocation?.latitude ?: "")
+            intent.putExtra("longitude", myLocation?.longitude ?: "")
+            startActivity(intent)
         }
     }
 
@@ -240,19 +225,13 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                 if(response.isSuccessful){
                     val body = response.body()
                     body?.let{
-                        when(it.status){
-                            200 -> {
-                                it.data?.let{
-                                    hashtagAdapter = HomeHashtagAdapter(requireContext(), it, this@HomeFragment)
-                                    binding.recyclerviewHomeHashtag.adapter = hashtagAdapter
-                                }
-                            }
-                            400 -> {
-                                Log.d(TAG, "400 -> ${it.data}")
-                            }
-                            else -> {}
+                        it.data?.let{
+                            hashtagAdapter = HomeHashtagAdapter(requireContext(), it, this@HomeFragment)
+                            binding.recyclerviewHomeHashtag.adapter = hashtagAdapter
                         }
                     }
+                }else{
+                    Log.e(TAG, response.errorBody()?.string() ?: "errorBody is null")
                 }
             }
 
@@ -268,6 +247,7 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
         binding.progressbar.visibility = View.VISIBLE
 
         var query = (searchQuery + " " + categoryAdapter.getSelectedCategory()).trim()
+        if(query.isEmpty()) query = getString(R.string.cafe)
 
         val call = RetrofitHelper.getKakaoService().getSearchCafes(
             query = query,
@@ -308,17 +288,14 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                 } else {
                     Log.d(TAG, response.errorBody()?.string().toString())
                 }
-                binding.progressbar.visibility = View.GONE
             }
 
             override fun onFailure(call: Call<KakaoSearchPlaceResponse>, t: Throwable) {
                 Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "${t.message}")
-                binding.progressbar.visibility = View.GONE
-
             }
         })
-
+        binding.progressbar.visibility = View.GONE
         binding.edtSearchHome.clearFocus()
     }
 
@@ -333,7 +310,8 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                         cafeAdapter.updateDBdata(data) // DB data로 카페 리스트 업데이트
 
                         val nullIdx = data.indexOfFirst { it.visit_datas == null }
-                        if(nullIdx < 5){ // 처음에는 화면에 보이는 리스트만 확인
+                        Log.d(TAG, "nullIdx: ${nullIdx}")
+                        if(nullIdx > -1 && nullIdx < 5){ // 처음에는 화면에 보이는 리스트만 확인 이미지 검색
                             viewLifecycleOwnerLiveData.value?.let{
                                 lifecycleScope.launch {
                                     requestSearchNaverImage(0, data.size)
@@ -343,7 +321,7 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                     }
                 }
                 400 -> {
-                    Log.d(TAG, "400 -> ${response.data}")
+                    Log.d(TAG, "${response.status}: ${response.data}")
                 }
             }
         }catch (e:Exception){
@@ -363,7 +341,13 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
         when(type){
             Constants.CATEGORY_TYPE -> { // 카테고리 클릭 시 카카오 카페 리스트 요청
                 viewLifecycleOwnerLiveData.value?.let{
-                    lifecycleScope.launch {  requestSearchCafesFromKakao() }
+                    lifecycleScope.launch {
+                        if(hashtagAdapter.getHashtagList().isNotEmpty()){
+                            requestHomeCafeHashtagFiltering() // 해시태그 클릭된 것이 있으면 DB에 있는 카페들을 조회
+                        }else{
+                            requestSearchCafesFromKakao()
+                        }
+                    }
                 }
             }
             Constants.HASHTAG_TYPE -> { // 해시태그 클릭 시 서버에 해당하는 카페 id 리스트 요청
@@ -449,7 +433,6 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
 
                         viewLifecycleOwnerLiveData.value?.let{
                             lifecycleScope.launch {
-                                binding.progressbar.visibility = View.VISIBLE
 
                                 val jobs = data.querys.map { query ->
                                     async {
@@ -476,11 +459,8 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
             override fun onFailure(call: Call<MyResponse<HomeHashtagFilteringResponse>>, t: Throwable) {
                 Toast.makeText(requireContext(), "${t.message}", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "${t.message}")
-
-
             }
         })
-        binding.progressbar.visibility = View.GONE
         binding.edtSearchHome.clearFocus()
     }
 

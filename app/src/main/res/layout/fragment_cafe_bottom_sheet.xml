@@ -32,7 +32,7 @@
         android:layout_height="32dp"
         android:button="@null"
         android:background="@drawable/selector_favorite_item"
-        android:backgroundTint="@color/red"
+        android:backgroundTint="@color/favorite"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_margin="4dp"/>

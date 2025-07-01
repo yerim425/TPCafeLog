@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="@color/cream"
+        android:backgroundTint="@color/bnv_bg"
         android:paddingEnd="18dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -42,8 +42,8 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_add"
         app:layout_anchor="@id/bab"
-        android:backgroundTint="@color/secondary"
-        app:tint="@color/cream"/>
+        android:backgroundTint="@color/fab_bg"
+        app:tint="@color/fab_fg"/>
 
     <!-- 확장 버튼들이 위치할 컨테이너 -->
     <LinearLayout
@@ -63,9 +63,9 @@
             android:text="@string/visit_certify"
             app:icon="@drawable/ic_visit_certify"
             app:iconPadding="4dp"
-            android:backgroundTint="@color/secondary"
-            app:iconTint="@color/white"
-            android:textColor="@color/white"
+            android:backgroundTint="@color/fab_bg"
+            app:iconTint="@color/fab_fg"
+            android:textColor="@color/fab_fg"
             android:layout_marginVertical="4dp"
             android:textSize="14sp"
             style="@style/Widget.Material3.FloatingActionButton.Large.Primary"/>
@@ -77,9 +77,9 @@
             android:text="@string/create_review"
             app:icon="@drawable/ic_create_review"
             app:iconPadding="4dp"
-            android:backgroundTint="@color/secondary"
-            app:iconTint="@color/white"
-            android:textColor="@color/white"
+            android:backgroundTint="@color/fab_bg"
+            app:iconTint="@color/fab_fg"
+            android:textColor="@color/fab_fg"
             android:layout_marginVertical="2dp"
             style="@style/Widget.Material3.FloatingActionButton.Large.Primary"/>
     </LinearLayout>

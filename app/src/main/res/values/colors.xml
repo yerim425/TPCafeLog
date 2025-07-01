@@ -3,7 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="dark_brown">#372D27</color>
     <color name="brown">#6B4F3B</color>
     <color name="mocha">#A9746E</color>
     <color name="cream">#F5F0EC</color>
@@ -14,15 +13,36 @@
     <color name="gray2">#444444</color>
     <color name="gray">#222222</color>
 
-    <color name="primary">#6B4F3B</color>
+    <color name="primary">#A9746E</color>
     <color name="on_primary">#F5F0EC</color>
-    <color name="secondary">#A9746E</color>
+    <color name="secondary">#6B4F3B</color>
     <color name="on_secondary">#D9D0C0</color>
     <color name="unselected">#B5B5B5</color>
 
     <color name="yellow">#FFF954</color>
-    <color name="red">#FF1E1E</color>
+    <color name="favorite">#CE1717</color>
 
     <color name="hint_color">#999999</color>
+    <color name="edt_bg">#F5F0EC</color>
+    <color name="edt_text">#222222</color>
     <color name="black_transparent">#99000000</color>
+
+    <color name="bnv_bg">#F5F0EC</color>
+    <color name="bnv_selected">#A9746E</color>
+    <color name="bnv_unselected">#D9D0C0</color>
+    <color name="fab_bg">#A9746E</color>
+    <color name="fab_fg">#F5F0EC</color>
+
+    <color name="text">#222222</color>
+    <color name="point_color">#A9746E</color>
+    <color name="light_color">#F5F0EC</color>
+
+    <color name="btn_bg_selected">#A9746E</color>
+
+    <color name="rv_item_bg">#F5F0EC</color>
+
+    <color name="line">#D9D0C0</color>
+
+    <color name="hashtag_unselected">#D9D0C0</color>
+    <color name="hashtag_selected">#A9746E</color>
 </resources>

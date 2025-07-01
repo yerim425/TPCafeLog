@@ -21,7 +21,7 @@
         <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/shape_bg_cream_rounded"
+            android:background="@drawable/shape_bg_edt"
             android:src="@drawable/ic_back"
             app:tint="@color/gray" />
 
@@ -33,7 +33,7 @@
             android:textColor="@color/gray"
             android:layout_gravity="center"
             android:gravity="center"
-            android:background="@drawable/shape_bg_cream_rounded"
+            android:background="@drawable/shape_bg_edt"
             android:layout_marginStart="16dp"/>
 
 
