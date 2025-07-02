@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
@@ -34,7 +35,7 @@ import retrofit2.Response
 import kotlin.Exception
 
 class MapCafeActivity : AppCompatActivity() {
-    val binding by lazy { ActivityMapCafeBinding.inflate(layoutInflater) }
+    val binding by lazy {ActivityMapCafeBinding.inflate(layoutInflater)}
     lateinit var kakaoMap: KakaoMap
     var myLocation: Location? = null
     var page: Int = 1
@@ -64,15 +65,15 @@ class MapCafeActivity : AppCompatActivity() {
             binding.mapview.start(mapLifecycleCallback, mapReadyCallback)
         }
 
-        kakaoMap.setOnCameraMoveStartListener { kakaoMap, gestureType ->
-
-        }
     }
 
     // 지도 준비가 완료되면 반응하는 콜백 객체
     val mapReadyCallback = object : KakaoMapReadyCallback(){
         override fun onMapReady(p0: KakaoMap) {
             kakaoMap = p0
+//            val center: LatLng = kakaoMap.cameraPosition!!.position
+//            val lat = center.latitude
+//            val lng = center.longitude
             // 현재 내 위치로 지도 카메라 이동 (위치가 null이면 서울 좌표 등록)
             val latitude : Double = myLocation?.latitude ?: 37.550263
             val longitude : Double = myLocation?.longitude ?: 126.997083
@@ -129,6 +130,7 @@ class MapCafeActivity : AppCompatActivity() {
 
         withContext(Dispatchers.IO){
             try{
+
                 val response = RetrofitHelper.getKakaoService().getSearchMapCafes(
                     longitude = myLocation!!.longitude.toString(),
                     latitude = myLocation!!.latitude.toString(),
@@ -151,5 +153,40 @@ class MapCafeActivity : AppCompatActivity() {
             }
         }
         binding.progressbar.visibility = View.GONE
+    }
+
+    fun getCurrentMapBounds(){
+//        val mapView: MapView = binding.mapview
+//
+//        // 1. 현재 중심 좌표
+//        val center = mapView.mapCenterPoint
+//        val centerGeo = center.mapPointGeoCoord
+//        val centerLat = centerGeo.latitude
+//        val centerLng = centerGeo.longitude
+//
+//        // 2. 줌 레벨
+//        val zoomLevel = mapView.zoomLevel
+//
+//        // 3. 계산식으로 bounds 근사 추정
+//        val latDelta = 0.02 * (20 - zoomLevel)  // 대략적인 범위 (줌 레벨 작을수록 넓어짐)
+//        val lngDelta = 0.025 * (20 - zoomLevel)
+//
+//        // 4. 남서, 북동 좌표 계산
+//        val southWestLat = centerLat - latDelta
+//        val southWestLng = centerLng - lngDelta
+//        val northEastLat = centerLat + latDelta
+//        val northEastLng = centerLng + lngDelta
+//
+//        val rect = "$southWestLng,$southWestLat,$northEastLng,$northEastLat"
+//        Log.d("MapBounds", "rect=$rect") // 카카오 Local API 요청용 rect
+
+
+
+        val center: LatLng = kakaoMap.cameraPosition!!.position
+        val lat = center.latitude
+        val lng = center.longitude
+
+        val zoomLevel = kakaoMap.zoomLevel
+
     }
 }
