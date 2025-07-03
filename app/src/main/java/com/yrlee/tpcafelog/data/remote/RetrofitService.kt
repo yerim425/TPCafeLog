@@ -1,5 +1,6 @@
 package com.yrlee.tpcafelog.data.remote
 
+import android.graphics.Rect
 import com.yrlee.tpcafelog.MyApplication
 import com.yrlee.tpcafelog.model.HashTagItem
 import com.yrlee.tpcafelog.model.HomeCafeRequest
@@ -78,6 +79,7 @@ interface RetrofitService {
         @Query("x") longitude: String,
         @Query("y") latitude: String,
         @Query("page") page: Int,
+        @Query("rect") rect: String
     ): KakaoSearchPlaceResponse
 
     // 네이버 이미지 검색하기
