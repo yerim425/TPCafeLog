@@ -1,5 +1,7 @@
 package com.yrlee.tpcafelog.ui.map
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -9,30 +11,29 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.MapView
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelLayer
 import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelTextBuilder
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
-import com.yrlee.tpcafelog.data.remote.RetrofitService
 import com.yrlee.tpcafelog.databinding.ActivityMapCafeBinding
-import com.yrlee.tpcafelog.model.KakaoSearchPlaceResponse
 import com.yrlee.tpcafelog.model.Place
 import com.yrlee.tpcafelog.util.LocationUtils
+import com.yrlee.tpcafelog.util.PrefUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.Exception
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import java.net.URL
 
 class MapCafeActivity : AppCompatActivity() {
     val binding by lazy {ActivityMapCafeBinding.inflate(layoutInflater)}
@@ -71,21 +72,44 @@ class MapCafeActivity : AppCompatActivity() {
     val mapReadyCallback = object : KakaoMapReadyCallback(){
         override fun onMapReady(p0: KakaoMap) {
             kakaoMap = p0
-//            val center: LatLng = kakaoMap.cameraPosition!!.position
-//            val lat = center.latitude
-//            val lng = center.longitude
             // 현재 내 위치로 지도 카메라 이동 (위치가 null이면 서울 좌표 등록)
             val latitude : Double = myLocation?.latitude ?: 37.550263
             val longitude : Double = myLocation?.longitude ?: 126.997083
             val myPos: LatLng = LatLng.from(latitude, longitude)
+            Log.d("rect", "$myPos")
 
-            val cameraUpdate = CameraUpdateFactory.newCenterPosition(myPos, 17)
+            val cameraUpdate = CameraUpdateFactory.newCenterPosition(myPos, 16)
             kakaoMap.moveCamera(cameraUpdate)
 
             // 내 위치에 마커 추가하기
             labelLayer = kakaoMap.labelManager!!.layer!!
-            val labelOptions = LabelOptions.from(myPos).setStyles(R.drawable.ic_location).setTag("mine")
-            labelLayer.addLabel(labelOptions)
+            val labelTextBuilder = LabelTextBuilder().setTexts("내위치")
+            val labelOptions = LabelOptions.from(myPos).setTag("mine").setTexts(labelTextBuilder)
+            val img_url = PrefUtils.getString("img_url")
+            Glide.with(this@MapCafeActivity)
+                .asBitmap()
+                .load(img_url)
+                .circleCrop()
+                .into(object : CustomTarget<Bitmap>(){
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        labelOptions.setStyles(resource)
+                        labelLayer.addLabel(labelOptions)
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        labelOptions.setStyles(R.drawable.ic_my_location_pin)
+                        labelLayer.addLabel(labelOptions)
+                    }
+                })
+
+
 
             // 주변 카페 검색해서 지도에 표시
             lifecycleScope.launch {
@@ -134,17 +158,15 @@ class MapCafeActivity : AppCompatActivity() {
                 val response = RetrofitHelper.getKakaoService().getSearchMapCafes(
                     longitude = myLocation!!.longitude.toString(),
                     latitude = myLocation!!.latitude.toString(),
-                    page = page
+                    page = page,
+                    rect = getCurrentMapRect()
                 )
                 withContext(Dispatchers.Main){
                     response.documents.forEach {
-                        if(!cafeList.contains(it)) {
-                            val pos = LatLng.from(it.latitude.toDouble(), it.longitude.toDouble())
-                            val options = LabelOptions.from(pos).setStyles(R.drawable.ic_location).setTag(it)
-                            labelLayer.addLabel(options)
-                            cafeList.add(it)
-                        }
-
+                        val pos = LatLng.from(it.latitude.toDouble(), it.longitude.toDouble())
+                        val options = LabelOptions.from(pos).setStyles(R.drawable.ic_location).setTag(it)
+                        labelLayer.addLabel(options)
+                        cafeList.add(it)
                     }
                 }
 
@@ -155,38 +177,25 @@ class MapCafeActivity : AppCompatActivity() {
         binding.progressbar.visibility = View.GONE
     }
 
-    fun getCurrentMapBounds(){
-//        val mapView: MapView = binding.mapview
-//
-//        // 1. 현재 중심 좌표
-//        val center = mapView.mapCenterPoint
-//        val centerGeo = center.mapPointGeoCoord
-//        val centerLat = centerGeo.latitude
-//        val centerLng = centerGeo.longitude
-//
-//        // 2. 줌 레벨
-//        val zoomLevel = mapView.zoomLevel
-//
-//        // 3. 계산식으로 bounds 근사 추정
-//        val latDelta = 0.02 * (20 - zoomLevel)  // 대략적인 범위 (줌 레벨 작을수록 넓어짐)
-//        val lngDelta = 0.025 * (20 - zoomLevel)
-//
-//        // 4. 남서, 북동 좌표 계산
-//        val southWestLat = centerLat - latDelta
-//        val southWestLng = centerLng - lngDelta
-//        val northEastLat = centerLat + latDelta
-//        val northEastLng = centerLng + lngDelta
-//
-//        val rect = "$southWestLng,$southWestLat,$northEastLng,$northEastLat"
-//        Log.d("MapBounds", "rect=$rect") // 카카오 Local API 요청용 rect
-
-
+    fun getCurrentMapRect(): String{
 
         val center: LatLng = kakaoMap.cameraPosition!!.position
-        val lat = center.latitude
-        val lng = center.longitude
+        val centerLat = center.latitude
+        val centerLng = center.longitude
 
         val zoomLevel = kakaoMap.zoomLevel
 
+        val latDelta = 0.02 * (20 - zoomLevel)
+        val lngDelta = 0.025 * (20 - zoomLevel)
+
+        val swLat = centerLat - latDelta
+        val swLng = centerLng - lngDelta
+        val neLat = centerLat + latDelta
+        val neLng = centerLng + lngDelta
+
+        val rect = "$swLng,$swLat,$neLng,$neLat"
+        Log.d("rect", "${rect}")
+        return rect
     }
+
 }
