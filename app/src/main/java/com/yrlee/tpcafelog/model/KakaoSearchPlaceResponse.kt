@@ -30,6 +30,6 @@ data class Place(
     var review_cnt: Int= 0,
     var img_url: String? = null,
     var isImgRequested: Boolean = false,
-    var visitDatas: List<HomeVisit>?= null,
+    var visitDatas: List<CafeInfoVisit>?= null,
     var hashtag_names: String?= null,
 )

@@ -1,10 +1,9 @@
 package com.yrlee.tpcafelog.data.remote
 
-import android.graphics.Rect
 import com.yrlee.tpcafelog.MyApplication
 import com.yrlee.tpcafelog.model.HashTagItem
-import com.yrlee.tpcafelog.model.HomeCafeRequest
-import com.yrlee.tpcafelog.model.HomeCafeResponse
+import com.yrlee.tpcafelog.model.CafeInfoRequest
+import com.yrlee.tpcafelog.model.CafeInfoResponse
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringRequest
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringResponse
 import com.yrlee.tpcafelog.model.KakaoAddressResponse
@@ -131,10 +130,10 @@ interface RetrofitService {
     ): Call<MyResponse<ReviewDetailResponse>>
 
     // 각 카페의 DB 정보들 요청
-    @POST("loadHomeCafeList.php")
-    suspend fun getHomeCafeList(
-        @Body data: HomeCafeRequest
-    ): MyResponse<List<HomeCafeResponse>>
+    @POST("loadCafeInfos.php")
+    suspend fun getCafeInfos(
+        @Body data: CafeInfoRequest
+    ): MyResponse<List<CafeInfoResponse>>
 
     // DB에 저장되어 있는 카페 정보들 중 검색어, 카테고리, 해시태그에 맞는 카페의 id들 요청
     @POST("loadHomeCafeFiltering.php")
