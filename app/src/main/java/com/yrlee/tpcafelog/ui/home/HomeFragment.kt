@@ -27,7 +27,7 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yrlee.tpcafelog.data.local.OnHomeItemSelectListener
 import com.yrlee.tpcafelog.model.HashTagItem
-import com.yrlee.tpcafelog.model.HomeCafeRequest
+import com.yrlee.tpcafelog.model.CafeInfoRequest
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringRequest
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringResponse
 import com.yrlee.tpcafelog.model.MyResponse
@@ -35,7 +35,6 @@ import com.yrlee.tpcafelog.ui.map.MapCafeActivity
 import com.yrlee.tpcafelog.util.Constants
 import com.yrlee.tpcafelog.util.LocationUtils
 import com.yrlee.tpcafelog.util.PrefUtils
-import com.yrlee.tpcafelog.util.Utils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 
@@ -301,8 +300,8 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
 
     suspend fun requestHomeCafeList(userId: Int, placeIds: List<String>){
         try{
-            val request = HomeCafeRequest(userId, placeIds)
-            val response = RetrofitHelper.getMyService().getHomeCafeList(request)
+            val request = CafeInfoRequest(userId, placeIds)
+            val response = RetrofitHelper.getMyService().getCafeInfos(request)
             val status = response.status
             when(status) {
                 200 -> {

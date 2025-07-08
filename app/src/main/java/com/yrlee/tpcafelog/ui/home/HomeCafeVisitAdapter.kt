@@ -1,7 +1,6 @@
 package com.yrlee.tpcafelog.ui.home
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.databinding.ItemVisitBinding
-import com.yrlee.tpcafelog.model.HomeVisit
+import com.yrlee.tpcafelog.model.CafeInfoVisit
 
-class HomeCafeVisitAdapter(val context: Context, val itemList: List<HomeVisit>): Adapter<HomeCafeVisitAdapter.VH>() {
+class HomeCafeVisitAdapter(val context: Context, val itemList: List<CafeInfoVisit>): Adapter<HomeCafeVisitAdapter.VH>() {
 
     inner class VH(val binding: ItemVisitBinding): ViewHolder(binding.root){
         init{

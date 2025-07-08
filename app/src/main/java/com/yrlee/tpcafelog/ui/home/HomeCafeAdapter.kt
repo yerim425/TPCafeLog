@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.databinding.ItemCafeBinding
-import com.yrlee.tpcafelog.model.HomeCafeResponse
+import com.yrlee.tpcafelog.model.CafeInfoResponse
 import com.yrlee.tpcafelog.model.Place
 import com.yrlee.tpcafelog.util.PrefUtils
 
@@ -140,7 +140,7 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
         notifyDataSetChanged()
     }
 
-    fun updateDBdata(datas: List<HomeCafeResponse>){
+    fun updateDBdata(datas: List<CafeInfoResponse>){
         datas.forEach{ data ->
             val pos = itemList.indexOfFirst { it.id == data.place_id }
             if(pos != -1){
