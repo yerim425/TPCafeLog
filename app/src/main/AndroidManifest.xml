@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.map.MapWebViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.start.StartActivity"
             android:exported="false" />
         <activity
@@ -42,7 +45,7 @@
         <activity
             android:name=".ui.review.ReviewAddActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.review.ReviewDetailActivity"
             android:exported="false" />
