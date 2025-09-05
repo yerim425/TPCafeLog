@@ -19,6 +19,7 @@ class MyApplication : Application(){
         val KAKAO_REST_API_KEY = BuildConfig.KAKAO_REST_API_KEY
         val NAVER_CLIENT_ID = BuildConfig.NAVER_CLIENT_ID
         val NAVER_CLIENT_SECRET = BuildConfig.NAVER_CLIENT_SECRET
+        val KAKAO_JS_API_KEY = BuildConfig.KAKAO_JS_API_KEY
     }
 
     override fun onCreate() {
