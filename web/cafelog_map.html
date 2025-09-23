@@ -27,6 +27,8 @@
         // 클러스터러
         var clusterer;
 
+        var centerPos;
+
         //마커 이미지
         var myPinSize = new kakao.maps.Size(32,32);
         var cafePinSize = new kakao.maps.Size(48,48);
@@ -44,7 +46,7 @@
             document.getElementById('loading').style.display = 'none';
 
             // 지도 생성 (이제서야 만듦)
-            var centerPos = new kakao.maps.LatLng(lat, lng);
+            centerPos = new kakao.maps.LatLng(lat, lng);
             var mapContainer = document.getElementById('map');
             var mapOption = {
                 center: centerPos,
