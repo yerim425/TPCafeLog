@@ -36,6 +36,7 @@
         var myPinImg = new kakao.maps.MarkerImage("./images/ic_my_pin.png", myPinSize);
         // 카페 마커 이미지
         var cafePinImg = new kakao.maps.MarkerImage("./images/ic_cafe_pin.png", cafePinSize);
+        var page = 1;
 
 
         // 지도 중심을 내 위치로 세팅
@@ -82,7 +83,6 @@
         }
         initKakaoMap(37.5472784, 127.0518973);
 
-        var page = 1;
 
         // kakao 로컬 카테고리 검색
         async function searchCafe() {
