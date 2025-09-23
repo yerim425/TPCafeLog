@@ -99,12 +99,12 @@
                 page++;
                 searchCafe();
             }
-            var markers = data.documents.map(function(i, cafe){
+            var markers = data.documents.map(function(cafe){
                 return new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(cafe.y, cafe.x),
                     image: cafePinImg
                 });
-            })
+            });
             // 클러스터러에 마커들을 추가
             clusterer.addMarkers(markers);
         }
