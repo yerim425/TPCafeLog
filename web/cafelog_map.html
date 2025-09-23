@@ -30,16 +30,22 @@
             averageCenter: true,    // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
             minLevel: 5,             // 클러스터 할 최소 지도 레벨 
             styles: [{
-                background: 'rgba(169,116,110,0.7)', // 배경색 변경 가능
-                color: '#fff', // 글자 색
+                width: '50px',            // 클러스터 마커 가로
+                height: '50px',           // 클러스터 마커 세로
+                background: 'rgba(169,116,110,0.7)', // 배경색
+                color: '#fff',            // 글자색
+                textAlign: 'center',      
+                lineHeight: '50px',       // 글자 세로 중앙 정렬
+                borderRadius: '25px'      // 원형
             }]
         });
 
         //마커 이미지
-        var imgSize = new kakao.maps.Size(32,32);
-        var myPinImg = new kakao.maps.MarkerImage("./images/ic_my_pin.png", imgSize);
+        var myPinSize = new kakao.maps.Size(32,32);
+        var cafePinSize = new kakao.maps.Size(48,48);
+        var myPinImg = new kakao.maps.MarkerImage("./images/ic_my_pin.png", myPinSize);
         // 카페 마커 이미지
-        var cafePinImg = new kakao.maps.MarkerImage("./images/ic_cafe_pin.png", imgSize);
+        var cafePinImg = new kakao.maps.MarkerImage("./images/ic_cafe_pin.png", cafePinSize);
 
 
         // 지도 중심을 내 위치로 세팅
