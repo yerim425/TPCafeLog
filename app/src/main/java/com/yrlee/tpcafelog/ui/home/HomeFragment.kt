@@ -32,6 +32,7 @@ import com.yrlee.tpcafelog.model.HomeHashtagFilteringRequest
 import com.yrlee.tpcafelog.model.HomeHashtagFilteringResponse
 import com.yrlee.tpcafelog.model.MyResponse
 import com.yrlee.tpcafelog.ui.map.MapCafeActivity
+import com.yrlee.tpcafelog.ui.map.MapWebViewActivity
 import com.yrlee.tpcafelog.util.Constants
 import com.yrlee.tpcafelog.util.LocationUtils
 import com.yrlee.tpcafelog.util.PrefUtils
@@ -185,11 +186,13 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
             }
         }
 
+        // 지도 화면으로 이동
         binding.btnMap.setOnClickListener {
-            val intent = Intent(requireContext(), MapCafeActivity::class.java)
-            intent.putExtra("latitude", myLocation?.latitude ?: "")
-            intent.putExtra("longitude", myLocation?.longitude ?: "")
-            startActivity(intent)
+//            val intent = Intent(requireContext(), MapCafeActivity::class.java)
+//            intent.putExtra("latitude", myLocation?.latitude ?: "")
+//            intent.putExtra("longitude", myLocation?.longitude ?: "")
+//            startActivity(intent)
+            startActivity(Intent(requireContext(), MapWebViewActivity::class.java))
         }
     }
 

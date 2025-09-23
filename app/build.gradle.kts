@@ -25,6 +25,7 @@ android {
 
         buildConfigField("String", "KAKAO_NATIVE_API_KEY", properties["KAKAO_NATIVE_API_KEY"].toString())
         buildConfigField("String", "KAKAO_REST_API_KEY", properties["KAKAO_REST_API_KEY"].toString())
+        buildConfigField("String", "KAKAO_JS_API_KEY", properties["KAKAO_JS_API_KEY"].toString())
         buildConfigField("String", "NAVER_CLIENT_ID", properties["NAVER_CLIENT_ID"].toString())
         buildConfigField("String", "NAVER_CLIENT_SECRET", properties["NAVER_CLIENT_SECRET"].toString())
         manifestPlaceholders["KAKAO_NATIVE_API_KEY"] = properties["KAKAO_NATIVE_API_KEY"] as String

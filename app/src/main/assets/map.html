@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카페로그 지도화면</title>
+</head>
+<body>
+    <div id="map" style="width: 100%; height: 100vh;">
+    </div>
+
+    <script>
+
+        let map;
+        let cafeMarkers = {};
+        let cafeSet = new Set();
+
+        function initKakaoMap(jsKey, lat, lng){
+            // JS SDK 동적 로드
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + jsKey + "&autoload=false";
+            console.log("Kakao SDK loaded");
+            script.onload = function(){
+                // SDK 로드 완료 후 지도 초기화
+                kakao.maps.load(function() {
+                    var mapContainer = document.getElementById('map');
+                    var myPos = new kakao.maps.LatLng(lat, lng);
+                    var mapOption = {
+                        center : myPos,
+                        level : 3
+                    };
+                    var map = new kakao.maps.Map(mapContainer, mapOption);
+                    console.log("Kakao Map initialized");
+
+                    // 내 위치 마커
+                    var imgSrc = 'file:///android_asset/ic_my_location_pin.png';
+                    var imgSize = new kakao.maps.Size(50,50);
+                    var markerImg = new kakao.maps.MarkerImage(imgSrc, imgSize);
+                    new kakao.maps.Marker({
+                        position: myPos,
+                        map: map,
+                        title: '내 위치',
+                        image: markerImg
+                    });
+
+
+                });
+                console.log("Kakao map initialized");
+            }
+            document.head.appendChild(script);
+        }
+
+    </script>
+</body>
+</html>

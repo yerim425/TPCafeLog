@@ -100,10 +100,9 @@ class MapCafeActivity : AppCompatActivity() {
             labelLayer = kakaoMap.labelManager!!.layer!!
             val labelTextBuilder = LabelTextBuilder().setTexts("내위치")
             val labelOptions = LabelOptions.from(myPos).setTag("mine").setTexts(labelTextBuilder)
-            val img_url = PrefUtils.getString("img_url")
             Glide.with(this@MapCafeActivity)
                 .asBitmap()
-                .load(img_url)
+                .load(R.drawable.ic_my_location_pin)
                 .circleCrop()
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(
