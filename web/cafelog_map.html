@@ -31,6 +31,13 @@
             minLevel: 8             // 클러스터 할 최소 지도 레벨 
         });
 
+        //마커 이미지
+        var imgSize = new kakao.maps.Size(32,32);
+        var myPinImg = new kakao.maps.MarkerImage("./images/ic_my_pin.png", imgSize);
+        // 카페 마커 이미지
+        var cafePinImg = new kakao.maps.MarkerImage("./images/ic_cafe_pin.png", imgSize);
+
+
         // 지도 중심을 내 위치로 세팅
         function setMyLocation(lat, lng){
             console.log("내 위치 : ", lat , lng);
@@ -38,14 +45,11 @@
             // 지도 중심을 내 위치로 이동
             centerPos = new kakao.maps.LatLng(lat, lng);
             map.setCenter(centerPos);
-            var imgSrc = "./images/ic_my_location_pin.png";
-            var imgSize = new kakao.maps.Size(32,32);
-            var markerImg = new kakao.maps.MarkerImage(imgSrc, imgSize);
 
             // 내 위치 마커 표시
             var marker = new kakao.maps.Marker({
                 position: centerPos,
-                image: markerImg 
+                image: myPinImg 
             })
             marker.setMap(map);
         }
@@ -97,7 +101,8 @@
             }
             var markers = data.documents.map(function(i, cafe){
                 return new kakao.maps.Marker({
-                    position: new kakao.maps.LatLng(cafe.y, cafe.x)
+                    position: new kakao.maps.LatLng(cafe.y, cafe.x),
+                    image: cafePinImg 
                 });
             })
             // 클러스터러에 마커들을 추가
