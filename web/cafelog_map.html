@@ -30,11 +30,11 @@
             averageCenter: true,    // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
             minLevel: 5,             // 클러스터 할 최소 지도 레벨 
             // calculator로 마커 개수별 스타일 지정
-            calculator: function(markers, numStyles) {
-                var count = markers.length;
-                var index = count >= 10 ? 1 : 0;
-                return { text: count, index: index };
-            },
+            // calculator: function(markers, numStyles) {
+            //     var count = markers.length;
+            //     var index = count >= 10 ? 1 : 0;
+            //     return { text: count, index: index };
+            // },
             styles: [
                 { // 마커 1~9개
                     width: '50px',
@@ -45,15 +45,15 @@
                     lineHeight: '50px',
                     borderRadius: '25px'
                 },
-                { // 마커 10개 이상
-                    width: '50px',
-                    height: '50px',
-                    background: 'rgba(107,79,59,0.7)',
-                    color: '#fff',
-                    textAlign: 'center',
-                    lineHeight: '50px',
-                    borderRadius: '25px'
-                }
+                // { // 마커 10개 이상
+                //     width: '50px',
+                //     height: '50px',
+                //     background: 'rgba(107,79,59,0.7)',
+                //     color: '#fff',
+                //     textAlign: 'center',
+                //     lineHeight: '50px',
+                //     borderRadius: '25px'
+                // }
             ]
         });
         console.log(clusterer.getStyles());
