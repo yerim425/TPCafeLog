@@ -51,6 +51,7 @@
             const lat = centerPos.getLat();
             const lng = centerPos.getLng();
 
+            console.log(lat, lng);
             const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=${lat}&y=${lng}&radius=2000&page=${page}`;
 
             try {
