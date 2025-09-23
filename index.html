@@ -3,76 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>카페로그 지도화면</title>
+    <title>카페로그</title>
     <script>
         
     </script>
 </head>
 <body>
-    <div id="map" style="width: 100%; height: 100vh;">
-    </div>
 
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7d2594d51002a4ba8bcd20ceb529f408"></script>
-
-    <script>
-        var mapContainer = document.getElementById('map');
-        var centerPos = new kakao.maps.LatLng(35.1795543, 129.0756416); // 기본 위치
-        mapOption = {
-            center: centerPos, 
-            level:3
-        };
-        // 카카오 지도
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-
-        // 지도 중심을 내 위치로 세팅
-        function setMyLocation(lat, lng){
-            console.log("내 위치 : ", lat , lng);
-
-            // 지도 중심을 내 위치로 이동
-            centerPos = new kakao.maps.LatLng(lat, lng);
-            map.setCenter(centerPos);
-            var imgSrc = "./images/ic_my_location_pin.png";
-            var imgSize = new kakao.maps.Size(32,32);
-            var markerImg = new kakao.maps.MarkerImage(imgSrc, imgSize);
-
-            // 내 위치 마커 표시
-            var marker = new kakao.maps.Marker({
-                position: centerPos,
-                image: markerImg 
-            })
-            marker.setMap(map);
-        }
-        setMyLocation(centerPos.getLat(), centerPos.getLng());
-
-        var page = 1;
-
-        // kakao 로컬 카테고리 검색
-        async function searchCafe() {
-            const lat = centerPos.getLat();
-            const lng = centerPos.getLng();
-
-            console.log(lat, lng);
-            const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=${lat}&y=${lng}&radius=2000&page=${page}`;
-
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        Authorization: "KakaoAK 4d2a57ec2a45ae21cfa73a4abafe38a6" // REST API 키
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error("API 요청 실패: " + response.status);
-                }
-
-                const data = await response.json();
-                console.log(data);
-            } catch (error) {
-                console.error("에러: " + error);
-            }
-        }
-        searchCafe();
-    </script>
 </body>
 </html>
