@@ -98,7 +98,7 @@
             console.log("rect:", rect);
 
             const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=${lat}&y=${lng}&radius=2000&page=${page}&rect=${rect}`;
-
+            console.log(url);
             try {
                 const response = await fetch(url, {
                     method: 'GET',
