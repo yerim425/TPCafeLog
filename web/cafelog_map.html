@@ -87,7 +87,7 @@
                 page++;
                 searchCafe();
             }
-            data.documents.array.forEach(cafe => {
+            data.documents.forEach(cafe => {
                 var cafePos = new kakao.maps.LatLng(cafe.x, cafe.y);
                 // 카페 마커 표시
                 var marker = new kakao.maps.Marker({
