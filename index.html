@@ -23,7 +23,6 @@
         };
         // 카카오 지도
         var map = new kakao.maps.Map(mapContainer, mapOption);
-        map.setCenter(centerPos);
 
         // 지도 중심을 내 위치로 세팅
         function setMyLocation(lat, lng){
@@ -43,6 +42,7 @@
             })
             marker.setMap(map);
         }
+        setMyLocation(centerPos.getLat(), centerPos.getLng());
 
         var page = 1;
 
