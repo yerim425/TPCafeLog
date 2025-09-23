@@ -48,7 +48,9 @@
 
         // kakao 로컬 카테고리 검색
         async function searchCafe() {
-            const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&page=${page}x=${centerPos.lat}&y=${centerPos.lng}`;
+            var lat = centerPos.getLat();
+            var lng = centerPos.getLng();
+            const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&page=${page}x=${lat}&y=${lng}`;
 
             try{
                 const response = await fetch(url, {
