@@ -51,7 +51,7 @@
             const lat = centerPos.getLat();
             const lng = centerPos.getLng();
 
-            const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=${lng}&y=${lat}&radius=2000&page=${page}`;
+            const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=${lat}&y=${lng}&radius=2000&page=${page}`;
 
             try {
                 const response = await fetch(url, {
