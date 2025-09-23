@@ -19,7 +19,7 @@
         var centerPos = new kakao.maps.LatLng(35.1795543, 129.0756416); // 기본 위치
         mapOption = {
             center: centerPos, 
-            level: 8
+            level: 5
         };
         // 카카오 지도
         var map = new kakao.maps.Map(mapContainer, mapOption);
@@ -28,7 +28,7 @@
         var clusterer = new kakao.maps.MarkerClusterer({
             map: map,               // 마커들을 클러스터로 관리하고 표시할 지도 객체 
             averageCenter: true,    // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-            minLevel: 8             // 클러스터 할 최소 지도 레벨 
+            minLevel: 5             // 클러스터 할 최소 지도 레벨 
         });
 
         //마커 이미지
@@ -102,7 +102,7 @@
             var markers = data.documents.map(function(i, cafe){
                 return new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(cafe.y, cafe.x),
-                    image: cafePinImg 
+                    image: cafePinImg
                 });
             })
             // 클러스터러에 마커들을 추가
