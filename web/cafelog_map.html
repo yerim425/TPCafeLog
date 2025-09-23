@@ -26,32 +26,10 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7d2594d51002a4ba8bcd20ceb529f408&libraries=clusterer"></script>
 
     <script>
-        var mapContainer = document.getElementById('map');
-        var centerPos = new kakao.maps.LatLng(35.1795543, 129.0756416); // 기본 위치
-        mapOption = {
-            center: centerPos, 
-            level: 5
-        };
         // 카카오 지도
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-
-        // 마커 클러스터러를 생성합니다 
-        var clusterer = new kakao.maps.MarkerClusterer({
-            map: map,               // 마커들을 클러스터로 관리하고 표시할 지도 객체 
-            averageCenter: true,    // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-            minLevel: 5,             // 클러스터 할 최소 지도 레벨 
-            styles: [
-                { // 마커 1~9개
-                    width: '50px',
-                    height: '50px',
-                    background: 'rgba(169,116,110,0.7)',
-                    color: '#fff',
-                    textAlign: 'center',
-                    lineHeight: '50px',
-                    borderRadius: '25px'
-                }
-            ]
-        });
+        var map;
+        // 클러스터러
+        var clusterer;
 
         //마커 이미지
         var myPinSize = new kakao.maps.Size(32,32);
@@ -62,21 +40,44 @@
 
 
         // 지도 중심을 내 위치로 세팅
+        // 내 위치를 받아온 후에 지도 초기화
         function initKakaoMap(lat, lng){
             console.log("내 위치 : ", lat , lng);
 
-            // document.getElementById('loading').style.display = 'none';
-            // document.getElementById('map').style.display = 'flex';
+            // 로딩 숨기고 지도 보이기
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('map').style.display = 'block';
 
-            // 지도 중심을 내 위치로 이동
-            centerPos = new kakao.maps.LatLng(lat, lng);
-            map.setCenter(centerPos);
+            // 지도 생성 (이제서야 만듦)
+            var centerPos = new kakao.maps.LatLng(lat, lng);
+            var mapContainer = document.getElementById('map');
+            var mapOption = {
+                center: centerPos,
+                level: 5
+            };
+            map = new kakao.maps.Map(mapContainer, mapOption);
+
+            // 클러스터러 생성
+            clusterer = new kakao.maps.MarkerClusterer({
+                map: map,
+                averageCenter: true,
+                minLevel: 5,
+                styles: [{
+                    width: '50px',
+                    height: '50px',
+                    background: 'rgba(169,116,110,0.7)',
+                    color: '#fff',
+                    textAlign: 'center',
+                    lineHeight: '50px',
+                    borderRadius: '25px'
+                }]
+            });
 
             // 내 위치 마커 표시
             var marker = new kakao.maps.Marker({
                 position: centerPos,
-                image: myPinImg 
-            })
+                image: myPinImg
+            });
             marker.setMap(map);
         }
         // initKakaoMap(37.5472784, 127.0518973);
@@ -117,7 +118,6 @@
                 console.error("에러: " + error);
             }
         }
-        searchCafe();
 
         // 카카오에서 가져온 데이터로 마커를 생성하고 클러스터러 객체에 넘겨줌
         function setCafeDatas(data){
