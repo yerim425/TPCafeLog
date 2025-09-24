@@ -161,7 +161,8 @@
         }
 
         // DB의 카페 이미지로 업데이트
-        function updateCafeImages(items){
+        function updateCafeImages(jsonString){
+            const items = JSON.parse(jsonString);
             items.forEach(item => {
                 const marker = markerMap[item.place_id];
                 if(marker){
