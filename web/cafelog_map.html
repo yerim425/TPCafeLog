@@ -164,8 +164,8 @@
             items.forEach(item => {
                 const marker = markerMap[item.place_id];
                 if(marker){
-                    const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize)
-                    console.log(item.img_url);
+                    const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize);
+                    console.log("image url", item.img_url);
                     marker.setImage(newImage);
                 }
             });
