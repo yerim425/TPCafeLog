@@ -145,16 +145,19 @@
             var place_ids = data.documents.map(function(cafe){
                 return cafe.id;
             });
-            var markers = data.documents.map(function(cafe){
-                var marker = new kakao.maps.Marker({
-                    position: new kakao.maps.LatLng(cafe.y, cafe.x),
-                    image: cafePinImg
+
+            data.documents.map(function(cafe){
+                createRoundedMarkerImage('./images/ic_cafe_pin.png', cafePinSize, function(markerImage){
+                    var marker = new kakao.maps.Marker({
+                        position: new kakao.maps.LatLng(cafe.y, cafe.x),
+                        image: markerImage
+                    });
+                    clusterer.addMarker(marker); // 비동기 콜백 안에서 추가
+                    markerMap[cafe.id] = marker; // place_id와 매핑
                 });
-                markerMap[cafe.id] = marker;
-                return marker
             });
             // 클러스터러에 마커들을 추가
-            clusterer.addMarkers(markers);
+            // clusterer.addMarkers(markers);
 
             // db에서 카페 이미지 가져오기
             AndroidInterface.sendPlaceIds(JSON.stringify(place_ids));
@@ -171,6 +174,27 @@
                     marker.setImage(newImage);
                 }
             });
+        }
+
+        // DB에서 가져온 카페 이미지로 둥근 마커 만들기
+        function createRoundedMarkerImage(url, size, callback){
+            const canvas = document.createElement('canvas');
+            canvas.width = size.width;
+            canvas.height = size.height;
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.crossOrigin = "anonymous"; // 외부 이미지 CORS 문제 해결
+            img.onload = function(){
+                ctx.clearRect(0, 0, size.width, size.height);
+                ctx.beginPath();
+                ctx.arc(size.width/2, size.height/2, size.width/2, 0, Math.PI*2);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(img, 0, 0, size.width, size.height);
+                const dataUrl = canvas.toDataURL();
+                callback(new kakao.maps.MarkerImage(dataUrl, size));
+            }
+            img.src = url;
         }
 
 
