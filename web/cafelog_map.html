@@ -118,22 +118,23 @@
             }
         }
 
-        async function searchCafeFromDB(place_ids) {
-            const url = "http://yrlee2025.dothome.co.kr/cafelog/loadCafeImages.php"
-            try{
-                const response = await fetch(url, {
-                    method: 'POST',
-                    data: place_ids
-                })
-                .then(res=>res.json())
-                .then(data=>console.log("카페이미지", data))
-                .catch(error=>console.error(error));
-            } catch(error){
-                console.error("에러: "+ error);
-            }
-        }
+        // async function searchCafeFromDB(place_ids) {
+        //     const url = "http://yrlee2025.dothome.co.kr/cafelog/loadCafeImages.php"
+        //     try{
+        //         const response = await fetch(url, {
+        //             method: 'POST',
+        //             data: place_ids
+        //         })
+        //         .then(res=>res.json())
+        //         .then(data=>console.log("카페이미지", data))
+        //         .catch(error=>console.error(error));
+        //     } catch(error){
+        //         console.error("에러: "+ error);
+        //     }
+        // }
 
         // 카카오에서 가져온 데이터로 마커를 생성하고 클러스터러 객체에 넘겨줌
+        let markerMap = {}; // place_id -> Marker 매핑
         function setCafeDatas(data){
             if(!data.meta.is_end){
                 page++;
@@ -143,17 +144,31 @@
                 return cafe.id;
             });
             var markers = data.documents.map(function(cafe){
-                return new kakao.maps.Marker({
+                var marker = new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(cafe.y, cafe.x),
                     image: cafePinImg
                 });
+                markerMap[cafe.id] = marker;
+                return marker
             });
             // 클러스터러에 마커들을 추가
             clusterer.addMarkers(markers);
 
             // db에서 카페 이미지 가져오기
-            searchCafeFromDB(place_ids)
+            AndroidInterface.sendPlaceIds(JSON.stringify(place_ids));
         }
+
+        // DB의 카페 이미지로 업데이트
+        function updateCafeImages(items){
+            items.array.forEach(item => {
+                const marker = markerMap[item.place_id];
+                if(marker){
+                    const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize)
+                    marker.setImage(newImage)
+                }
+            });
+        }
+
 
         // 지도 이동 시 centerPos 가져와서 카페 정보 요청
 
