@@ -140,7 +140,7 @@
         function setCafeDatas(data){
             if(!data.meta.is_end){
                 page++;
-                searchCafe();
+                searchCafeFromKakao();
             }
             var place_ids = data.documents.map(function(cafe){
                 return cafe.id;
