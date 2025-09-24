@@ -168,14 +168,25 @@
         // DB의 카페 이미지로 업데이트
         function updateCafeImages(jsonString){
             if(!jsonString) return;
-            const items = JSON.parse(jsonString);
+            let items;
+            try {
+                items = JSON.parse(jsonString);
+            } catch(e) {
+                console.error("JSON parse error:", e, jsonString);
+                return;
+            }
             items.forEach(item => {
-                const marker = markerMap[item.place_id];
-                if(marker){
-                    const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize);
-                    console.log("image url", item.img_url);
-                    marker.setImage(newImage);
-                }
+                items.forEach(item => {
+                    if(!item || !item.place_id) {
+                        console.warn("Invalid item:", item);
+                        return; // null 무시
+                    }
+                    const marker = markerMap[item.place_id];
+                    if(marker){
+                        const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize);
+                        marker.setImage(newImage);
+                    }
+                });
             });
         }
 
