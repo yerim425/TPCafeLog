@@ -155,7 +155,7 @@
             clusterer.addMarkers(markers);
 
             // db에서 카페 이미지 가져오기
-            console.log(place_ids);
+            // console.log(place_ids);
             AndroidInterface.sendPlaceIds(JSON.stringify(place_ids));
         }
 
@@ -165,7 +165,8 @@
                 const marker = markerMap[item.place_id];
                 if(marker){
                     const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize)
-                    marker.setImage(newImage)
+                    console.log(item.img_url);
+                    marker.setImage(newImage);
                 }
             });
         }
