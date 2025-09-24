@@ -79,13 +79,13 @@
             });
             marker.setMap(map);
 
-            searchCafe();
+            searchCafeFromKakao();
         }
         initKakaoMap(37.5472784, 127.0518973);
 
 
         // kakao 로컬 카테고리 검색
-        async function searchCafe() {
+        async function searchCafeFromKakao() {
             // 센터 위치
             const lat = centerPos.getLat();
             const lng = centerPos.getLng();
@@ -118,13 +118,33 @@
             }
         }
 
+        async function searchCafeFromDB(place_ids) {
+            const url = "http://yrlee2025.dothome.co.kr/cafelog/loadCafeImages.php"
+            try{
+                const response = await fetch(url, {
+                    method: 'POST',
+                    data: place_ids
+                });
+                if(!response.ok){
+                    throw new Error("API 요청 실패: " + response.status)
+                }
+
+                const data = await response.json();
+                console.log(data);
+            } catch(error){
+                console.error("에러: "+ error);
+            }
+        }
+
         // 카카오에서 가져온 데이터로 마커를 생성하고 클러스터러 객체에 넘겨줌
         function setCafeDatas(data){
             if(!data.meta.is_end){
                 page++;
                 searchCafe();
             }
+            var place_ids = [];
             var markers = data.documents.map(function(cafe){
+                place_ids.push(cafe.id)
                 return new kakao.maps.Marker({
                     position: new kakao.maps.LatLng(cafe.y, cafe.x),
                     image: cafePinImg
@@ -132,6 +152,9 @@
             });
             // 클러스터러에 마커들을 추가
             clusterer.addMarkers(markers);
+
+            // db에서 카페 이미지 가져오기
+            searchCafeFromDB(place_ids)
         }
 
         // 지도 이동 시 centerPos 가져와서 카페 정보 요청
