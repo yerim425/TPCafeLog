@@ -66,6 +66,7 @@ class VisitCertifyActivity : AppCompatActivity(), VisitCafeSearchDialogFragment.
             it.data?.data?.let{ uri ->
                 Glide.with(this).load(uri).into(binding.iv)
                 binding.iv.visibility = View.VISIBLE
+                binding.btnCertifyImage.text = getString(R.string.certify_image_completed)
                 lifecycleScope.launch {
                     imgRealPath = Utils.getRealPathFromUri(uri)
                     imgRealPath?.let{

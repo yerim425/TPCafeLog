@@ -200,6 +200,7 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
         categoryItems = arrayOf(
             getString(R.string.coffee_shop),
             getString(R.string.dessert_cafe),
+            getString(R.string.unmanned_cafe),
             getString(R.string.cartoon_cafe),
             getString(R.string.board_cafe),
             getString(R.string.study_cafe),
@@ -352,7 +353,7 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                     }
                 }
             }
-            Constants.HASHTAG_TYPE -> { // 해시태그 클릭 시 서버에 해당하는 카페 id 리스트 요청
+            Constants.HASHTAG_TYPE -> { // 해시태그 클릭 시 DB에 해당하는 카페 id 리스트 요청
                 viewLifecycleOwnerLiveData.value?.let {
                     lifecycleScope.launch {
                         if(hashtagAdapter.getHashtagList().isNotEmpty()){
@@ -362,7 +363,6 @@ class HomeFragment : Fragment(), OnHomeItemSelectListener {
                         }
                     }
                 }
-
             }
         }
 

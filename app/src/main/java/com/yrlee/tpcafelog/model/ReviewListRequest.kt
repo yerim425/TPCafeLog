@@ -1,7 +1,7 @@
 package com.yrlee.tpcafelog.model
 
-data class ReviewLikeRequest(
+data class ReviewListRequest(
     val user_id: Int?=null,
-    val review_id: Int,
-    val is_like: Boolean
+    var query : String ?= "",
+    val page : Int ?= 0
 )

@@ -8,8 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yrlee.tpcafelog.R
 import com.yrlee.tpcafelog.data.remote.RetrofitHelper
@@ -22,53 +26,75 @@ import kotlinx.coroutines.launch
 
 class CafeBottomSheetFragment: BottomSheetDialogFragment() {
 
-    var cafeInfo : Place?= null
-    lateinit var binding: FragmentCafeBottomSheetBinding
+    companion object {
+        private const val ARG_URL = "arg_url"
+        fun newInstance(url: String): CafeBottomSheetFragment{
+            val fragment = CafeBottomSheetFragment()
+            val args = Bundle()
+            args.putString(ARG_URL, url)
+            fragment.arguments = args
+            return fragment
+        }
+
+        private lateinit var url: String
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-//            cafeInfo = arguments?.getParcelable("cafeInfo", Place::class.java)
-//        }else
-//            cafeInfo = arguments?.getParcelable("cafeInfo")
-
-        cafeInfo = (requireActivity() as MapCafeActivity).selectedCafe
-
-        if(cafeInfo == null){
-            Toast.makeText(requireContext(), "카페 정보를 불러오지 못했어요", Toast.LENGTH_SHORT).show()
-            dismissAllowingStateLoss()
-        }
+        url = arguments?.getString(ARG_URL) ?: ""
+        isCancelable = true
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentCafeBottomSheetBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    ): View {
+        val view = inflater.inflate(R.layout.fragment_cafe_bottom_sheet, container, false)
+        val webView = view.findViewById<WebView>(R.id.wv_cafe_detail)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        webView.settings.javaScriptEnabled = true
 
-        lifecycleScope.launch { requestCafeImageFromDB() }
-
-    }
-
-    suspend fun requestCafeImageFromDB(){
-
-        // 우선 디비에서 확인
-
-        // 없으면 Place 정보들로 셋팅하고 네이버 이미지 요청
-
-        try {
-            val userId = PrefUtils.getInt("user_id")
-            val request = CafeInfoRequest(userId, listOf(cafeInfo!!.id))
-        }catch (E: Exception){
-
+        // WebView 내부에서 링크 열도록 설정
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return false // 모든 URL을 WebView에서 열기
+            }
         }
+
+        webView.loadUrl(url)  // 카카오 로컬 상세 페이지
+
+//        webView.setOnTouchListener { v, event ->
+//            // WebView가 최상단에 있으면 BottomSheet 드래그 가능
+//            val canScrollUp = webView.canScrollVertically(-1) // true이면 위로 스크롤 가능
+//            v.parent.requestDisallowInterceptTouchEvent(canScrollUp)
+//            false
+//        }
+
+        return view
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+//        bottomSheet?.let {
+//            val behavior = BottomSheetBehavior.from(it)
+//            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//        }
+//    }
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        lifecycleScope.launch { requestCafeImageFromDB() }
+//
+//    }
+
 
 //    suspend fun requestHomeCafeList(userId: Int, placeIds: List<String>){
 //        try{
