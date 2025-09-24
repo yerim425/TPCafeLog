@@ -6,6 +6,8 @@
     <title>카페로그 지도</title>
     <style>
         #loading{
+            position: inherit;
+            z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -15,7 +17,7 @@
         }
     </style>
 </head>
-<body>
+<body style="position: relative;">
     <div id="loading">지도 로딩 중...</div>
     <div id="map" style="width: 100%; height: 100vh;"></div>
 
@@ -164,7 +166,9 @@
         }
 
         // DB의 카페 이미지로 업데이트
-        function updateCafeImages(items){
+        function updateCafeImages(jsonString){
+            if(!jsonString) return;
+            const items = JSON.parse(jsonString);
             items.forEach(item => {
                 const marker = markerMap[item.place_id];
                 if(marker){
