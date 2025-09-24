@@ -164,8 +164,7 @@
         }
 
         // DB의 카페 이미지로 업데이트
-        function updateCafeImages(jsonString){
-            const items = JSON.parse(jsonString);
+        function updateCafeImages(items){
             items.forEach(item => {
                 const marker = markerMap[item.place_id];
                 if(marker){
@@ -198,7 +197,7 @@
         }
 
 
-        // 지도 이동 시 centerPos 가져와서 카페 정보 요청
+        // 마커 클릭 시 안드로이드에 카페 상세 페이지 띄우기
 
     </script>
 </body>
