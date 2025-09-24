@@ -183,8 +183,11 @@
                     }
                     const marker = markerMap[item.place_id];
                     if(marker){
-                        const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize);
-                        marker.setImage(newImage);
+                        createRoundedMarkerImage(item.img_url, cafePinSize, function(markerImage){
+                            marker.setImage(markerImage);
+                        });
+                        // const newImage = new kakao.maps.MarkerImage(item.img_url, cafePinSize);
+                        // marker.setImage(newImage);
                     }
                 });
             });
