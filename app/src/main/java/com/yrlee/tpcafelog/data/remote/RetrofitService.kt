@@ -1,6 +1,8 @@
 package com.yrlee.tpcafelog.data.remote
 
 import com.yrlee.tpcafelog.MyApplication
+import com.yrlee.tpcafelog.model.CafeImageRequest
+import com.yrlee.tpcafelog.model.CafeImageResponse
 import com.yrlee.tpcafelog.model.HashTagItem
 import com.yrlee.tpcafelog.model.CafeInfoRequest
 import com.yrlee.tpcafelog.model.CafeInfoResponse
@@ -19,6 +21,7 @@ import com.yrlee.tpcafelog.model.ReviewDetailRequest
 import com.yrlee.tpcafelog.model.ReviewDetailResponse
 import com.yrlee.tpcafelog.model.ReviewLikeRequest
 import com.yrlee.tpcafelog.model.ReviewLikeResponse
+import com.yrlee.tpcafelog.model.ReviewListRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -57,7 +60,7 @@ interface RetrofitService {
     ): Call<KakaoSearchPlaceResponse>
 
     // 100m 근방의 카페 검색하기
-    @GET("v2/local/search/keyword.json?category_group_code=CE7&radius=100")
+    @GET("v2/local/search/keyword.json?category_group_code=CE7&radius=1000")
     suspend fun getSearchCafeNames(
         @Query("query") query: String,
         @Query("x") longitude: String,
@@ -123,6 +126,12 @@ interface RetrofitService {
         @Query("user_id") user_id: Int?=null,
     ): Call<MyResponse<List<ReviewListItemResponse>>>
 
+    // 리뷰 리스트 요청
+    @POST("loadReviewList.php")
+    fun getReviewList2(
+        @Body data: ReviewListRequest
+    ): Call<MyResponse<List<ReviewListItemResponse>>>
+
     // 리뷰 상세 정보 요청
     @POST("loadReviewDetail.php")
     fun getReviewDetail(
@@ -134,6 +143,12 @@ interface RetrofitService {
     suspend fun getCafeInfos(
         @Body data: CafeInfoRequest
     ): MyResponse<List<CafeInfoResponse>>
+
+    // 각 카페의 DB 이미지 요청
+    @POST("loadCafeImages.php")
+    suspend fun getCafeImages(
+        @Body data: CafeImageRequest
+    ): MyResponse<List<CafeImageResponse>>
 
     // DB에 저장되어 있는 카페 정보들 중 검색어, 카테고리, 해시태그에 맞는 카페의 id들 요청
     @POST("loadHomeCafeFiltering.php")

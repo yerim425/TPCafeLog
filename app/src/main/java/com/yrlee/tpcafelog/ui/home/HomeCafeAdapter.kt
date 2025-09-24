@@ -145,8 +145,8 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
             val pos = itemList.indexOfFirst { it.id == data.place_id }
             if(pos != -1){
                 itemList[pos].avg_rating = data.avg_rating
-                itemList[pos].visit_cnt = data.visit_id
-                itemList[pos].review_cnt = data.review_id
+                itemList[pos].visit_cnt = data.visit_cnt
+                itemList[pos].review_cnt = data.review_cnt
                 itemList[pos].hashtag_names = data.hashtag_names
                 data.visit_datas?.let {
                     itemList[pos].visitDatas = it
@@ -156,7 +156,6 @@ class HomeCafeAdapter(val context: Context): RecyclerView.Adapter<HomeCafeAdapte
                 notifyItemChanged(pos)
             }
         }
-
     }
 
 }

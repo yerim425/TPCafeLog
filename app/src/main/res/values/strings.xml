@@ -83,4 +83,5 @@
     <string name="message_stop_create_review">리뷰 작성을 그만두시겠습니까?</string>
     <string name="message_no_cafe">아직 이 해시태그에 해당하는 카페가 없어요.\n리뷰를 남겨 다른 사용자에게 도움이 되어주세요!</string>
     <string name="seoul">서울</string>
+    <string name="unmanned_cafe">무인카페</string>
 </resources>
