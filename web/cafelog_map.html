@@ -29,6 +29,8 @@
         // 클러스터러
         var clusterer;
 
+        var rect;
+
 
         //마커 이미지
         var myPinSize = new kakao.maps.Size(32,32);
@@ -47,7 +49,7 @@
             // 로딩 숨기고 지도 보이기
             document.getElementById('loading').style.display = 'none';
 
-            // 지도 생성 (이제서야 만듦)
+            // 지도 생성 
             centerPos = new kakao.maps.LatLng(lat, lng);
             var mapContainer = document.getElementById('map');
             var mapOption = {
@@ -79,6 +81,12 @@
             });
             marker.setMap(map);
 
+            var bounds = map.getBounds(); // 현재 지도 영역
+            var sw = bounds.getSouthWest(); // 남서쪽 좌표
+            var ne = bounds.getNorthEast(); // 북동쪽 좌표
+            rect = `${sw.getLng()},${sw.getLat()},${ne.getLng()},${ne.getLat()}`;
+            console.log("rect:", rect);
+
             searchCafeFromKakao();
         }
         // initKakaoMap(37.5472784, 127.0518973);
@@ -91,13 +99,7 @@
             const lng = centerPos.getLng();
             console.log(lat, lng);
 
-            var bounds = map.getBounds(); // 현재 지도 영역
-            var sw = bounds.getSouthWest(); // 남서쪽 좌표
-            var ne = bounds.getNorthEast(); // 북동쪽 좌표
-            var rect = `${sw.getLng()},${sw.getLat()},${ne.getLng()},${ne.getLat()}`;
-            console.log("rect:", rect);
-
-            const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=${lat}&y=${lng}&radius=2000&page=${page}&rect=${rect}`;
+            const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=${lat}&y=${lng}&page=${page}&rect=${rect}`;
             try {
                 const response = await fetch(url, {
                     method: 'GET',
@@ -111,7 +113,7 @@
                 }
 
                 const data = await response.json();
-                console.log(data);
+                console.log(page, data);
                 setCafeDatas(data);
             } catch (error) {
                 console.error("에러: " + error);
@@ -155,7 +157,6 @@
             clusterer.addMarkers(markers);
 
             // db에서 카페 이미지 가져오기
-            // console.log(place_ids);
             AndroidInterface.sendPlaceIds(JSON.stringify(place_ids));
         }
 
