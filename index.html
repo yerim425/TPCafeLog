@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카페로그 지도</title>
+    <style>
+        #loading{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: rgb(169,116,110);
+        }
+    </style>
+</head>
+<body style="position: relative;">
+    <div id="loading">지도 로딩 중...</div>
+    <div id="map" style="width: 100%; height: 100vh;"></div>
+
+    <script type="text/javascript" 
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7d2594d51002a4ba8bcd20ceb529f408&libraries=clusterer"></script>
+
+    <script>
+        // 카카오 지도
+        var map;
+        var centerPos;
+
+        // 클러스터러
+        var clusterer;
+        var rect;
+
+
+        //마커 이미지
+        var myPinSize = new kakao.maps.Size(40,40);
+        var cafePinSize = new kakao.maps.Size(48,48);
+        var myPinImg = new kakao.maps.MarkerImage("./images/ic_my_pin.png", myPinSize);
+        // 카페 마커 이미지
+        var cafePinImg = new kakao.maps.MarkerImage("./images/ic_cafe_pin.png", cafePinSize);
+        var page = 1;
+
+
+        // 지도 중심을 내 위치로 세팅
+        // 내 위치를 받아온 후에 지도 초기화
+        function initKakaoMap(lat, lng){
+            console.log("내 위치 : ", lat , lng);
+
+            // 로딩 숨기고 지도 보이기
+            document.getElementById('loading').style.display = 'none';
+
+            // 지도 생성 
+            centerPos = new kakao.maps.LatLng(lat, lng);
+            var mapContainer = document.getElementById('map');
+            var mapOption = {
+                center: centerPos,
+                level: 5
+            };
+            map = new kakao.maps.Map(mapContainer, mapOption);
+
+            // 클러스터러 생성
+            clusterer = new kakao.maps.MarkerClusterer({
+                map: map,
+                averageCenter: true,
+                minLevel: 3,
+                styles: [{
+                    width: '50px',
+                    height: '50px',
+                    background: 'rgba(169,116,110,0.7)',
+                    color: '#fff',
+                    textAlign: 'center',
+                    lineHeight: '50px',
+                    borderRadius: '25px'
+                }]
+            });
+
+            // 내 위치 마커 표시
+            var marker = new kakao.maps.Marker({
+                position: centerPos,
+                image: myPinImg
+            });
+            marker.setMap(map);
+
+            var bounds = map.getBounds(); // 현재 지도 영역
+            var sw = bounds.getSouthWest(); // 남서쪽 좌표
+            var ne = bounds.getNorthEast(); // 북동쪽 좌표
+            rect = `${sw.getLng()},${sw.getLat()},${ne.getLng()},${ne.getLat()}`;
+            console.log("rect:", rect);
+
+            searchCafeFromKakao();
+        }
+        // initKakaoMap(37.5472784, 127.0518973);
+
+
+        // kakao 로컬 카테고리 검색
+        async function searchCafeFromKakao() {
+            // 센터 위치
+            const lat = centerPos.getLat();
+            const lng = centerPos.getLng();
+            console.log(lat, lng);
+
+            const url = `https://dapi.kakao.com/v2/local/search/category.json
+                        ?category_group_code=CE7&x=${lat}&y=${lng}&page=${page}&rect=${rect}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: "KakaoAK 4d2a57ec2a45ae21cfa73a4abafe38a6" // REST API 키
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("API 요청 실패: " + response.status);
+                }
+
+                const data = await response.json();
+                console.log(page, data);
+                setCafeDatas(data);
+            } catch (error) {
+                console.error("에러: " + error);
+            }
+        }
+
+        // 카카오에서 가져온 데이터로 마커를 생성하고 클러스터러 객체에 넘겨줌
+        let markerMap = {}; // place_id -> Marker 매핑
+        function setCafeDatas(data){
+            if(!data.meta.is_end){
+                page++;
+                searchCafeFromKakao();
+            }
+            var place_ids = data.documents.map(function(cafe){
+                return cafe.id;
+            });
+
+            data.documents.map(function(cafe){
+                createRoundedMarkerImage('./images/ic_cafe_pin.png', cafePinSize, function(markerImage){
+                    var marker = new kakao.maps.Marker({
+                        position: new kakao.maps.LatLng(cafe.y, cafe.x),
+                        image: markerImage
+                    });
+                    kakao.maps.event.addListener(marker, 'click', function(){
+                        // 마커 클릭 -> 안드로이드 다이얼로그 띄우기
+                        AndroidInterface.showCafeDetail(cafe.place_url);
+                    });
+                    clusterer.addMarker(marker); // 비동기 콜백 안에서 추가
+                    markerMap[cafe.id] = marker; // place_id와 매핑
+                });
+            });
+
+            // DB에 카페 이미지 요청
+            updateCafeImages(place_ids)
+        }
+
+        async function updateCafeImages(place_ids) {
+            const url = "http://yrlee2025.dothome.co.kr/cafelog/loadCafeImages.php"
+            try{
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  // JSON 임을 명시
+                    },
+                    body: JSON.stringify({ place_ids: place_ids })  // 배열을 JSON으로 변환
+                })
+
+                if(!response.ok){
+                    throw new Error("API 요청 실패: " + response.status);
+                }
+
+                const data = await response.json();
+                console.log("카페이미지", data);
+                if(data.status == 200 && Array.isArray(data.data)){
+                    data.data.forEach(item => {
+                        const marker = markerMap[item.place_id];
+                        if(marker){
+                            createRoundedMarkerImage(item.img_url, myPinSize, function(markerImage){
+                                marker.setImage(markerImage);
+                            });
+                        }
+                    });
+                }
+                
+            } catch(error){
+                console.error("에러: "+ error);
+            }
+        } 
+
+        // canvas로 이미지를 원형으로 그리기
+        function createRoundedMarkerImage(url, size, callback){
+            const scale = 3; // 배율
+            const canvas = document.createElement('canvas');
+            canvas.width = size.width * scale;
+            canvas.height = size.height * scale;
+            const ctx = canvas.getContext('2d');
+
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = function(){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, Math.PI*2);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL();
+                // 실제 마커 크기는 원래 size로 설정
+                callback(new kakao.maps.MarkerImage(dataUrl, size));
+            }
+            img.src = url;
+        }
+
+        // 마커 클릭 시 안드로이드에 카페 상세 페이지 띄우기
+
+    </script>
+</body>
+</html>
