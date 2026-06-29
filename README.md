@@ -15,7 +15,7 @@
 - 오픈소스 : KakaoSDK(로그인, 지도), Kakao 로컬 검색 API
 NaverSDK(로그인), Naver Search API(이미지 검색)
 
-##사용기술
+## 사용기술
 - REST API, Retrofit
 - php, MySQL, CURD 구현
 - Kakao Login API, Kakao 로컬 키워드 검색 API
@@ -23,7 +23,7 @@ NaverSDK(로그인), Naver Search API(이미지 검색)
 - 무한 스크롤 페이징 구현
 - 지도 클러스터링 구현
 
-##주요기능
+## 주요기능
 ### 1) 로그인&회원관리
 ### 2) 카페검색&필터링
 ### 3) 방문인증 - 내 위치 인증
