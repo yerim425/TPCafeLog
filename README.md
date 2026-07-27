@@ -24,9 +24,34 @@
 
 ## 주요기능
 ### 1) 로그인&회원관리
+<p>
+  <img src='./images/login.png' width=300/>
+  <img src='./images/profile.png' width=300/>
+</p>
 ### 2) 카페검색&필터링
+<p>
+  <img src='./images/home.png' width=300/>
+  <img src='./images/detail.png' width=300/>
+</p>
 ### 3) 방문인증 - 내 위치 인증
+<p>
+  <img src='./images/certify0.png' width=300/>
+  <img src='./images/certify1.png' width=300/>
+  <img src='./images/certify2.png' width=300/>
+</p>
 ### 4) 리뷰작성
+<p>
+  <img src='./images/review0.png' width=300/>
+  <img src='./images/review1.png' width=300/>
+  <img src='./images/review2.png' width=300/>
+</p>
 ### 5) 리뷰조회
+<p>
+  <img src='./images/review.png' width=300/>
+</p>
 ### 6) 지도 - 카페조회
+<p>
+  <img src='./images/map1.png' width=300/>
+  <img src='./images/map2.png' width=300/>
+</p>
 
