@@ -12,8 +12,7 @@
 - DB : MySQL
 - 배포서버 : 닷홈(무료 호스팅 서버)
 - 개발환경 : Android Studio, Visual Studio Code
-- 오픈소스 : KakaoSDK(로그인, 지도), Kakao 로컬 검색 API
-NaverSDK(로그인), Naver Search API(이미지 검색)
+- 외부 SDK/API : KakaoSDK(로그인, 지도), Kakao 로컬 검색 API, NaverSDK(로그인), Naver Search API(이미지 검색)
 
 ## 사용기술
 - REST API, Retrofit
