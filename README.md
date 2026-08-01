@@ -1,6 +1,12 @@
 # 카페로그 Cafelog
 - Android, 1인 제작
 
+<p>
+  <img src="images/mockup1.png" width="30%"/>
+  <img src="images/mockup2.png" width="30%"/>
+  <img src="images/mockup3.png" width="30%"/>
+</p>
+
 ## 개요
 ### 카페를 좋아하고 애용하는 사용자를 위한 카페 방문 인증 앱입니다.
 - 내 위치를 활용해 카페 주변에서 방문 인증을 진행할 수 있으며, 레벨업 시스템을 통해 재미 요소를 제공합니다. 
