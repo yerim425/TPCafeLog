@@ -35,12 +35,15 @@
 
 ## 주요기능
 ### 1) 로그인&회원관리
+### - 소셜/로컬 로그인
 <p>
   <img src='./images/login.png' width="200"/>
   <img src='./images/profile.png' width="200"/>
 </p>
 
 ### 2) 카페검색&필터링
+#### - 카카오 로컬 검색 API 활용
+#### - 카페로그 DB에 저장된 카페 정보 조회 및 반영 (해시태그, 카페 이미지, 방문인증 리스트 등)
 <p>
   <img src='./images/home.png' width="200"/>
   <img src='./images/detail.png' width="200"/>
