@@ -51,6 +51,8 @@
 </p>
 
 ### 3) 방문인증 - 내 위치 인증
+#### 사용자의 현재 위치를 확인
+
 <p>
   <img src='./images/certify0.png' width="200"/>
   <img src='./images/certify1.png' width="200"/>
