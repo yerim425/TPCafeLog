@@ -52,7 +52,7 @@
 
 ### 3) 방문인증 - 내 위치 인증
 #### 사용자의 현재 위치를 확인
-
+#### 방문 인증하려는 카페에서 100m 이내에 위치할 때 인증 가능
 <p>
   <img src='./images/certify0.png' width="200"/>
   <img src='./images/certify1.png' width="200"/>
